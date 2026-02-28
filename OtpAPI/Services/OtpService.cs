@@ -46,7 +46,7 @@ namespace OtpAPI.Services
 
         public async Task<IsverifyOtp> VerifyOtp(string phoneNumber, string otp)
         {
-            IsverifyOtp record = _otpBAL.VerifyOtp(phoneNumber, otp);
+            var record = _otpBAL.VerifyOtp(phoneNumber, otp);
 
             return record;
         }

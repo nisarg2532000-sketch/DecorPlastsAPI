@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DecorPlastsAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.MicrosoftExtensions;
 using OtpAPI.BAL;
@@ -13,35 +14,56 @@ namespace OtpAPI.Controllers
     {
         private readonly OtpService _otpService;
         private readonly OtpBAL _otpBAL;
-        public OtpController(OtpService otpService, OtpBAL otpBAL)
+        private readonly JwtService _jwtService;
+        public OtpController(OtpService otpService, OtpBAL otpBAL, JwtService jwtService)
         {
             _otpService = otpService;
             _otpBAL = otpBAL;
+            _jwtService = jwtService;
         }
 
-        [HttpPost("send")]
-        public async Task<IActionResult> SendOtp([FromBody] OtpRequest request)
+        [HttpPost("GenerateOtp")]
+        public async Task<IActionResult> GenerateOtp([FromBody] OtpRequest request)
         {
-            bool IsMobileExists = _otpBAL.CheckMobileExists(request.PhoneNumber);
-            if (!IsMobileExists)
-                return BadRequest(new { Message = "Mobile number not found" });
-
-            string otp = await _otpService.GenerateOtp(request.PhoneNumber);
-            _otpService.SendOtp(request.PhoneNumber, otp);
-
-            return Ok(new { Message = "OTP Sent Successfully" });
-        }
-
-        [HttpPost("verify")]
-        public async Task<IsverifyOtp> VerifyOtp([FromBody] VerifyOtpRequest request)
-        {
-            IsverifyOtp record = await _otpService.VerifyOtp(request.PhoneNumber, request.Otp);
-
-            return new IsverifyOtp
+            try
             {
-                Status = record.Status,
-                Message = record.Message,
-            };
+                bool IsMobileExists = _otpBAL.CheckMobileExists(request.PhoneNumber);
+                if (!IsMobileExists)
+                    return BadRequest(new { Message = "Mobile number not found" });
+
+                string otp = await _otpService.GenerateOtp(request.PhoneNumber);
+                _otpService.SendOtp(request.PhoneNumber, otp);
+
+                return Ok(new { Message = "OTP Sent Successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while sending OTP", Details = ex.Message });
+            }
+        }
+
+        [HttpPost("verifyOtp")]
+        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequest request)
+        {
+            try
+            {
+                var record = await _otpService.VerifyOtp(request.PhoneNumber, request.Otp);
+                if (!record.Status)
+                    return BadRequest(new { record.Message });
+
+                var token = _jwtService.GenerateToken(request.PhoneNumber);
+
+                return Ok(new IsverifyOtp
+                {
+                    Status = record.Status,
+                    Message = record.Message,
+                    Token = token
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while verifying OTP", Details = ex.Message });
+            }
         }
     }
 }

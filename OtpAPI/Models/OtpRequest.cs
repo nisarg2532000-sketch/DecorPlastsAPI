@@ -20,7 +20,13 @@
     }
     public class IsverifyOtp
     {
-        public string Status {  get; set; }
+        public bool Status {  get; set; }
         public string Message { get; set; }
+        public string Token { get; set; }
+    }
+    public class Savetoken
+    {
+        public string PhoneNumber { get; set; }
+        public string Token { get; set; }
     }
 }

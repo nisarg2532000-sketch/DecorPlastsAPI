@@ -76,7 +76,7 @@ namespace OtpAPI.BAL
                     {
                         if (reader.Read())
                         {
-                            response.Status = reader["Status"].ToString();
+                            response.Status = Convert.ToBoolean(reader["Status"]);
                             response.Message = reader["Message"].ToString();
                         }
                     }
@@ -86,5 +86,21 @@ namespace OtpAPI.BAL
                 }
             }
         }
-    }
+        public bool SaveToken(Savetoken savetoken)
+        {
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("USP_SaveToken", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@PhoneNumber", savetoken.PhoneNumber);
+                    cmd.Parameters.AddWithValue("@Token", savetoken.Token);
+                    con.Open();
+                    int rows = cmd.ExecuteNonQuery();
+                    con.Close();
+                    return rows > 0;
+                }
+            }
+        }
 }
