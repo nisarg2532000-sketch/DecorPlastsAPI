@@ -5,6 +5,7 @@ using Microsoft.OpenApi.MicrosoftExtensions;
 using OtpAPI.BAL;
 using OtpAPI.Models;
 using OtpAPI.Services;
+using Twilio.TwiML.Messaging;
 
 namespace OtpAPI.Controllers
 {
@@ -52,6 +53,7 @@ namespace OtpAPI.Controllers
                     return BadRequest(new { record.Message });
 
                 var token = _jwtService.GenerateToken(request.PhoneNumber);
+                _otpBAL.SaveToken(token, request.PhoneNumber);
 
                 return Ok(new IsverifyOtp
                 {
@@ -63,6 +65,24 @@ namespace OtpAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "An error occurred while verifying OTP", Details = ex.Message });
+            }
+        }
+        [HttpPost("GetAdminDashbord")]
+        public IActionResult GetAdminDashbordData([FromBody] getdata getdata)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.token, getdata.token);
+                if (issucess)
+                {
+                    AdminDasshboard AdminDasshboard =  _otpBAL.GetAdminDashboardData(Convert.ToInt32(getdata.userid));
+                    return Ok(AdminDasshboard);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Admin Dashbord Data", Details = ex.Message });
             }
         }
     }

@@ -24,9 +24,17 @@
         public string Message { get; set; }
         public string Token { get; set; }
     }
-    public class Savetoken
+    public class AdminDasshboard
     {
-        public string PhoneNumber { get; set; }
-        public string Token { get; set; }
+        public string PandingOrdercount { get; set; }
+        public string CompletedOrderCount { get; set; }
+        public string totalUsercount { get; set; }
+        public string Availavlestockcount { get; set; }
+        public string ActiveUserCount { get; set; }
+    }
+    public class getdata
+    {
+        public string token { get; set; }
+        public string userid { get; set; }
     }
 }
