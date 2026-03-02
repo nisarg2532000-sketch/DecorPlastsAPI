@@ -25,7 +25,7 @@ namespace OtpAPI.Services
             _otpBAL = otpBAL;
         }
 
-        public async Task<string> GenerateOtp(string phoneNumber)
+        public string GenerateOtp(string phoneNumber)
         {
             var otp = new Random().Next(100000, 999999).ToString();
 
@@ -44,7 +44,7 @@ namespace OtpAPI.Services
             return otp;
         }
 
-        public async Task<IsverifyOtp> VerifyOtp(string phoneNumber, string otp)
+        public IsverifyOtp VerifyOtp(string phoneNumber, string otp)
         {
             var record = _otpBAL.VerifyOtp(phoneNumber, otp);
 

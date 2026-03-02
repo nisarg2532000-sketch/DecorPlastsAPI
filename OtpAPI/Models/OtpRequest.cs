@@ -26,6 +26,7 @@
     }
     public class AdminDasshboard
     {
+        public string AdminName { get; set; }
         public string PandingOrdercount { get; set; }
         public string CompletedOrderCount { get; set; }
         public string totalUsercount { get; set; }
@@ -34,7 +35,7 @@
     }
     public class getdata
     {
-        public string token { get; set; }
         public string userid { get; set; }
+        public string token { get; set; }
     }
 }

@@ -28,10 +28,10 @@ namespace OtpAPI.BAL
                     cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
 
                     con.Open();
-                    int rows = cmd.ExecuteNonQuery();
+                    int status = Convert.ToInt32(cmd.ExecuteScalar());
                     con.Close();
 
-                    return rows > 0;
+                    return status == 1;
                 }
             }
         }
@@ -111,12 +111,12 @@ namespace OtpAPI.BAL
                 using (SqlCommand cmd = new SqlCommand("USP_VerifyToken", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@userid", userid);
+                    cmd.Parameters.AddWithValue("@userid", Convert.ToInt32(userid));
                     cmd.Parameters.AddWithValue("@token", token);
                     con.Open();
-                    int rows = cmd.ExecuteNonQuery();
+                    int status = Convert.ToInt32(cmd.ExecuteScalar());
                     con.Close();
-                    return rows > 0;
+                    return status == 1;
                 }
             }
         }
@@ -126,13 +126,21 @@ namespace OtpAPI.BAL
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("USP_GetAdminDashboardData", con))
+                using (SqlCommand cmd = new SqlCommand("sp_GetDashboardCounts", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@userid", userid);
                     con.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
+                        if (reader.Read())
+                        {
+                            dashboardData.AdminName = reader["Name"].ToString();
+                        }
+
+                        // Move to Second Result Set — Dashboard Counts
+                        reader.NextResult();
+
                         if (reader.Read())
                         {
                             dashboardData.PandingOrdercount = reader["PandingOrdercount"].ToString();

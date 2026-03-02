@@ -1,3 +1,4 @@
+using DecorPlastsAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<OtpBAL>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

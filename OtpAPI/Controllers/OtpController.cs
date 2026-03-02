@@ -24,7 +24,7 @@ namespace OtpAPI.Controllers
         }
 
         [HttpPost("GenerateOtp")]
-        public async Task<IActionResult> GenerateOtp([FromBody] OtpRequest request)
+        public IActionResult GenerateOtp([FromBody] OtpRequest request)
         {
             try
             {
@@ -32,8 +32,9 @@ namespace OtpAPI.Controllers
                 if (!IsMobileExists)
                     return BadRequest(new { Message = "Mobile number not found" });
 
-                string otp = await _otpService.GenerateOtp(request.PhoneNumber);
-                _otpService.SendOtp(request.PhoneNumber, otp);
+                string otp =  _otpService.GenerateOtp(request.PhoneNumber);
+                var mobileno = "+91"+request.PhoneNumber;
+                _otpService.SendOtp(mobileno, otp);
 
                 return Ok(new { Message = "OTP Sent Successfully" });
             }
@@ -44,23 +45,18 @@ namespace OtpAPI.Controllers
         }
 
         [HttpPost("verifyOtp")]
-        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequest request)
+        public IActionResult VerifyOtp([FromBody] VerifyOtpRequest request)
         {
             try
             {
-                var record = await _otpService.VerifyOtp(request.PhoneNumber, request.Otp);
-                if (!record.Status)
-                    return BadRequest(new { record.Message });
+                IsverifyOtp IsverifyOtp = _otpService.VerifyOtp(request.PhoneNumber, request.Otp);
+                if (!IsverifyOtp.Status)
+                    return BadRequest(new { IsverifyOtp.Message });
 
-                var token = _jwtService.GenerateToken(request.PhoneNumber);
-                _otpBAL.SaveToken(token, request.PhoneNumber);
+                 IsverifyOtp.Token = _jwtService.GenerateToken(request.PhoneNumber);
+                _otpBAL.SaveToken(IsverifyOtp.Token, request.PhoneNumber);
 
-                return Ok(new IsverifyOtp
-                {
-                    Status = record.Status,
-                    Message = record.Message,
-                    Token = token
-                });
+                return Ok(IsverifyOtp);
             }
             catch (Exception ex)
             {
@@ -72,7 +68,7 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                bool issucess = _otpBAL.Verifytoken(getdata.token, getdata.token);
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
                     AdminDasshboard AdminDasshboard =  _otpBAL.GetAdminDashboardData(Convert.ToInt32(getdata.userid));
