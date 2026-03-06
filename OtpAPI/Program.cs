@@ -1,4 +1,4 @@
-using DecorPlastsAPI.Services;
+﻿using DecorPlastsAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +10,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// JWT Settings
 var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -27,7 +27,6 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(key)
@@ -37,24 +36,33 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<OtpBAL>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<OtpService>();
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// ✅ MySQL Connection (replaced UseSqlServer)
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(
+        connectionString,
+        new MySqlServerVersion(new Version(8, 0, 0))
+    )
+);
+
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("OtpPolicy", opt =>
     {
-        opt.PermitLimit = 3; // 3 requests
+        opt.PermitLimit = 3;
         opt.Window = TimeSpan.FromMinutes(10);
         opt.QueueLimit = 0;
     });
 });
 
 var app = builder.Build();
+
 app.UseRateLimiter();
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -64,7 +72,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

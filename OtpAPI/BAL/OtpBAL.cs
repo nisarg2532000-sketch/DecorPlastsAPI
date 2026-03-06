@@ -1,10 +1,12 @@
 ﻿
 using Microsoft.Data.SqlClient;
+using MySql.Data;
 using Microsoft.Extensions.Configuration;
 using OtpAPI.Models;
 using System;
 using System.Data;
 using Twilio.Jwt.AccessToken;
+using MySql.Data.MySqlClient;
 namespace OtpAPI.BAL
 {
     public class OtpBAL
@@ -19,12 +21,11 @@ namespace OtpAPI.BAL
         {
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("USP_CheckMobileExists", con))
+                using (MySqlCommand cmd = new MySqlCommand("USP_CheckMobileExists", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
 
                     con.Open();
@@ -39,9 +40,9 @@ namespace OtpAPI.BAL
         {
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("USP_SaveOtp", con))
+                using (MySqlCommand cmd = new MySqlCommand("USP_SaveOtp", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -63,9 +64,9 @@ namespace OtpAPI.BAL
             IsverifyOtp response = new IsverifyOtp();
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("USP_VerifyOtp", con))
+                using (MySqlCommand cmd = new MySqlCommand("USP_VerifyOtp", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
@@ -73,7 +74,7 @@ namespace OtpAPI.BAL
                     cmd.Parameters.AddWithValue("@OtpCode", otp);
 
                     con.Open();
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -89,9 +90,9 @@ namespace OtpAPI.BAL
         public bool SaveToken(string token, string mobileno)
         {
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("USP_SaveToken", con))
+                using (MySqlCommand cmd = new MySqlCommand("USP_SaveToken", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@PhoneNumber", mobileno);
@@ -106,9 +107,9 @@ namespace OtpAPI.BAL
         public bool Verifytoken(string userid, string token)
         {
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("USP_VerifyToken", con))
+                using (MySqlCommand cmd = new MySqlCommand("USP_VerifyToken", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@userid", Convert.ToInt32(userid));
@@ -124,20 +125,19 @@ namespace OtpAPI.BAL
         {
             AdminDasshboard dashboardData = new AdminDasshboard();
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("sp_GetDashboardCounts", con))
+                using (MySqlCommand cmd = new MySqlCommand("USP_GetDashboardCounts", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@userid", userid);
                     con.Open();
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             dashboardData.AdminName = reader["Name"].ToString();
                         }
-
                         // Move to Second Result Set — Dashboard Counts
                         reader.NextResult();
 
