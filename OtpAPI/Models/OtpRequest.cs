@@ -24,18 +24,39 @@
         public string Message { get; set; }
         public string Token { get; set; }
     }
-    public class AdminDasshboard
+    public class AdminDashboard 
     {
         public string AdminName { get; set; }
         public string PandingOrdercount { get; set; }
         public string CompletedOrderCount { get; set; }
-        public string totalUsercount { get; set; }
         public string Availavlestockcount { get; set; }
-        public string ActiveUserCount { get; set; }
+        public string totalUsercount { get; set; }
     }
     public class getdata
     {
         public string userid { get; set; }
         public string token { get; set; }
+    }
+    public class GetCategory
+    {
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string Status { get; set; }
+    }
+    public class GetCode
+    {
+        public int CodeId { get; set; }
+        public string CodeName { get; set; }
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public int SizeId { get; set; }
+        public string Size { get; set; }
+        public string Status { get; set; }
+    }
+    public class GetSize
+    {
+        public int SizeId { get; set; }
+        public string Size { get; set; }
+        public string Status { get; set; }
     }
 }

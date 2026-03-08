@@ -1,4 +1,5 @@
-﻿using DecorPlastsAPI.Services;
+﻿using DecorPlastsAPI.Interface;
+using DecorPlastsAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<OtpBAL>();
+builder.Services.AddScoped<IDataRepository, DataRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<OtpService>();

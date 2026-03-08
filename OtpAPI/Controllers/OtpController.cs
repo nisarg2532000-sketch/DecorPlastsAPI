@@ -32,8 +32,8 @@ namespace OtpAPI.Controllers
                 if (!IsMobileExists)
                     return BadRequest(new { Message = "Mobile number not found" });
 
-                string otp =  _otpService.GenerateOtp(request.PhoneNumber);
-                var mobileno = "+91"+request.PhoneNumber;
+                string otp = _otpService.GenerateOtp(request.PhoneNumber);
+                var mobileno = "+91" + request.PhoneNumber;
                 _otpService.SendOtp(mobileno, otp);
 
                 return Ok(new { Message = "OTP Sent Successfully" });
@@ -53,7 +53,7 @@ namespace OtpAPI.Controllers
                 if (!IsverifyOtp.Status)
                     return BadRequest(new { IsverifyOtp.Message });
 
-                 IsverifyOtp.Token = _jwtService.GenerateToken(request.PhoneNumber);
+                IsverifyOtp.Token = _jwtService.GenerateToken(request.PhoneNumber);
                 _otpBAL.SaveToken(IsverifyOtp.Token, request.PhoneNumber);
 
                 return Ok(IsverifyOtp);
@@ -71,7 +71,7 @@ namespace OtpAPI.Controllers
                 bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    AdminDasshboard AdminDasshboard =  _otpBAL.GetAdminDashboardData(Convert.ToInt32(getdata.userid));
+                    AdminDashboard AdminDasshboard = _otpBAL.GetAdminDashboardData(Convert.ToInt32(getdata.userid));
                     return Ok(AdminDasshboard);
                 }
                 return BadRequest(new { Message = "Token not verified" });
@@ -79,6 +79,60 @@ namespace OtpAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "An error occurred while Get Admin Dashbord Data", Details = ex.Message });
+            }
+        }
+        [HttpPost("GetCategoryById")]
+        public IActionResult GetCategory([FromBody] getdata getdata, string CategoryId)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var category = _otpBAL.GetAllCategoryByID(Convert.ToInt32(CategoryId));
+                    return Ok(category);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Category", Details = ex.Message });
+            }
+        }
+        [HttpPost("GetCodeById")]
+        public IActionResult GetCode([FromBody] getdata getdata, string CodeId)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var codes = _otpBAL.GetCodeByID(Convert.ToInt32(CodeId));
+                    return Ok(codes);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Category", Details = ex.Message });
+            }
+        }
+        [HttpPost("GetSizeById")]
+        public IActionResult GetSize([FromBody] getdata getdata, string SizeId)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var size = _otpBAL.GetSizeByID(Convert.ToInt32(SizeId));
+                    return Ok(size);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Category", Details = ex.Message });
             }
         }
     }

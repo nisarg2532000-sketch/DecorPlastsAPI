@@ -1,21 +1,25 @@
 ﻿
+using Dapper;
+using DecorPlastsAPI.Interface;
 using Microsoft.Data.SqlClient;
-using MySql.Data;
 using Microsoft.Extensions.Configuration;
+using MySql.Data;
+using MySql.Data.MySqlClient;
 using OtpAPI.Models;
 using System;
 using System.Data;
 using Twilio.Jwt.AccessToken;
-using MySql.Data.MySqlClient;
 namespace OtpAPI.BAL
 {
     public class OtpBAL
     {
         private readonly IConfiguration _configuration;
+        private readonly IDataRepository _DB;
 
-        public OtpBAL(IConfiguration configuration)
+        public OtpBAL(IConfiguration configuration, IDataRepository DB)
         {
             _configuration = configuration;
+            _DB = DB;
         }
         public bool CheckMobileExists(string PhoneNumber)
         {
@@ -36,124 +40,75 @@ namespace OtpAPI.BAL
                 }
             }
         }
-        public bool SaveOtp(OtpEntity OtpEntity)
+        public bool SaveOtp(OtpEntity otpEntity)
         {
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var param = new DynamicParameters();
+            param.Add("@PhoneNumber", otpEntity.PhoneNumber);
+            param.Add("@OtpCode", otpEntity.OtpCode);
+            param.Add("@ExpiryTime", DateTime.Now.AddMinutes(5));
 
-            using (MySqlConnection con = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand cmd = new MySqlCommand("USP_SaveOtp", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@PhoneNumber", OtpEntity.PhoneNumber);
-                    cmd.Parameters.AddWithValue("@OtpCode", OtpEntity.OtpCode);
-                    cmd.Parameters.AddWithValue("@ExpiryTime", DateTime.Now.AddMinutes(5));
-
-                    con.Open();
-                    int rows = cmd.ExecuteNonQuery();
-                    con.Close();
-
-                    return rows > 0;
-                }
-            }
+            return _DB.ExecuteSP("USP_SaveOtp", param) > 0;
         }
 
         public IsverifyOtp VerifyOtp(string phoneNumber, string otp)
         {
-            IsverifyOtp response = new IsverifyOtp();
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var param = new DynamicParameters();
+            param.Add("@PhoneNumber", phoneNumber);
+            param.Add("@OtpCode", otp);
 
-            using (MySqlConnection con = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand cmd = new MySqlCommand("USP_VerifyOtp", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
+            var result = _DB.Query<IsverifyOtp>("USP_VerifyOtp", param).FirstOrDefault();
 
-                    cmd.Parameters.AddWithValue("@PhoneNumber", phoneNumber);
-                    cmd.Parameters.AddWithValue("@OtpCode", otp);
-
-                    con.Open();
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            response.Status = Convert.ToBoolean(reader["Status"]);
-                            response.Message = reader["Message"].ToString();
-                        }
-                    }
-                    con.Close();
-                    return response;
-                }
-            }
+            return result ?? new IsverifyOtp { Status = false, Message = "Something went wrong" };
         }
         public bool SaveToken(string token, string mobileno)
         {
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
-            using (MySqlConnection con = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand cmd = new MySqlCommand("USP_SaveToken", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@PhoneNumber", mobileno);
-                    cmd.Parameters.AddWithValue("@Token", token);
-                    con.Open();
-                    int rows = cmd.ExecuteNonQuery();
-                    con.Close();
-                    return rows > 0;
-                }
-            }
+            var param = new DynamicParameters();
+            param.Add("@PhoneNumber", mobileno);
+            param.Add("@TokenValue", token);
+            return _DB.ExecuteSP("USP_SaveToken", param) > 0;
         }
         public bool Verifytoken(string userid, string token)
         {
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
-            using (MySqlConnection con = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand cmd = new MySqlCommand("USP_VerifyToken", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@userid", Convert.ToInt32(userid));
-                    cmd.Parameters.AddWithValue("@token", token);
-                    con.Open();
-                    int status = Convert.ToInt32(cmd.ExecuteScalar());
-                    con.Close();
-                    return status == 1;
-                }
-            }
-        }
-        public AdminDasshboard GetAdminDashboardData(int userid)
-        {
-            AdminDasshboard dashboardData = new AdminDasshboard();
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
-            using (MySqlConnection con = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand cmd = new MySqlCommand("USP_GetDashboardCounts", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@userid", userid);
-                    con.Open();
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            dashboardData.AdminName = reader["Name"].ToString();
-                        }
-                        // Move to Second Result Set — Dashboard Counts
-                        reader.NextResult();
+            var param = new DynamicParameters();
+            param.Add("@userid", Convert.ToInt32(userid));
+            param.Add("@token", token);
 
-                        if (reader.Read())
-                        {
-                            dashboardData.PandingOrdercount = reader["PandingOrdercount"].ToString();
-                            dashboardData.CompletedOrderCount = reader["CompletedOrderCount"].ToString();
-                            dashboardData.totalUsercount = reader["totalUsercount"].ToString();
-                            dashboardData.Availavlestockcount = reader["Availavlestockcount"].ToString();
-                            dashboardData.ActiveUserCount = reader["ActiveUserCount"].ToString();
-                        }
-                    }
-                    con.Close();
-                }
+            var result = _DB.Query<int>("USP_VerifyToken", param).FirstOrDefault();
+            return result == 1;
+        }
+        public AdminDashboard GetAdminDashboardData(int userid)
+        {
+            AdminDashboard dashboardData = new AdminDashboard();
+
+            var param = new DynamicParameters();
+            param.Add("@Userid", userid);
+
+            var result = _DB.QueryFirstOrDefault<AdminDashboard>("USP_GetDashboardCounts", param);
+
+            if (result != null)
+            {
+                dashboardData = result;
             }
             return dashboardData;
+        }
+        public List<GetCategory> GetAllCategoryByID(int CategoryId)
+        {
+            var param = new DynamicParameters();
+            param.Add("@CategoryId", CategoryId);
+
+            return _DB.Query<GetCategory>("USP_GetAllCategoryByID", param).ToList();
+        }
+        public List<GetCode> GetCodeByID(int CodeId)
+        {
+            var param = new DynamicParameters();
+            param.Add("@CodeId", CodeId);
+            return _DB.Query<GetCode>("USP_GetCodesById", param).ToList();
+        }
+        public List<GetSize> GetSizeByID(int SizeId)
+        {
+            var param = new DynamicParameters();
+            param.Add("@SizeId", SizeId);
+            return _DB.Query<GetSize>("UPS_GetSizeByID", param).ToList();
         }
     }
 }
