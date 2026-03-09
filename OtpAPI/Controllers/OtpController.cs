@@ -168,7 +168,7 @@ namespace OtpAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while Update Category", Details = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while Update Codes", Details = ex.Message });
             }
         }
     }
