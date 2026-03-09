@@ -135,5 +135,41 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Get Category", Details = ex.Message });
             }
         }
+        [HttpPost("UpdateCategory")]
+        public IActionResult UpdateCategory([FromBody] UpdateCategory UpdateCategory)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(UpdateCategory.userid, UpdateCategory.token);
+                if (issucess)
+                {
+                    var category = _otpBAL.UpdateCategory(UpdateCategory);
+                    return Ok(category);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Update Category", Details = ex.Message });
+            }
+        }
+        [HttpPost("UpdateCode")]
+        public IActionResult UpdateCode([FromBody] UpdateCodes UpdateCodes)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(UpdateCodes.userid, UpdateCodes.token);
+                if (issucess)
+                {
+                    var Codes = _otpBAL.UpdateCode(UpdateCodes);
+                    return Ok(Codes);
+                }
+                 return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Update Category", Details = ex.Message });
+            }
+        }
     }
 }

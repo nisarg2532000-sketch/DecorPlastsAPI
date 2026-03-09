@@ -120,5 +120,25 @@ namespace OtpAPI.BAL
             var result = _DB.Query<int>("USP_AddCategory", param).FirstOrDefault();
             return result == 1;
         }
+        public bool UpdateCategory(UpdateCategory UpdateCategory)
+        {
+            var param = new DynamicParameters();
+            param.Add("@p_CategoryId", Convert.ToInt32(UpdateCategory.CategoryId));
+            param.Add("@p_CategoryName", UpdateCategory.CategoryName);
+            param.Add("@p_IsActive", Convert.ToInt32(UpdateCategory.Status));
+            var result = _DB.Query<int>("USP_UpdateCategory", param).FirstOrDefault();
+            return result == 1;
+        }
+        public bool UpdateCode(UpdateCodes UpdateCodes)
+        {
+            var param = new DynamicParameters();
+            param.Add("@p_CodeId", Convert.ToInt32(UpdateCodes.CodeId));
+            param.Add("@p_CodeName", UpdateCodes.CodeName);
+            param.Add("@p_SizeId", Convert.ToInt32(UpdateCodes.SizeId));
+            param.Add("@p_CategoryId", Convert.ToInt32(UpdateCodes.CategoryId));
+            param.Add("@p_IsActive", Convert.ToInt32(UpdateCodes.Status));
+            var result = _DB.Query<int>("USP_UpdateCode", param).FirstOrDefault();
+            return result == 1;
+        }
     }
 }
