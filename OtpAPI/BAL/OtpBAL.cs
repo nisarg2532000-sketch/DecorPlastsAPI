@@ -53,8 +53,8 @@ namespace OtpAPI.BAL
         public IsverifyOtp VerifyOtp(string phoneNumber, string otp)
         {
             var param = new DynamicParameters();
-            param.Add("@PhoneNumber", phoneNumber);
-            param.Add("@OtpCode", otp);
+            param.Add("@P_PhoneNumber", phoneNumber);
+            param.Add("@O_OtpCode", otp);
 
             var result = _DB.Query<IsverifyOtp>("USP_VerifyOtp", param).FirstOrDefault();
 
@@ -70,8 +70,8 @@ namespace OtpAPI.BAL
         public bool Verifytoken(string userid, string token)
         {
             var param = new DynamicParameters();
-            param.Add("@userid", Convert.ToInt32(userid));
-            param.Add("@token", token);
+            param.Add("@p_UserId", Convert.ToInt32(userid));
+            param.Add("@p_Token", token);
 
             var result = _DB.Query<int>("USP_VerifyToken", param).FirstOrDefault();
             return result == 1;
@@ -98,10 +98,11 @@ namespace OtpAPI.BAL
 
             return _DB.Query<GetCategory>("USP_GetAllCategoryByID", param).ToList();
         }
-        public List<GetCode> GetCodeByID(int CodeId)
+        public List<GetCode> GetCodeByID(int CodeId, int CategoryId)
         {
             var param = new DynamicParameters();
             param.Add("@CodeId", CodeId);
+            param.Add("@CategoryId", CategoryId);
             return _DB.Query<GetCode>("USP_GetCodesById", param).ToList();
         }
         public List<GetSize> GetSizeByID(int SizeId)
@@ -109,6 +110,15 @@ namespace OtpAPI.BAL
             var param = new DynamicParameters();
             param.Add("@SizeId", SizeId);
             return _DB.Query<GetSize>("UPS_GetSizeByID", param).ToList();
+        }
+        public bool AddCategory(int UserId, string Category)
+        {
+            var param = new DynamicParameters();
+            param.Add("@UserId", UserId);
+            param.Add("@C_CategoryName", Category);
+
+            var result = _DB.Query<int>("USP_AddCategory", param).FirstOrDefault();
+            return result == 1;
         }
     }
 }
