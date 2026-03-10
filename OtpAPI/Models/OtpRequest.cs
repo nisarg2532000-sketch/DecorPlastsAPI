@@ -45,6 +45,8 @@
     }
     public class GetCode
     {
+        public string userid { get; set; }
+        public string token { get; set; }
         public int CodeId { get; set; }
         public string CodeName { get; set; }
         public int CategoryId { get; set; }
@@ -55,6 +57,8 @@
     }
     public class GetSize
     {
+        public string userid { get; set; }
+        public string token { get; set; }
         public int SizeId { get; set; }
         public string Size { get; set; }
         public string Status { get; set; }
@@ -75,6 +79,14 @@
         public string CodeName { get;set; }
         public string SizeId { get; set; }
         public string CategoryId { get; set; }
+        public string Status { get; set; }
+    }
+    public class UpdateSize
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string SizeId { get; set; }
+        public string Size { get; set; }
         public string Status { get; set; }
     }
     public class AddCategory

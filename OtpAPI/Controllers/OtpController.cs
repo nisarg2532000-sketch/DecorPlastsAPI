@@ -102,14 +102,14 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetCodeById")]
-        public IActionResult GetCode([FromBody] getdata getdata, string CodeId, string CategoryId)
+        public IActionResult GetCode([FromBody] GetCode GetCode)
         {
             try
             {
-                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                bool issucess = _otpBAL.Verifytoken(GetCode.userid, GetCode.token);
                 if (issucess)
                 {
-                    var codes = _otpBAL.GetCodeByID(Convert.ToInt32(CodeId), Convert.ToInt32(CategoryId));
+                    var codes = _otpBAL.GetCodeByID(Convert.ToInt32(GetCode.CodeId), Convert.ToInt32(GetCode.CategoryId));
                     return Ok(codes);
                 }
                 return BadRequest(new { Message = "Token not verified" });
@@ -120,14 +120,14 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetSizeById")]
-        public IActionResult GetSize([FromBody] getdata getdata, string SizeId)
+        public IActionResult GetSize([FromBody] GetSize GetSize)
         {
             try
             {
-                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                bool issucess = _otpBAL.Verifytoken(GetSize.userid, GetSize.token);
                 if (issucess)
                 {
-                    var size = _otpBAL.GetSizeByID(Convert.ToInt32(SizeId));
+                    var size = _otpBAL.GetSizeByID(Convert.ToInt32(GetSize.SizeId));
                     return Ok(size);
                 }
                 return BadRequest(new { Message = "Token not verified" });
@@ -165,6 +165,24 @@ namespace OtpAPI.Controllers
                 {
                     var Codes = _otpBAL.UpdateCode(UpdateCodes);
                     return Ok(Codes);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Update Codes", Details = ex.Message });
+            }
+        }
+        [HttpPost("UpdateSize")]
+        public IActionResult UpdateSize([FromBody] UpdateSize UpdateSize)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(UpdateSize.userid, UpdateSize.token);
+                if (issucess)
+                {
+                    var size = _otpBAL.UpdateSize(UpdateSize);
+                    return Ok(size);
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }

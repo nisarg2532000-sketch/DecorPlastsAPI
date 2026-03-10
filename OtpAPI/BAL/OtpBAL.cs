@@ -132,6 +132,16 @@ namespace OtpAPI.BAL
             var result = _DB.Query<int>("USP_UpdateCode", param).FirstOrDefault();
             return result == 1;
         }
+        public SpResult UpdateSize(UpdateSize UpdateSize)
+        {
+            var param = new DynamicParameters();
+            param.Add("@P_UserId", Convert.ToInt32(UpdateSize.userid));
+            param.Add("@p_Id", Convert.ToInt32(UpdateSize.SizeId));
+            param.Add("@p_Size", UpdateSize.Size);
+            param.Add("@p_Status", Convert.ToInt32(UpdateSize.Status));
+            var result = _DB.Query<SpResult>("USP_UpdateSize", param).FirstOrDefault();
+            return result;
+        }
         public bool AddCategory(AddCategory AddCategory)
         {
             var param = new DynamicParameters();
@@ -158,7 +168,6 @@ namespace OtpAPI.BAL
             param.Add("@p_Size", AddSize.Size);
             var result = _DB.Query<SpResult>("USP_AddSize", param).FirstOrDefault();
             return result;
-
         }
     }
 }
