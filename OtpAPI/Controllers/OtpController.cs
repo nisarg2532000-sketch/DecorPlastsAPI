@@ -1,5 +1,4 @@
 ﻿using DecorPlastsAPI.Services;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.MicrosoftExtensions;
@@ -102,14 +101,14 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetCodeById")]
-        public IActionResult GetCode([FromBody] getdata getdata, string CodeId,string CategoryId)
+        public IActionResult GetCode([FromBody] getdata getdata, string CodeId, string CategoryId)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var codes = _otpBAL.GetCodeByID(Convert.ToInt32(CodeId),Convert.ToInt32(CategoryId));
+                    var codes = _otpBAL.GetCodeByID(Convert.ToInt32(CodeId), Convert.ToInt32(CategoryId));
                     return Ok(codes);
                 }
                 return BadRequest(new { Message = "Token not verified" });
@@ -166,13 +165,14 @@ namespace OtpAPI.Controllers
                     var Codes = _otpBAL.UpdateCode(UpdateCodes);
                     return Ok(Codes);
                 }
-                 return BadRequest(new { Message = "Token not verified" });
+                return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "An error occurred while Update Codes", Details = ex.Message });
             }
         }
+        [HttpPost("AddCategory")]
         public IActionResult AddCategory([FromBody] AddCategory AddCategory)
         {
             try
@@ -189,5 +189,23 @@ namespace OtpAPI.Controllers
             {
                 return StatusCode(500, new { Message = "An error occurred while Add Category", Details = ex.Message });
             }
-    }
+        }
+        [HttpPost("AddCode")]
+        public IActionResult AddCode([FromBody] AddCode AddCode)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(AddCode.userid, AddCode.token);
+                if (issucess)
+                {
+                    var Codes = _otpBAL.AddCode(AddCode);
+                    return Ok(Codes);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Add Codes", Details = ex.Message });
+            }
+        }
 }
