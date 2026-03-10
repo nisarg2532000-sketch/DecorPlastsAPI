@@ -10,6 +10,16 @@ using OtpAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 // JWT Settings
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -63,7 +73,7 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 app.UseRateLimiter();
-
+app.UseCors("AllowAll");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

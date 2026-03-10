@@ -1,4 +1,5 @@
 ﻿using DecorPlastsAPI.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.MicrosoftExtensions;
@@ -9,6 +10,7 @@ using Twilio.TwiML.Messaging;
 
 namespace OtpAPI.Controllers
 {
+    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
     public class OtpController : Controller
@@ -207,4 +209,5 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Add Codes", Details = ex.Message });
             }
         }
+    }
 }
