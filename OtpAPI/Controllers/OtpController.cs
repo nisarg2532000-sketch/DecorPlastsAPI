@@ -120,14 +120,14 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetSizeById")]
-        public IActionResult GetSize([FromBody] GetSize GetSize)
+        public IActionResult GetSize([FromBody] getdata getdata, string SizeId)
         {
             try
             {
-                bool issucess = _otpBAL.Verifytoken(GetSize.userid, GetSize.token);
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var size = _otpBAL.GetSizeByID(Convert.ToInt32(GetSize.SizeId));
+                    var size = _otpBAL.GetSizeByID(Convert.ToInt32(SizeId));
                     return Ok(size);
                 }
                 return BadRequest(new { Message = "Token not verified" });
