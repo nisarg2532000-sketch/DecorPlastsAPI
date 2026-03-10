@@ -102,14 +102,14 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetCodeById")]
-        public IActionResult GetCode([FromBody] GetCode GetCode)
+        public IActionResult GetCode([FromBody] getdata getdata, string CodeId, string CategoryId)
         {
             try
             {
-                bool issucess = _otpBAL.Verifytoken(GetCode.userid, GetCode.token);
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var codes = _otpBAL.GetCodeByID(Convert.ToInt32(GetCode.CodeId), Convert.ToInt32(GetCode.CategoryId));
+                    var codes = _otpBAL.GetCodeByID(Convert.ToInt32(CodeId), Convert.ToInt32(CategoryId));
                     return Ok(codes);
                 }
                 return BadRequest(new { Message = "Token not verified" });
