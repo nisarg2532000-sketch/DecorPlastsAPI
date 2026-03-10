@@ -111,7 +111,7 @@ namespace OtpAPI.BAL
             param.Add("@SizeId", SizeId);
             return _DB.Query<GetSize>("UPS_GetSizeByID", param).ToList();
         }
-        
+
         public bool UpdateCategory(UpdateCategory UpdateCategory)
         {
             var param = new DynamicParameters();
@@ -160,4 +160,5 @@ namespace OtpAPI.BAL
             return result;
 
         }
+    }
 }
