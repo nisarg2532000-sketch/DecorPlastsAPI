@@ -111,15 +111,7 @@ namespace OtpAPI.BAL
             param.Add("@SizeId", SizeId);
             return _DB.Query<GetSize>("UPS_GetSizeByID", param).ToList();
         }
-        public bool AddCategory(int UserId, string Category)
-        {
-            var param = new DynamicParameters();
-            param.Add("@UserId", UserId);
-            param.Add("@C_CategoryName", Category);
-
-            var result = _DB.Query<int>("USP_AddCategory", param).FirstOrDefault();
-            return result == 1;
-        }
+        
         public bool UpdateCategory(UpdateCategory UpdateCategory)
         {
             var param = new DynamicParameters();
@@ -140,5 +132,15 @@ namespace OtpAPI.BAL
             var result = _DB.Query<int>("USP_UpdateCode", param).FirstOrDefault();
             return result == 1;
         }
+        public bool AddCategory(AddCategory AddCategory)
+        {
+            var param = new DynamicParameters();
+            param.Add("@UserId", Convert.ToInt32(AddCategory.userid));
+            param.Add("@C_CategoryName", AddCategory.Category);
+
+            var result = _DB.Query<int>("USP_AddCategory", param).FirstOrDefault();
+            return result == 1;
+        }
+        
     }
 }

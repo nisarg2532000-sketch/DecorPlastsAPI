@@ -1,4 +1,5 @@
 ﻿using DecorPlastsAPI.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.MicrosoftExtensions;
@@ -9,6 +10,7 @@ using Twilio.TwiML.Messaging;
 
 namespace OtpAPI.Controllers
 {
+    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
     public class OtpController : Controller
@@ -171,5 +173,21 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Update Codes", Details = ex.Message });
             }
         }
+        public IActionResult AddCategory([FromBody] AddCategory AddCategory)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(AddCategory.userid, AddCategory.token);
+                if (issucess)
+                {
+                    var category = _otpBAL.AddCategory(AddCategory);
+                    return Ok(category);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Add Category", Details = ex.Message });
+            }
     }
 }

@@ -77,4 +77,10 @@
         public string CategoryId { get; set; }
         public string Status { get; set; }
     }
+    public class AddCategory
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string Category { get; set; }
+    }
 }
