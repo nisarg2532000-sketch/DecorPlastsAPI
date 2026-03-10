@@ -209,5 +209,23 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Add Codes", Details = ex.Message });
             }
         }
+        [HttpPost("AddSize")]
+        public IActionResult AddSize([FromBody] AddSize AddSize)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(AddSize.userid, AddSize.token);
+                if (issucess)
+                {
+                    var size = _otpBAL.AddSize(AddSize);
+                    return Ok(size);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Add Codes", Details = ex.Message });
+            }
+        }
     }
 }

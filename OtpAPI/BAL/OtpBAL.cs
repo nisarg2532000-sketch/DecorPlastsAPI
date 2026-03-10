@@ -141,15 +141,23 @@ namespace OtpAPI.BAL
             var result = _DB.Query<int>("USP_AddCategory", param).FirstOrDefault();
             return result == 1;
         }
-        public bool AddCode(AddCode AddCode)
+        public SpResult AddCode(AddCode AddCode)
         {
             var param = new DynamicParameters();
             param.Add("@p_UserId", Convert.ToInt32(AddCode.userid));
             param.Add("@p_CodeName", AddCode.CodeName);
             param.Add("@p_SizeId", Convert.ToInt32(AddCode.SizeId));
             param.Add("@p_CategoryId", Convert.ToInt32(AddCode.CategoryId));
-            var result = _DB.Query<int>("USP_AddCode", param).FirstOrDefault();
-            return result == 1;
+            var result = _DB.Query<SpResult>("USP_AddCode", param).FirstOrDefault();
+            return result;
         }
-    }
+        public SpResult AddSize(AddSize AddSize)
+        {
+            var param = new DynamicParameters();
+            param.Add("@p_UserId", Convert.ToInt32(AddSize.userid));
+            param.Add("@p_Size", AddSize.Size);
+            var result = _DB.Query<SpResult>("USP_AddSize", param).FirstOrDefault();
+            return result;
+
+        }
 }

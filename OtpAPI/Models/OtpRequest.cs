@@ -83,12 +83,23 @@
         public string token { get; set; }
         public string Category { get; set; }
     }
-        public class AddCode
-        {
-            public string userid { get; set; }
-            public string token { get; set; }
-            public string CodeName { get; set; }
-            public string SizeId { get; set; }
-            public string CategoryId { get; set; }
+    public class AddCode
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string CodeName { get; set; }
+        public string SizeId { get; set; }
+        public string CategoryId { get; set; }
+    }
+    public class SpResult
+    {
+        public int Status { get; set; }
+        public string Message { get; set; }
+    }
+    public class AddSize
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string Size { get; set; }
     }
 }
