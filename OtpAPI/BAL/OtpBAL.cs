@@ -150,5 +150,6 @@ namespace OtpAPI.BAL
             param.Add("@p_CategoryId", Convert.ToInt32(AddCode.CategoryId));
             var result = _DB.Query<int>("USP_AddCode", param).FirstOrDefault();
             return result == 1;
+        }
     }
 }

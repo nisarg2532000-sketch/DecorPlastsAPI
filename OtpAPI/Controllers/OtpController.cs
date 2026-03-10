@@ -9,7 +9,6 @@ using Twilio.TwiML.Messaging;
 
 namespace OtpAPI.Controllers
 {
-    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
     public class OtpController : Controller
