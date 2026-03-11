@@ -169,5 +169,22 @@ namespace OtpAPI.BAL
             var result = _DB.Query<SpResult>("USP_AddSize", param).FirstOrDefault();
             return result;
         }
+        public SpResult DeleteSize(DeleteSize DeleteSize)
+        {
+            var param = new DynamicParameters();
+            param.Add("@SizeId", Convert.ToInt32(DeleteSize.SizeId));
+            param.Add("@I_IsDelete", DeleteSize.IsDelete);
+            var result = _DB.Query<SpResult>("USP_DeleteSize", param).FirstOrDefault();
+            return result;
+        }
+        public SpResult DeleteCode(DeleteCode DeleteCode)
+        {
+            var param = new DynamicParameters();
+            param.Add("@CodeId", Convert.ToInt32(DeleteCode.userid));
+            param.Add("@I_IsDelete", DeleteCode.IsDelete);
+            var result = _DB.Query<SpResult>("USP_DeleteSize", param).FirstOrDefault();
+            return result;
+        }
+// USP_DeleteCategory
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.OpenApi.MicrosoftExtensions;
 using OtpAPI.BAL;
 using OtpAPI.Models;
 using OtpAPI.Services;
+using System.Drawing;
 using Twilio.TwiML.Messaging;
 
 namespace OtpAPI.Controllers
@@ -242,7 +243,43 @@ namespace OtpAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while Add Codes", Details = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while Add Size", Details = ex.Message });
+            }
+        }
+        [HttpPost("DeleteSize")]
+        public IActionResult DeleteSize([FromBody] DeleteSize DeleteSize)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(DeleteSize.userid, DeleteSize.token);
+                if (issucess)
+                {
+                    var deletesize = _otpBAL.DeleteSize(DeleteSize);
+                    return Ok(deletesize);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Delete Size", Details = ex.Message });
+            }
+        }
+        [HttpPost("DeleteCode")]
+        public IActionResult DeleteCode([FromBody] DeleteCode DeleteCode)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(DeleteCode.userid, DeleteCode.token);
+                if (issucess)
+                {
+                    var deletecode = _otpBAL.DeleteCode(DeleteCode);
+                    return Ok(deletecode);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Delete Code", Details = ex.Message });
             }
         }
     }

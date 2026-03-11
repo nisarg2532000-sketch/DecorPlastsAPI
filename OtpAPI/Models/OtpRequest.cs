@@ -26,7 +26,7 @@
     }
     public class AdminDashboard 
     {
-        public string AdminName { get; set; }
+        public string Name { get; set; }
         public string PandingOrdercount { get; set; }
         public string CompletedOrderCount { get; set; }
         public string Availavlestockcount { get; set; }
@@ -113,5 +113,26 @@
         public string userid { get; set; }
         public string token { get; set; }
         public string Size { get; set; }
+    }
+    public class DeleteSize
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string SizeId { get; set; }
+        public string IsDelete { get; set; }
+    }
+    public class DeleteCode
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string CodeId { get; set; }
+        public string IsDelete { get; set; }
+    }
+    public class DeleteCategory
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string CategoryId { get; set; }
+        public string IsDelete { get; set; }
     }
 }
