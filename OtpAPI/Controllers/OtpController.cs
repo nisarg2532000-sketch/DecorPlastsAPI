@@ -297,7 +297,7 @@ namespace OtpAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while Delete Code", Details = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while Delete Category", Details = ex.Message });
             }
         }
     }
