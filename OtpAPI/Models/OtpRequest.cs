@@ -1,5 +1,10 @@
 ﻿namespace OtpAPI.Models
 {
+    public class SpResult
+    {
+        public int Status { get; set; }
+        public string Message { get; set; }
+    }
     public class OtpRequest
     {
         public string PhoneNumber { get; set; }
@@ -103,36 +108,17 @@
         public string SizeId { get; set; }
         public string CategoryId { get; set; }
     }
-    public class SpResult
-    {
-        public int Status { get; set; }
-        public string Message { get; set; }
-    }
     public class AddSize
     {
         public string userid { get; set; }
         public string token { get; set; }
         public string Size { get; set; }
     }
-    public class DeleteSize
+    public class Delete
     {
         public string userid { get; set; }
         public string token { get; set; }
-        public string SizeId { get; set; }
-        public string IsDelete { get; set; }
-    }
-    public class DeleteCode
-    {
-        public string userid { get; set; }
-        public string token { get; set; }
-        public string CodeId { get; set; }
-        public string IsDelete { get; set; }
-    }
-    public class DeleteCategory
-    {
-        public string userid { get; set; }
-        public string token { get; set; }
-        public string CategoryId { get; set; }
+        public string Id { get; set; }
         public string IsDelete { get; set; }
     }
 }

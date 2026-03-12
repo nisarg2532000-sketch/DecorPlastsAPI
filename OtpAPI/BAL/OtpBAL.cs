@@ -169,22 +169,29 @@ namespace OtpAPI.BAL
             var result = _DB.Query<SpResult>("USP_AddSize", param).FirstOrDefault();
             return result;
         }
-        public SpResult DeleteSize(DeleteSize DeleteSize)
+        public SpResult DeleteSize(Delete DeleteSize)
         {
             var param = new DynamicParameters();
-            param.Add("@SizeId", Convert.ToInt32(DeleteSize.SizeId));
+            param.Add("@SizeId", Convert.ToInt32(DeleteSize.Id));
             param.Add("@I_IsDelete", DeleteSize.IsDelete);
             var result = _DB.Query<SpResult>("USP_DeleteSize", param).FirstOrDefault();
             return result;
         }
-        public SpResult DeleteCode(DeleteCode DeleteCode)
+        public SpResult DeleteCode(Delete DeleteCode)
         {
             var param = new DynamicParameters();
-            param.Add("@CodeId", Convert.ToInt32(DeleteCode.userid));
+            param.Add("@CodeId", Convert.ToInt32(DeleteCode.Id));
             param.Add("@I_IsDelete", DeleteCode.IsDelete);
             var result = _DB.Query<SpResult>("USP_DeleteSize", param).FirstOrDefault();
             return result;
         }
-// USP_DeleteCategory
+        public SpResult DeleteCategory(Delete DeleteCategory)
+        {
+            var param = new DynamicParameters();
+            param.Add("@I_CategoryId", Convert.ToInt32(DeleteCategory.Id));
+            param.Add("@I_IsDelete", DeleteCategory.IsDelete);
+            var result = _DB.Query<SpResult>("USP_DeleteCategory", param).FirstOrDefault();
+            return result;
+        }
     }
 }

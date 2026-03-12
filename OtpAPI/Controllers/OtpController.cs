@@ -247,7 +247,7 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("DeleteSize")]
-        public IActionResult DeleteSize([FromBody] DeleteSize DeleteSize)
+        public IActionResult DeleteSize([FromBody] Delete DeleteSize)
         {
             try
             {
@@ -265,7 +265,7 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("DeleteCode")]
-        public IActionResult DeleteCode([FromBody] DeleteCode DeleteCode)
+        public IActionResult DeleteCode([FromBody] Delete DeleteCode)
         {
             try
             {
@@ -274,6 +274,24 @@ namespace OtpAPI.Controllers
                 {
                     var deletecode = _otpBAL.DeleteCode(DeleteCode);
                     return Ok(deletecode);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Delete Code", Details = ex.Message });
+            }
+        }
+        [HttpPost("DeleteCategory")]
+        public IActionResult DeleteCrategory([FromBody] Delete DeleteCategory)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(DeleteCategory.userid, DeleteCategory.token);
+                if (issucess)
+                {
+                    var deletecategory = _otpBAL.DeleteCategory(DeleteCategory);
+                    return Ok(DeleteCategory);
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }
