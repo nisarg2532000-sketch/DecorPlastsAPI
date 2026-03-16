@@ -50,15 +50,28 @@
     }
     public class GetCode
     {
-        public string userid { get; set; }
-        public string token { get; set; }
         public int CodeId { get; set; }
         public string CodeName { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public List<SizeItem> Sizes { get; set; }  // ✅ Array of objects
+        public string Status { get; set; }
+    }
+    public class GetCodeRaw
+    {
+        public int CodeId { get; set; }
+        public string CodeName { get; set; }
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string SizeId { get; set; }    // "1,2,3"
+        public string Sizes { get; set; }     // "22 x 78, 25 x 78, 31 x 78"
+        public string Status { get; set; }
+    }
+
+    public class SizeItem
+    {
         public int SizeId { get; set; }
         public string Size { get; set; }
-        public string Status { get; set; }
     }
     public class GetSize
     {

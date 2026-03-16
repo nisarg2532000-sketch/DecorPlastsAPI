@@ -103,7 +103,32 @@ namespace OtpAPI.BAL
             var param = new DynamicParameters();
             param.Add("@CodeId", CodeId);
             param.Add("@CategoryId", CategoryId);
-            return _DB.Query<GetCode>("USP_GetCodesById", param).ToList();
+            var rawList = _DB.Query<GetCodeRaw>("USP_GetCodesById", param).ToList();
+            return rawList.Select(c =>
+            {
+                var sizeIdArray = c.SizeId?.Split(',')
+                                     .Select(s => int.Parse(s.Trim()))
+                                     .ToList() ?? new List<int>();
+
+                var sizeNameArray = c.Sizes?.Split(',')
+                                     .Select(s => s.Trim())
+                                     .ToList() ?? new List<string>();
+
+                return new GetCode
+                {
+                    CodeId = c.CodeId,
+                    CodeName = c.CodeName,
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName,
+                    Status = c.Status,
+                    Sizes = sizeIdArray
+                                    .Select((id, index) => new SizeItem
+                                    {
+                                        SizeId = id,
+                                        Size = sizeNameArray.ElementAtOrDefault(index) ?? ""
+                                    }).ToList()
+                };
+            }).ToList();
         }
         public List<GetSize> GetSizeByID(int SizeId)
         {
@@ -156,7 +181,7 @@ namespace OtpAPI.BAL
             var param = new DynamicParameters();
             param.Add("@p_UserId", Convert.ToInt32(AddCode.userid));
             param.Add("@p_CodeName", AddCode.CodeName);
-            param.Add("@p_SizeId", Convert.ToInt32(AddCode.SizeId));
+            param.Add("@p_SizeId", AddCode.SizeId);
             param.Add("@p_CategoryId", Convert.ToInt32(AddCode.CategoryId));
             var result = _DB.Query<SpResult>("USP_AddCode", param).FirstOrDefault();
             return result;
