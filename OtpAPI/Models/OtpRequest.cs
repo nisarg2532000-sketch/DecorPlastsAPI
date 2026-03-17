@@ -28,6 +28,7 @@
         public bool Status {  get; set; }
         public string Message { get; set; }
         public string Token { get; set; }
+        public string UserType { get; set; }
     }
     public class AdminDashboard 
     {
@@ -54,7 +55,7 @@
         public string CodeName { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public List<SizeItem> Sizes { get; set; }  // ✅ Array of objects
+        public List<SizeItem> Sizes { get; set; } 
         public string Status { get; set; }
     }
     public class GetCodeRaw
@@ -65,6 +66,7 @@
         public string CategoryName { get; set; }
         public string SizeId { get; set; }    // "1,2,3"
         public string Sizes { get; set; }     // "22 x 78, 25 x 78, 31 x 78"
+        public string Quantity { get; set; }
         public string Status { get; set; }
     }
 
@@ -72,6 +74,7 @@
     {
         public int SizeId { get; set; }
         public string Size { get; set; }
+        public int Quantity { get; set; }
     }
     public class GetSize
     {

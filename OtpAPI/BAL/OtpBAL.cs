@@ -113,6 +113,10 @@ namespace OtpAPI.BAL
                 var sizeNameArray = c.Sizes?.Split(',')
                                      .Select(s => s.Trim())
                                      .ToList() ?? new List<string>();
+                
+                var quantityArray = c.Quantity?.Split(',')        // ✅ parse quantities
+                          .Select(s => int.Parse(s.Trim()))
+                          .ToList() ?? new List<int>();
 
                 return new GetCode
                 {
@@ -125,7 +129,8 @@ namespace OtpAPI.BAL
                                     .Select((id, index) => new SizeItem
                                     {
                                         SizeId = id,
-                                        Size = sizeNameArray.ElementAtOrDefault(index) ?? ""
+                                        Size = sizeNameArray.ElementAtOrDefault(index) ?? "",
+                                        Quantity = quantityArray.ElementAtOrDefault(index)
                                     }).ToList()
                 };
             }).ToList();
