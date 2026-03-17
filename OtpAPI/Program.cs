@@ -85,7 +85,8 @@ app.UseCors("AllowAll");
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DecorPlastsAPI v1");
+    // ✅ Relative path — works locally AND on AWS regardless of prefix
+    c.SwaggerEndpoint("v1/swagger.json", "DecorPlastsAPI v1");
     c.RoutePrefix = "swagger";
 });
 
