@@ -49,7 +49,15 @@ builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<OtpBAL>();
 builder.Services.AddScoped<IDataRepository, DataRepository>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "DecorPlastsAPI",
+        Version = "v1"
+    });
+});
+
 builder.Services.AddScoped<OtpService>();
 
 // ✅ MySQL Connection (replaced UseSqlServer)
@@ -74,11 +82,12 @@ builder.Services.AddRateLimiter(options =>
 var app = builder.Build();
 app.UseRateLimiter();
 app.UseCors("AllowAll");
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DecorPlastsAPI v1");
+    c.RoutePrefix = "swagger";
+});
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
