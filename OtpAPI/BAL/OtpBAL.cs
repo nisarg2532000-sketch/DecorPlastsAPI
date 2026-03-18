@@ -113,7 +113,7 @@ namespace OtpAPI.BAL
                 var sizeNameArray = c.Sizes?.Split(',')
                                      .Select(s => s.Trim())
                                      .ToList() ?? new List<string>();
-                
+
                 var quantityArray = c.Quantity?.Split(',')        // ✅ parse quantities
                           .Select(s => int.Parse(s.Trim()))
                           .ToList() ?? new List<int>();
@@ -221,6 +221,16 @@ namespace OtpAPI.BAL
             param.Add("@I_CategoryId", Convert.ToInt32(DeleteCategory.Id));
             param.Add("@I_IsDelete", DeleteCategory.IsDelete);
             var result = _DB.Query<SpResult>("USP_DeleteCategory", param).FirstOrDefault();
+            return result;
+        }
+        public SpResult AddStock(AddStock addStock)
+        {
+            var param = new DynamicParameters();
+            param.Add("@p_CategoryId", Convert.ToInt32(addStock.CategoryId));
+            param.Add("@p_CodeId", Convert.ToInt32(addStock.CodeId));
+            param.Add("@p_SizeId", Convert.ToInt32(addStock.SizeId));
+            param.Add("@p_Quantity", Convert.ToInt32(addStock.Quantity));
+            var result = _DB.Query<SpResult>("USP_AddUpdateStock", param).FirstOrDefault();
             return result;
         }
     }

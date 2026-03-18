@@ -137,4 +137,14 @@
         public string Id { get; set; }
         public string IsDelete { get; set; }
     }
+    public class AddStock
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string CategoryId { get; set; }
+        public string CodeId { get; set; }
+        public string SizeId { get; set; }
+        public string Quantity { get; set; }
+        public string Status { get; set; }
+    }
 }
