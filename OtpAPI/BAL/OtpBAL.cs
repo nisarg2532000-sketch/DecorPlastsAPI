@@ -98,42 +98,49 @@ namespace OtpAPI.BAL
 
             return _DB.Query<GetCategory>("USP_GetAllCategoryByID", param).ToList();
         }
-        public List<GetCode> GetCodeByID(int CodeId, int CategoryId)
+        public List<GetCodeByCategory> GetCodeByID(int CodeId, int CategoryId)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@CodeId", CodeId);
             param.Add("@CategoryId", CategoryId);
             var rawList = _DB.Query<GetCodeRaw>("USP_GetCodesById", param).ToList();
-            return rawList.Select(c =>
-            {
-                var sizeIdArray = c.SizeId?.Split(',')
-                                     .Select(s => int.Parse(s.Trim()))
-                                     .ToList() ?? new List<int>();
+            if (!rawList.Any()) return new List<GetCodeByCategory>();
 
-                var sizeNameArray = c.Sizes?.Split(',')
-                                     .Select(s => s.Trim())
-                                     .ToList() ?? new List<string>();
-
-                var quantityArray = c.Quantity?.Split(',')        // ✅ parse quantities
-                          .Select(s => int.Parse(s.Trim()))
-                          .ToList() ?? new List<int>();
-
-                return new GetCode
+            return rawList
+                .GroupBy(c => new { c.CategoryId, c.CategoryName })  // Group by category
+                .Select(group => new GetCodeByCategory
                 {
-                    CodeId = c.CodeId,
-                    CodeName = c.CodeName,
-                    CategoryId = c.CategoryId,
-                    CategoryName = c.CategoryName,
-                    Status = c.Status,
-                    Sizes = sizeIdArray
-                                    .Select((id, index) => new SizeItem
-                                    {
-                                        SizeId = id,
-                                        Size = sizeNameArray.ElementAtOrDefault(index) ?? "",
-                                        Quantity = quantityArray.ElementAtOrDefault(index)
-                                    }).ToList()
-                };
-            }).ToList();
+                    CategoryId = group.Key.CategoryId,
+                    CategoryName = group.Key.CategoryName,
+                    Codes = group.Select(c =>
+                    {
+                        var sizeIdArray = c.SizeId?.Split(',')
+                                             .Select(s => int.Parse(s.Trim()))
+                                             .ToList() ?? new List<int>();
+
+                        var sizeNameArray = c.Sizes?.Split(',')
+                                             .Select(s => s.Trim())
+                                             .ToList() ?? new List<string>();
+
+                        var quantityArray = c.Quantity?.Split(',')
+                                             .Select(s => int.Parse(s.Trim()))
+                                             .ToList() ?? new List<int>();
+
+                        return new GetCode
+                        {
+                            CodeId = c.CodeId,
+                            CodeName = c.CodeName,
+                            Status = c.Status,
+                            Sizes = sizeIdArray
+                                .Select((id, index) => new SizeItem
+                                {
+                                    SizeId = id,
+                                    Size = sizeNameArray.ElementAtOrDefault(index) ?? "",
+                                    Quantity = quantityArray.ElementAtOrDefault(index)
+                                }).ToList()
+                        };
+                    }).ToList()
+                }).ToList();
         }
         public List<GetSize> GetSizeByID(int SizeId)
         {

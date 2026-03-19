@@ -49,6 +49,12 @@
         public string CategoryName { get; set; }
         public string Status { get; set; }
     }
+    public class GetCodeByCategory
+    {
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public List<GetCode> Codes { get; set; }
+    }
     public class GetCode
     {
         public int CodeId { get; set; }
