@@ -147,4 +147,15 @@
         public string Quantity { get; set; }
         public string Status { get; set; }
     }
+    public class InsertUpdateOrder
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string OrderId { get; set; }
+        public string CategoryId { get; set; }
+        public string CodeId { get; set; }
+        public string SizeId { get; set; }
+        public string Quantity { get; set; }
+        public string Status { get; set; }
+    }
 }

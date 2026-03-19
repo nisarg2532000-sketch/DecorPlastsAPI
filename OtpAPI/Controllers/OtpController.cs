@@ -318,5 +318,23 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Add Stock", Details = ex.Message });
             }
         }
+        [HttpPost("InsertUpdateOrder")]
+        public IActionResult InsertUpdateOrder([FromBody] InsertUpdateOrder insertUpdateOrder)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
+                if (issucess)
+                {
+                    var order = _otpBAL.InsertUpdateOrder(insertUpdateOrder);
+                    return Ok(order);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Insert Update Order", Details = ex.Message });
+            }
+        }
     }
 }

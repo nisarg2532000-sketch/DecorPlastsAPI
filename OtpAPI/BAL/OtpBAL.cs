@@ -42,7 +42,7 @@ namespace OtpAPI.BAL
         }
         public bool SaveOtp(OtpEntity otpEntity)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@PhoneNumber", otpEntity.PhoneNumber);
             param.Add("@OtpCode", otpEntity.OtpCode);
             param.Add("@ExpiryTime", DateTime.Now.AddMinutes(5));
@@ -52,7 +52,7 @@ namespace OtpAPI.BAL
 
         public IsverifyOtp VerifyOtp(string phoneNumber, string otp)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@P_PhoneNumber", phoneNumber);
             param.Add("@O_OtpCode", otp);
 
@@ -62,14 +62,14 @@ namespace OtpAPI.BAL
         }
         public bool SaveToken(string token, string mobileno)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@PhoneNumber", mobileno);
             param.Add("@TokenValue", token);
             return _DB.ExecuteSP("USP_SaveToken", param) > 0;
         }
         public bool Verifytoken(string userid, string token)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@p_UserId", Convert.ToInt32(userid));
             param.Add("@p_Token", token);
 
@@ -80,7 +80,7 @@ namespace OtpAPI.BAL
         {
             AdminDashboard dashboardData = new AdminDashboard();
 
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@Userid", userid);
 
             var result = _DB.QueryFirstOrDefault<AdminDashboard>("USP_GetDashboardCounts", param);
@@ -93,14 +93,14 @@ namespace OtpAPI.BAL
         }
         public List<GetCategory> GetAllCategoryByID(int CategoryId)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@CategoryId", CategoryId);
 
             return _DB.Query<GetCategory>("USP_GetAllCategoryByID", param).ToList();
         }
         public List<GetCode> GetCodeByID(int CodeId, int CategoryId)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@CodeId", CodeId);
             param.Add("@CategoryId", CategoryId);
             var rawList = _DB.Query<GetCodeRaw>("USP_GetCodesById", param).ToList();
@@ -137,14 +137,14 @@ namespace OtpAPI.BAL
         }
         public List<GetSize> GetSizeByID(int SizeId)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@SizeId", SizeId);
             return _DB.Query<GetSize>("UPS_GetSizeByID", param).ToList();
         }
 
         public bool UpdateCategory(UpdateCategory UpdateCategory)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@p_CategoryId", Convert.ToInt32(UpdateCategory.CategoryId));
             param.Add("@p_CategoryName", UpdateCategory.CategoryName);
             param.Add("@p_IsActive", Convert.ToInt32(UpdateCategory.Status));
@@ -153,7 +153,7 @@ namespace OtpAPI.BAL
         }
         public bool UpdateCode(UpdateCodes UpdateCodes)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@p_CodeId", Convert.ToInt32(UpdateCodes.CodeId));
             param.Add("@p_CodeName", UpdateCodes.CodeName);
             param.Add("@p_SizeId", Convert.ToInt32(UpdateCodes.SizeId));
@@ -164,7 +164,7 @@ namespace OtpAPI.BAL
         }
         public SpResult UpdateSize(UpdateSize UpdateSize)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@P_UserId", Convert.ToInt32(UpdateSize.userid));
             param.Add("@p_Id", Convert.ToInt32(UpdateSize.SizeId));
             param.Add("@p_Size", UpdateSize.Size);
@@ -174,7 +174,7 @@ namespace OtpAPI.BAL
         }
         public bool AddCategory(AddCategory AddCategory)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@UserId", Convert.ToInt32(AddCategory.userid));
             param.Add("@C_CategoryName", AddCategory.Category);
 
@@ -183,7 +183,7 @@ namespace OtpAPI.BAL
         }
         public SpResult AddCode(AddCode AddCode)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@p_UserId", Convert.ToInt32(AddCode.userid));
             param.Add("@p_CodeName", AddCode.CodeName);
             param.Add("@p_SizeId", AddCode.SizeId);
@@ -193,7 +193,7 @@ namespace OtpAPI.BAL
         }
         public SpResult AddSize(AddSize AddSize)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@p_UserId", Convert.ToInt32(AddSize.userid));
             param.Add("@p_Size", AddSize.Size);
             var result = _DB.Query<SpResult>("USP_AddSize", param).FirstOrDefault();
@@ -201,7 +201,7 @@ namespace OtpAPI.BAL
         }
         public SpResult DeleteSize(Delete DeleteSize)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@SizeId", Convert.ToInt32(DeleteSize.Id));
             param.Add("@I_IsDelete", DeleteSize.IsDelete);
             var result = _DB.Query<SpResult>("USP_DeleteSize", param).FirstOrDefault();
@@ -209,7 +209,7 @@ namespace OtpAPI.BAL
         }
         public SpResult DeleteCode(Delete DeleteCode)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@CodeId", Convert.ToInt32(DeleteCode.Id));
             param.Add("@I_IsDelete", DeleteCode.IsDelete);
             var result = _DB.Query<SpResult>("USP_DeleteSize", param).FirstOrDefault();
@@ -217,7 +217,7 @@ namespace OtpAPI.BAL
         }
         public SpResult DeleteCategory(Delete DeleteCategory)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@I_CategoryId", Convert.ToInt32(DeleteCategory.Id));
             param.Add("@I_IsDelete", DeleteCategory.IsDelete);
             var result = _DB.Query<SpResult>("USP_DeleteCategory", param).FirstOrDefault();
@@ -225,12 +225,25 @@ namespace OtpAPI.BAL
         }
         public SpResult AddStock(AddStock addStock)
         {
-            var param = new DynamicParameters();
+            DynamicParameters param = new DynamicParameters();
             param.Add("@p_CategoryId", Convert.ToInt32(addStock.CategoryId));
             param.Add("@p_CodeId", Convert.ToInt32(addStock.CodeId));
             param.Add("@p_SizeId", Convert.ToInt32(addStock.SizeId));
             param.Add("@p_Quantity", Convert.ToInt32(addStock.Quantity));
             var result = _DB.Query<SpResult>("USP_AddUpdateStock", param).FirstOrDefault();
+            return result;
+        }
+        public SpResult InsertUpdateOrder(InsertUpdateOrder insertUpdateOrder)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
+            parameters.Add("@p_Id", Convert.ToInt32(insertUpdateOrder.OrderId));
+            parameters.Add("@p_OrderCategoryId", Convert.ToInt32(insertUpdateOrder.CategoryId));
+            parameters.Add("@p_OrderCodeId", Convert.ToInt32(insertUpdateOrder.CodeId));
+            parameters.Add("@p_OrderSizeId", Convert.ToInt32(insertUpdateOrder.SizeId));
+            parameters.Add("@p_Quantity", Convert.ToInt32(insertUpdateOrder.Quantity));
+            parameters.Add("@p_Status", insertUpdateOrder.Status);
+            var result = _DB.Query<SpResult>("USP_InsertUpdateOrder", parameters).FirstOrDefault();
             return result;
         }
     }
