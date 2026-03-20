@@ -86,7 +86,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     // ✅ Relative path — works locally AND on AWS regardless of prefix
-    c.SwaggerEndpoint("v1/swagger.json", "DecorPlastsAPI v1");
+    c.SwaggerEndpoint("/api2/swagger/v1/swagger.json", "DecorPlastsAPI v1");
     c.RoutePrefix = "swagger";
 });
 
