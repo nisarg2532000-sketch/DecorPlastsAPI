@@ -80,13 +80,14 @@ builder.Services.AddRateLimiter(options =>
 });
 
 var app = builder.Build();
+app.UsePathBase("/api2");
 app.UseRateLimiter();
 app.UseCors("AllowAll");
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     // ✅ Relative path — works locally AND on AWS regardless of prefix
-    c.SwaggerEndpoint("/api2/swagger/v1/swagger.json", "DecorPlastsAPI v1");
+    c.SwaggerEndpoint("v1/swagger.json", "DecorPlastsAPI v1");
     c.RoutePrefix = "swagger";
 });
 
