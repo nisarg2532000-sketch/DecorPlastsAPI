@@ -354,5 +354,22 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Get Order By Id", Details = ex.Message });
             }
         }
+        public IActionResult UserLogout([FromBody] getdata getdata) 
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var status = _otpBAL.UserLogout(Convert.ToInt32(getdata.userid));
+                    return Ok(status);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while User Logout", Details = ex.Message });
+            }
+        }
     }
 }

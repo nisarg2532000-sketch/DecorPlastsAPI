@@ -84,8 +84,6 @@
     }
     public class GetSize
     {
-        public string userid { get; set; }
-        public string token { get; set; }
         public int SizeId { get; set; }
         public string Size { get; set; }
         public string Status { get; set; }

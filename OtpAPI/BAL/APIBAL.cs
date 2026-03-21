@@ -259,5 +259,12 @@ namespace OtpAPI.BAL
             param.Add("@UserId", UserId);
             return _DB.Query<OrderDetails>("USP_GetOrderById", param).ToList();
         }
+        public SpResult UserLogout(int userid)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@UserId", userid);
+            var result = _DB.Query<SpResult>("USP_Logout", param).FirstOrDefault();
+            return result;
+        }
     }
 }
