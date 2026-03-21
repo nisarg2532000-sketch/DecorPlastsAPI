@@ -354,6 +354,7 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Get Order By Id", Details = ex.Message });
             }
         }
+        [HttpPost("UserLogout")]
         public IActionResult UserLogout([FromBody] getdata getdata) 
         {
             try
