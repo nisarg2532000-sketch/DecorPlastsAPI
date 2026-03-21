@@ -80,7 +80,6 @@ builder.Services.AddRateLimiter(options =>
 });
 
 var app = builder.Build();
-app.UsePathBase("/api2");
 app.UseRateLimiter();
 app.UseCors("AllowAll");
 app.UseSwagger();
