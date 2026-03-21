@@ -11,12 +11,12 @@ using System.Data;
 using Twilio.Jwt.AccessToken;
 namespace OtpAPI.BAL
 {
-    public class OtpBAL
+    public class APIBAL
     {
         private readonly IConfiguration _configuration;
         private readonly IDataRepository _DB;
 
-        public OtpBAL(IConfiguration configuration, IDataRepository DB)
+        public APIBAL(IConfiguration configuration, IDataRepository DB)
         {
             _configuration = configuration;
             _DB = DB;
@@ -252,6 +252,12 @@ namespace OtpAPI.BAL
             parameters.Add("@p_Status", insertUpdateOrder.Status);
             var result = _DB.Query<SpResult>("USP_InsertUpdateOrder", parameters).FirstOrDefault();
             return result;
+        }
+        public List<OrderDetails> GetOrderDetails(int UserId)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@UserId", UserId);
+            return _DB.Query<OrderDetails>("USP_GetOrderById", param).ToList();
         }
     }
 }

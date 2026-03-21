@@ -5,7 +5,7 @@
         public int Status { get; set; }
         public string Message { get; set; }
     }
-    public class OtpRequest
+    public class APIRequest
     {
         public string PhoneNumber { get; set; }
     }
@@ -161,6 +161,17 @@
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
         public string SizeId { get; set; }
+        public string Quantity { get; set; }
+        public string Status { get; set; }
+    }
+    public class OrderDetails
+    {
+        public string OrderCategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string OrderCodeId { get; set; }
+        public string CodeName { get; set; }
+        public string OrderSizeId {  get; set; }
+        public string SizeName { get; set; }
         public string Quantity { get; set; }
         public string Status { get; set; }
     }

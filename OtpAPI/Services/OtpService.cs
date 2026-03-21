@@ -15,10 +15,10 @@ namespace OtpAPI.Services
     {
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
-        private readonly OtpBAL _otpBAL;
+        private readonly APIBAL _otpBAL;
         private static ConcurrentDictionary<string, string> _otpStore = new();
 
-        public OtpService(IConfiguration configuration, ApplicationDbContext context, OtpBAL otpBAL)
+        public OtpService(IConfiguration configuration, ApplicationDbContext context, APIBAL otpBAL)
         {
             _configuration = configuration;
             _context = context;

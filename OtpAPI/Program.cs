@@ -46,7 +46,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<JwtService>();
-builder.Services.AddScoped<OtpBAL>();
+builder.Services.AddScoped<APIBAL>();
 builder.Services.AddScoped<IDataRepository, DataRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

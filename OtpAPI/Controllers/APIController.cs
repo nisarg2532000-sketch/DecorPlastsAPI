@@ -14,12 +14,12 @@ namespace OtpAPI.Controllers
     [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
-    public class OtpController : Controller
+    public class APIController : Controller
     {
         private readonly OtpService _otpService;
-        private readonly OtpBAL _otpBAL;
+        private readonly APIBAL _otpBAL;
         private readonly JwtService _jwtService;
-        public OtpController(OtpService otpService, OtpBAL otpBAL, JwtService jwtService)
+        public APIController(OtpService otpService, APIBAL otpBAL, JwtService jwtService)
         {
             _otpService = otpService;
             _otpBAL = otpBAL;
@@ -27,7 +27,7 @@ namespace OtpAPI.Controllers
         }
 
         [HttpPost("GenerateOtp")]
-        public IActionResult GenerateOtp([FromBody] OtpRequest request)
+        public IActionResult GenerateOtp([FromBody] APIRequest request)
         {
             try
             {
@@ -334,6 +334,24 @@ namespace OtpAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "An error occurred while Insert Update Order", Details = ex.Message });
+            }
+        }
+        [HttpPost("GetOrderByUserId")]
+        public IActionResult GetOrderByUserId([FromBody] getdata getdata, string userid)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var order = _otpBAL.GetOrderDetails(Convert.ToInt32(userid));
+                    return Ok(order);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Order By Id", Details = ex.Message });
             }
         }
     }
