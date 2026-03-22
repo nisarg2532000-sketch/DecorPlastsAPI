@@ -355,7 +355,7 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("UserLogout")]
-        public IActionResult UserLogout([FromBody] getdata getdata) 
+        public IActionResult UserLogout([FromBody] getdata getdata)
         {
             try
             {
@@ -372,5 +372,42 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while User Logout", Details = ex.Message });
             }
         }
+        [HttpPost("GetAllNotifications")]
+        public IActionResult GetAllNotifications([FromBody] getdata getdata)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var notifications = _otpBAL.GetAllNotifications(Convert.ToInt32(getdata.userid));
+                    return Ok(notifications);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get All Notifications", Details = ex.Message });
+            }
+        }
+        [HttpPost("GetNotificationById")]
+        public IActionResult GetNotificationById([FromBody] getdata getdata)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var notification = _otpBAL.GetAllNotifications(Convert.ToInt32(getdata.userid));
+                    return Ok(notification);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Notification By Id", Details = ex.Message });
+            }
+        }
+         //   [HttpPost("MarkNotificationAsRead")]
     }
 }

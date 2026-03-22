@@ -59,8 +59,6 @@
     {
         public int CodeId { get; set; }
         public string CodeName { get; set; }
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
         public List<SizeItem> Sizes { get; set; } 
         public string Status { get; set; }
     }
@@ -172,5 +170,15 @@
         public string SizeName { get; set; }
         public string Quantity { get; set; }
         public string Status { get; set; }
+    }
+    public class Notifications
+    {
+        public string NotificationId { get; set; }
+        public string UserId { get; set; }
+        public string Title { get; set; }
+        public string Message { get; set; }
+        public string Type { get; set; }
+        public bool IsRead { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

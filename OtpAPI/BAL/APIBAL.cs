@@ -266,5 +266,17 @@ namespace OtpAPI.BAL
             var result = _DB.Query<SpResult>("USP_Logout", param).FirstOrDefault();
             return result;
         }
+        public List<Notifications> GetAllNotifications(int userid)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_UserId", userid);
+            return _DB.Query<Notifications>("USP_GetAllNotifications").ToList();
+        }
+        public List<Notifications> GetUnreadNotifications(int userid)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_UserId", userid);
+            return _DB.Query<Notifications>("USP_GetUnreadNotifications").ToList();
+        }
     }
 }
