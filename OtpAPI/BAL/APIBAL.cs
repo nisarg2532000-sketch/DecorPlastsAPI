@@ -278,5 +278,12 @@ namespace OtpAPI.BAL
             param.Add("@p_UserId", userid);
             return _DB.Query<Notifications>("USP_GetUnreadNotifications").ToList();
         }
+        public Count GetUnreadNotificationCount(int userid)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_UserId", userid);
+            return _DB.Query<Count>("USP_GetUnreadCount", param).FirstOrDefault();
+        }
+         
     }
 }

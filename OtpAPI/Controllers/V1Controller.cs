@@ -14,12 +14,12 @@ namespace OtpAPI.Controllers
     [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
-    public class APIController : Controller
+    public class V1Controller : Controller
     {
         private readonly OtpService _otpService;
         private readonly APIBAL _otpBAL;
         private readonly JwtService _jwtService;
-        public APIController(OtpService otpService, APIBAL otpBAL, JwtService jwtService)
+        public V1Controller(OtpService otpService, APIBAL otpBAL, JwtService jwtService)
         {
             _otpService = otpService;
             _otpBAL = otpBAL;
@@ -66,7 +66,7 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while verifying OTP", Details = ex.Message });
             }
         }
-        [HttpPost("GetAdminDashbord")]
+        [HttpGet("GetAdminDashbord")]
         public IActionResult GetAdminDashbordData([FromBody] getdata getdata)
         {
             try
@@ -372,25 +372,25 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while User Logout", Details = ex.Message });
             }
         }
-        [HttpPost("GetAllNotifications")]
-        public IActionResult GetAllNotifications([FromBody] getdata getdata)
+        [HttpPost("GetUnreadNotifications")]
+        public IActionResult GetUnreadNotifications([FromBody] getdata getdata)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var notifications = _otpBAL.GetAllNotifications(Convert.ToInt32(getdata.userid));
+                    var notifications = _otpBAL.GetUnreadNotifications(Convert.ToInt32(getdata.userid));
                     return Ok(notifications);
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while Get All Notifications", Details = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while Get Unread Notifications", Details = ex.Message });
             }
         }
-        [HttpPost("GetNotificationById")]
+        [HttpPost("GetNotificationByUserId")]
         public IActionResult GetNotificationById([FromBody] getdata getdata)
         {
             try
@@ -408,6 +408,23 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Get Notification By Id", Details = ex.Message });
             }
         }
-         //   [HttpPost("MarkNotificationAsRead")]
+        [HttpPost("GetUnredNotificationCount")]
+        public IActionResult GetUnredNotificationCount([FromBody] getdata getdata)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var count = _otpBAL.GetUnreadNotificationCount(Convert.ToInt32(getdata.userid));
+                    return Ok(count);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Unread Notification Count", Details = ex.Message });
+            }
+        }
     }
 }

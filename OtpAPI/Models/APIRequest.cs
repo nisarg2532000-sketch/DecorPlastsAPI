@@ -181,4 +181,8 @@
         public bool IsRead { get; set; }
         public DateTime CreatedAt { get; set; }
     }
+    public class Count
+    {
+        public string NotificationCount { get; set; }
+    }
 }
