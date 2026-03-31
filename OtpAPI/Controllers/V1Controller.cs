@@ -66,7 +66,7 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while verifying OTP", Details = ex.Message });
             }
         }
-        [HttpGet("GetAdminDashbord")]
+        [HttpPost("GetAdminDashbord")]
         public IActionResult GetAdminDashbordData([FromBody] getdata getdata)
         {
             try
