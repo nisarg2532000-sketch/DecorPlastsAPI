@@ -74,7 +74,7 @@ builder.Services.AddRateLimiter(options =>
     options.AddFixedWindowLimiter("OtpPolicy", opt =>
     {
         opt.PermitLimit = 3;
-        opt.Window = TimeSpan.FromMinutes(10);
+        opt.Window = TimeSpan.FromMinutes(60);
         opt.QueueLimit = 0;
     });
 });
