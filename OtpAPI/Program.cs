@@ -60,7 +60,6 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<OtpService>();
 
-// ✅ MySQL Connection (replaced UseSqlServer)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(

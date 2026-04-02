@@ -45,7 +45,7 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@PhoneNumber", otpEntity.PhoneNumber);
             param.Add("@OtpCode", otpEntity.OtpCode);
-            param.Add("@ExpiryTime", DateTime.Now.AddMinutes(5));
+            param.Add("@ExpiryTime", DateTime.Now.AddMinutes(60));
 
             return _DB.ExecuteSP("USP_SaveOtp", param) > 0;
         }
@@ -240,18 +240,24 @@ namespace OtpAPI.BAL
             var result = _DB.Query<SpResult>("USP_AddUpdateStock", param).FirstOrDefault();
             return result;
         }
-        public SpResult InsertUpdateOrder(InsertUpdateOrder insertUpdateOrder)
+        public List<SpResult> InsertUpdateOrder(InsertUpdateOrder insertUpdateOrder)
         {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
-            parameters.Add("@p_Id", Convert.ToInt32(insertUpdateOrder.OrderId));
-            parameters.Add("@p_OrderCategoryId", Convert.ToInt32(insertUpdateOrder.CategoryId));
-            parameters.Add("@p_OrderCodeId", Convert.ToInt32(insertUpdateOrder.CodeId));
-            parameters.Add("@p_OrderSizeId", Convert.ToInt32(insertUpdateOrder.SizeId));
-            parameters.Add("@p_Quantity", Convert.ToInt32(insertUpdateOrder.Quantity));
-            parameters.Add("@p_Status", insertUpdateOrder.Status);
-            var result = _DB.Query<SpResult>("USP_InsertUpdateOrder", parameters).FirstOrDefault();
-            return result;
+            var results = new List<SpResult>();
+            foreach (var item in insertUpdateOrder.items)
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
+                parameters.Add("@p_OrderId", insertUpdateOrder.OrderId);
+                parameters.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
+                parameters.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
+                parameters.Add("@p_OrderSizeId", Convert.ToInt32(item.SizeId));
+                parameters.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
+                parameters.Add("@p_Status", insertUpdateOrder.Status);
+
+                var result = _DB.Query<SpResult>("USP_InsertUpdateOrder", parameters).FirstOrDefault();
+                results.Add(result);
+            }
+            return results;
         }
         public List<OrderDetails> GetOrderDetails(int UserId)
         {

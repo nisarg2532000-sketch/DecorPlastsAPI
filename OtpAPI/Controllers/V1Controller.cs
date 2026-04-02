@@ -326,8 +326,24 @@ namespace OtpAPI.Controllers
                 bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
                 if (issucess)
                 {
-                    var order = _otpBAL.InsertUpdateOrder(insertUpdateOrder);
-                    return Ok(order);
+                    if (Convert.ToInt32(insertUpdateOrder.OrderId) == 0)
+                    {
+                        insertUpdateOrder.OrderId = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % int.MaxValue);
+                    }
+                    var orders = insertUpdateOrder.items.Select(item =>
+                    {
+                        var singleOrder = new InsertUpdateOrder
+                        {
+                            userid = insertUpdateOrder.userid,
+                            token = insertUpdateOrder.token,
+                            OrderId = insertUpdateOrder.OrderId,
+                            Status = insertUpdateOrder.Status,
+                            items = new List<OrderItem> { item }
+                        };
+                        return _otpBAL.InsertUpdateOrder(singleOrder);
+                    }).ToList();
+
+                    return Ok(orders);
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }
