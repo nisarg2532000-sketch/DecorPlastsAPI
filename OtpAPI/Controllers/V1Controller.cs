@@ -308,8 +308,26 @@ namespace OtpAPI.Controllers
                 bool issucess = _otpBAL.Verifytoken(AddStock.userid, AddStock.token);
                 if (issucess)
                 {
-                    var addstock = _otpBAL.AddStock(AddStock);
+                    SpResult addstock = _otpBAL.AddStock(AddStock);
                     return Ok(addstock);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Add Stock", Details = ex.Message });
+            }
+        }
+        [HttpPost("GetOrder")]
+        public IActionResult GetOrder([FromBody] getdata getdata)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var getOrderList = _otpBAL.GetOrder(getdata);
+                    return Ok(getOrderList);
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }
@@ -326,7 +344,7 @@ namespace OtpAPI.Controllers
                 bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
                 if (issucess)
                 {
-                    if (Convert.ToInt32(insertUpdateOrder.OrderId) == 0)
+                    if (insertUpdateOrder.OrderId == 0)
                     {
                         insertUpdateOrder.OrderId = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % int.MaxValue);
                     }
@@ -350,24 +368,6 @@ namespace OtpAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "An error occurred while Insert Update Order", Details = ex.Message });
-            }
-        }
-        [HttpPost("GetOrderByUserId")]
-        public IActionResult GetOrderByUserId([FromBody] getdata getdata, string userid)
-        {
-            try
-            {
-                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                if (issucess)
-                {
-                    var order = _otpBAL.GetOrderDetails(Convert.ToInt32(userid));
-                    return Ok(order);
-                }
-                return BadRequest(new { Message = "Token not verified" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while Get Order By Id", Details = ex.Message });
             }
         }
         [HttpPost("UserLogout")]

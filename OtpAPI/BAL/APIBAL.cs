@@ -240,6 +240,48 @@ namespace OtpAPI.BAL
             var result = _DB.Query<SpResult>("USP_AddUpdateStock", param).FirstOrDefault();
             return result;
         }
+        public List<GetOrderList> GetOrder(getdata getdata)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
+
+            // Query flat rows from SP
+            var rows = _DB.Query<dynamic>("USP_GetOrderList", param).ToList();
+
+            if (rows == null || !rows.Any())
+                return null;
+
+            var dict = new Dictionary<long, GetOrderList>();
+            foreach (var row in rows)
+            {
+                long orderId = (long)row.OrderId;
+
+                if (!dict.ContainsKey(orderId))
+                {
+                    dict[orderId] = new GetOrderList
+                    {
+
+                        userid = row.UserId.ToString(),
+                        username = row.UserName,
+                        MobileNo = row.MobileNo.ToString(),
+                        OrderId = row.OrderId,
+                        Status = row.Status,
+                        DateTime = row.CreatedAt.ToString(),
+                        items = new List<OrderItem>()
+                    };
+                }
+                dict[orderId].items.Add(new OrderItem
+                {
+                    // Map each row to OrderItem
+
+                    CategoryId = row.OrderCategoryId.ToString(),
+                    CodeId = row.OrderCodeId.ToString(),
+                    SizeId = row.OrderSizeId.ToString(),
+                    Quantity = row.Quantity.ToString()
+                });
+            }
+            return dict.Values.ToList();
+        }
         public List<SpResult> InsertUpdateOrder(InsertUpdateOrder insertUpdateOrder)
         {
             var results = new List<SpResult>();
@@ -258,12 +300,6 @@ namespace OtpAPI.BAL
                 results.Add(result);
             }
             return results;
-        }
-        public List<OrderDetails> GetOrderDetails(int UserId)
-        {
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@UserId", UserId);
-            return _DB.Query<OrderDetails>("USP_GetOrderById", param).ToList();
         }
         public SpResult UserLogout(int userid)
         {

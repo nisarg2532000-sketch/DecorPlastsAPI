@@ -156,6 +156,16 @@
         public string SizeId { get; set; }
         public string Quantity { get; set; }
     }
+    public class GetOrderList
+    {
+        public string userid { get; set; }
+        public string username { get; set; }
+        public string MobileNo { get; set; }
+        public int OrderId { get; set; }
+        public List<OrderItem> items { get; set; }
+        public string Status { get; set; }
+        public string DateTime { get; set; }
+    }
     public class InsertUpdateOrder
     {
         public string userid { get; set; }
