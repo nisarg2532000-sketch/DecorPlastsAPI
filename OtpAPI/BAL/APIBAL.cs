@@ -76,6 +76,26 @@ namespace OtpAPI.BAL
             var result = _DB.Query<int>("USP_VerifyToken", param).FirstOrDefault();
             return result == 1;
         }
+        public List<UserData> GetUserData(int userid)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@u_Id", userid);
+            var result = _DB.Query<UserData>("USP_GetUserData", param).ToList();
+            return result;
+        }
+        public SpResult InsertUpdateUser(InsertUpdateUser insertUpdateUser)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_Id", Convert.ToInt32(insertUpdateUser.Id));
+            param.Add("@p_OwnerName", insertUpdateUser.OwnerName);
+            param.Add("@p_ShopName", insertUpdateUser.ShopName);
+            param.Add("@p_MobileNo", insertUpdateUser.MobileNo);
+            param.Add("@p_Address", insertUpdateUser.Address);
+            param.Add("@p_Role", insertUpdateUser.Role);
+            param.Add("@p_IsActive", Convert.ToInt32(insertUpdateUser.IsActive));
+            var result = _DB.Query<SpResult>("USP_InsertUpdateUser", param).FirstOrDefault();
+            return result;
+        }
         public AdminDashboard GetAdminDashboardData(int userid)
         {
             AdminDashboard dashboardData = new AdminDashboard();
@@ -84,12 +104,7 @@ namespace OtpAPI.BAL
             param.Add("@Userid", userid);
 
             var result = _DB.QueryFirstOrDefault<AdminDashboard>("USP_GetDashboardCounts", param);
-
-            if (result != null)
-            {
-                dashboardData = result;
-            }
-            return dashboardData;
+            return result;
         }
         public List<GetCategory> GetAllCategoryByID(int CategoryId)
         {
@@ -211,6 +226,7 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@SizeId", Convert.ToInt32(DeleteSize.Id));
             param.Add("@I_IsDelete", DeleteSize.IsDelete);
+
             var result = _DB.Query<SpResult>("USP_DeleteSize", param).FirstOrDefault();
             return result;
         }

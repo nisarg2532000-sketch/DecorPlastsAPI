@@ -66,6 +66,42 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while verifying OTP", Details = ex.Message });
             }
         }
+        [HttpPost("GetUserData")]
+        public IActionResult GetUserData([FromBody] getdata getdata, string id)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var userData = _otpBAL.GetUserData(Convert.ToInt32(id));
+                    return Ok(userData);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get User Data", Details = ex.Message });
+            }
+        }
+        [HttpPost("InsertUpdateUser")]
+        public IActionResult InsertUpdateUser([FromBody] InsertUpdateUser insertUpdateUser)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(insertUpdateUser.userid, insertUpdateUser.token);
+                if (issucess)
+                {
+                    SpResult userData = _otpBAL.InsertUpdateUser(insertUpdateUser);
+                    return Ok(userData);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get User Data", Details = ex.Message });
+            }
+        }
         [HttpPost("GetAdminDashbord")]
         public IActionResult GetAdminDashbordData([FromBody] getdata getdata)
         {

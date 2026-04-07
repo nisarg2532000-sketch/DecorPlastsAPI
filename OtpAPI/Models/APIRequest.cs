@@ -30,6 +30,28 @@
         public string Token { get; set; }
         public string UserType { get; set; }
     }
+    public class InsertUpdateUser
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string Id { get; set; }
+        public string OwnerName { get; set; }
+        public string ShopName { get; set; }
+        public string MobileNo { get; set; }
+        public string Address { get; set; }
+        public string Role { get; set; }
+        public string IsActive { get; set; }
+    }
+    public class UserData
+    {
+        public string Id { get; set; }
+        public string OwnerName { get; set; }
+        public string ShopName { get; set; }
+        public string MobileNo { get; set; }
+        public string Address { get; set; }
+        public string Role { get; set; }
+        public string IsActive { get; set; }
+    }
     public class AdminDashboard 
     {
         public string Name { get; set; }
