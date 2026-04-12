@@ -28,6 +28,7 @@
         public bool Status {  get; set; }
         public string Message { get; set; }
         public string Token { get; set; }
+        public int UserId { get; set; }
         public string UserType { get; set; }
     }
     public class InsertUpdateUser
@@ -207,6 +208,17 @@
         public string Quantity { get; set; }
         public string Status { get; set; }
     }
+    public class InsertUpdateCart
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string CartId { get; set; }
+        public string CategoryId { get; set; }
+        public string CodeId { get; set; }
+        public string SizeId { get; set; }
+        public string Quantity { get; set; }
+    }
+
     public class Notifications
     {
         public string NotificationId { get; set; }

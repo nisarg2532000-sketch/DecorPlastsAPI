@@ -342,6 +342,18 @@ namespace OtpAPI.BAL
             param.Add("@p_UserId", userid);
             return _DB.Query<Count>("USP_GetUnreadCount", param).FirstOrDefault();
         }
-         
-    }
+        public SpResult InsertUpdateCart(InsertUpdateCart insertUpdateCart)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_id", Convert.ToInt32(insertUpdateCart.CartId));
+            param.Add("@p_UserId", Convert.ToInt32(insertUpdateCart.userid));
+            param.Add("@p_categoryid", Convert.ToInt32(insertUpdateCart.CategoryId));
+            param.Add("@p_codeid", Convert.ToInt32(insertUpdateCart.CodeId));
+            param.Add("@p_sizeid", Convert.ToInt32(insertUpdateCart.SizeId));
+            param.Add("@p_quantity", Convert.ToInt32(insertUpdateCart.Quantity));
+            var result = _DB.Query<SpResult>("USP_InsertUpdateCart", param).FirstOrDefault();
+            return result;
+        }
+
+        }
 }
