@@ -392,7 +392,7 @@ namespace OtpAPI.Controllers
                             token = insertUpdateOrder.token,
                             OrderId = insertUpdateOrder.OrderId,
                             Status = insertUpdateOrder.Status,
-                            items = new List<OrderItem> { item }
+                            items = new List<InsertUpdateOrderitem> { item }
                         };
                         return _otpBAL.InsertUpdateOrder(singleOrder);
                     }).ToList();
