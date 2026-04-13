@@ -8,6 +8,7 @@ using MySql.Data.MySqlClient;
 using OtpAPI.Models;
 using System;
 using System.Data;
+using System.Reflection.Metadata;
 using Twilio.Jwt.AccessToken;
 namespace OtpAPI.BAL
 {
@@ -291,8 +292,11 @@ namespace OtpAPI.BAL
                     // Map each row to OrderItem
 
                     CategoryId = row.OrderCategoryId.ToString(),
+                    CategoryName = row.CategoryName,
                     CodeId = row.OrderCodeId.ToString(),
+                    CodeName = row.CodeName,
                     SizeId = row.OrderSizeId.ToString(),
+                    Size = row.Size,
                     Quantity = row.Quantity.ToString()
                 });
             }
@@ -354,6 +358,13 @@ namespace OtpAPI.BAL
             var result = _DB.Query<SpResult>("USP_InsertUpdateCart", param).FirstOrDefault();
             return result;
         }
-
+        public GetCart GetCart(string id,string userid)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_id", Convert.ToInt32(id));
+            param.Add("@p_UserId", Convert.ToInt32(userid));
+            var result = _DB.Query<GetCart>("USP_GetCart", param).FirstOrDefault();
+            return result;
         }
+    }
 }
