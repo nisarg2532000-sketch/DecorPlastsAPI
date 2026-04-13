@@ -175,8 +175,11 @@
     public class OrderItem
     {
         public string CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public string CodeId { get; set; }
+        public string CodeName { get; set; }
         public string SizeId { get; set; }
+        public string Size { get; set; }
         public string Quantity { get; set; }
     }
     public class GetOrderList
@@ -218,7 +221,18 @@
         public string SizeId { get; set; }
         public string Quantity { get; set; }
     }
-
+    public class GetCart
+    {
+        public int id { get; set; }
+        public int categoryid { get; set; }
+        public string CategoryName { get; set; }
+        public int codeid { get; set; }
+        public string CodeName { get; set; }
+        public int sizeid { get; set; }
+        public string Size { get; set; }
+        public int quantity { get; set; }
+        public DateTime createddate { get; set; }
+    }
     public class Notifications
     {
         public string NotificationId { get; set; }
