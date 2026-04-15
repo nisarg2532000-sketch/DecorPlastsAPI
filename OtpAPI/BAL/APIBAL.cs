@@ -211,7 +211,7 @@ namespace OtpAPI.BAL
             param.Add("@p_CodeName", AddCode.CodeName);
             param.Add("@p_SizeId", string.Join(",", AddCode.SizeIds));
             param.Add("@p_CategoryId", Convert.ToInt32(AddCode.CategoryId));
-            var result = _DB.Query<SpResult>("USP_AddCode", param).FirstOrDefault();
+            SpResult result = _DB.Query<SpResult>("USP_AddCode", param).FirstOrDefault();
             return result;
         }
         public SpResult AddSize(AddSize AddSize)

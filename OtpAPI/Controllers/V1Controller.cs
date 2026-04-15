@@ -254,7 +254,7 @@ namespace OtpAPI.Controllers
                 bool issucess = _otpBAL.Verifytoken(AddCode.userid, AddCode.token);
                 if (issucess)
                 {
-                    var Codes = _otpBAL.AddCode(AddCode);
+                    SpResult Codes = _otpBAL.AddCode(AddCode);
                     return Ok(Codes);
                 }
                 return BadRequest(new { Message = "Token not verified" });
