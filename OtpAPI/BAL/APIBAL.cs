@@ -179,7 +179,7 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_CodeId", Convert.ToInt32(UpdateCodes.CodeId));
             param.Add("@p_CodeName", UpdateCodes.CodeName);
-            param.Add("@p_SizeId", Convert.ToInt32(UpdateCodes.SizeId));
+            param.Add("@p_SizeId", string.Join(",", UpdateCodes.SizeIds));
             param.Add("@p_CategoryId", Convert.ToInt32(UpdateCodes.CategoryId));
             param.Add("@p_IsActive", Convert.ToInt32(UpdateCodes.Status));
             var result = _DB.Query<int>("USP_UpdateCode", param).FirstOrDefault();
@@ -209,7 +209,7 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_UserId", Convert.ToInt32(AddCode.userid));
             param.Add("@p_CodeName", AddCode.CodeName);
-            param.Add("@p_SizeId", AddCode.SizeId);
+            param.Add("@p_SizeId", string.Join(",", AddCode.SizeIds));
             param.Add("@p_CategoryId", Convert.ToInt32(AddCode.CategoryId));
             var result = _DB.Query<SpResult>("USP_AddCode", param).FirstOrDefault();
             return result;

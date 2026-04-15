@@ -123,7 +123,7 @@
         public string token { get; set; }
         public string CodeId { get; set; }
         public string CodeName { get;set; }
-        public string SizeId { get; set; }
+        public List<int> SizeIds { get; set; }
         public string CategoryId { get; set; }
         public string Status { get; set; }
     }
@@ -146,7 +146,7 @@
         public string userid { get; set; }
         public string token { get; set; }
         public string CodeName { get; set; }
-        public string SizeId { get; set; }
+        public List<int> SizeIds { get; set; }
         public string CategoryId { get; set; }
     }
     public class AddSize
