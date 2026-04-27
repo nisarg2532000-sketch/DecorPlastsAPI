@@ -62,10 +62,7 @@ builder.Services.AddScoped<OtpService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(
-        connectionString,
-        new MySqlServerVersion(new Version(8, 0, 0))
-    )
+    options.UseSqlServer(connectionString)
 );
 
 builder.Services.AddRateLimiter(options =>

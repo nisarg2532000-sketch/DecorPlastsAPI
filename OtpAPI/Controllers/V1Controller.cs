@@ -406,6 +406,42 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Insert Update Order", Details = ex.Message });
             }
         }
+        [HttpPost("InsertUpdateCart")]
+        public IActionResult InsertUpdateCart([FromBody] InsertUpdateCart insertUpdateCart)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(insertUpdateCart.userid, insertUpdateCart.token);
+                if (issucess)
+                {
+                    SpResult cart = _otpBAL.InsertUpdateCart(insertUpdateCart);
+                    return Ok(cart);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Insert Update Cart", Details = ex.Message });
+            }
+        }
+        [HttpPost("GetCart")]
+        public IActionResult GetCart([FromBody] getdata getdata , string id)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    GetCart cart = _otpBAL.GetCart(id, getdata.userid);
+                    return Ok(cart);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while get Cart", Details = ex.Message });
+            }
+        }
         [HttpPost("UserLogout")]
         public IActionResult UserLogout([FromBody] getdata getdata)
         {
