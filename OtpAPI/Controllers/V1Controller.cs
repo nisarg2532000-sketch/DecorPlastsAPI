@@ -125,13 +125,13 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                if (issucess)
-                {
+                //bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                //if (issucess)
+                //{
                     var category = _otpBAL.GetAllCategoryByID(Convert.ToInt32(CategoryId));
                     return Ok(category);
-                }
-                return BadRequest(new { Message = "Token not verified" });
+                //}
+                //return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {

@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
+using MySqlConnector; // ✅ Replace Microsoft.Data.SqlClient
 using System.Collections.Generic;
 using System.Data;
 
@@ -17,21 +17,21 @@ namespace DecorPlastsAPI.Interface
 
         public IEnumerable<T> Query<T>(string storedProcedure, dynamic param = null)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new MySqlConnection(_connectionString); // ✅
             connection.Open();
             return connection.Query<T>(storedProcedure, param: (object?)param, commandType: CommandType.StoredProcedure);
         }
 
         public int ExecuteSP(string storedProcedure, dynamic param = null)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new MySqlConnection(_connectionString); // ✅
             connection.Open();
             return connection.Execute(storedProcedure, param: (object?)param, commandType: CommandType.StoredProcedure);
         }
 
         public Tuple<IEnumerable<T1>, IEnumerable<T2>> QueryMultipleSP<T1, T2>(string storedProcedure, dynamic param = null)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new MySqlConnection(_connectionString); // ✅
             connection.Open();
             using var multi = connection.QueryMultiple(storedProcedure, param: (object?)param, commandType: CommandType.StoredProcedure);
             var result1 = multi.Read<T1>();
@@ -41,10 +41,9 @@ namespace DecorPlastsAPI.Interface
 
         public T QueryFirstOrDefault<T>(string storedProcedure, dynamic param = null)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new MySqlConnection(_connectionString); // ✅
             connection.Open();
             return connection.QueryFirstOrDefault<T>(storedProcedure, param: (object?)param, commandType: CommandType.StoredProcedure);
         }
     }
 }
-

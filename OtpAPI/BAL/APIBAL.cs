@@ -19,27 +19,15 @@ namespace OtpAPI.BAL
 
         public APIBAL(IConfiguration configuration, IDataRepository DB)
         {
-            _configuration = configuration;
+            _configuration = configuration; 
             _DB = DB;
         }
         public bool CheckMobileExists(string PhoneNumber)
         {
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@PhoneNumber", PhoneNumber);
 
-            using (MySqlConnection con = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand cmd = new MySqlCommand("USP_CheckMobileExists", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
-
-                    con.Open();
-                    int status = Convert.ToInt32(cmd.ExecuteScalar());
-                    con.Close();
-
-                    return status == 1;
-                }
-            }
+            return _DB.ExecuteSP("USP_CheckMobileExists", param) > 0;
         }
         public bool SaveOtp(OtpEntity otpEntity)
         {
@@ -48,7 +36,7 @@ namespace OtpAPI.BAL
             param.Add("@OtpCode", otpEntity.OtpCode);
             param.Add("@ExpiryTime", DateTime.Now.AddMinutes(60));
 
-            return _DB.ExecuteSP("USP_SaveOtp", param) > 0;
+            return _DB.ExecuteSP("USP_InsertUpdateOtp", param) > 0;
         }
 
         public IsverifyOtp VerifyOtp(string phoneNumber, string otp)
