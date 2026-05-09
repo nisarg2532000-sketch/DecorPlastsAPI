@@ -14,6 +14,12 @@
         public string PhoneNumber { get; set; }
         public string Otp { get; set; }
     }
+    public class OtpResult
+    {
+        public string Status { get; set; } = "";
+        public string Details { get; set; } = "";
+        public string OTP { get; set; } = "";
+    }
     public class OtpEntity
     {
         public int Id { get; set; }

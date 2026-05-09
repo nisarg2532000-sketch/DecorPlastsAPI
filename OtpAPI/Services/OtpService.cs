@@ -6,8 +6,11 @@ using OtpAPI.BAL;
 using OtpAPI.Data;
 using OtpAPI.Models;
 using System.Collections.Concurrent;
+using System.Text.Json;
 using Twilio;
+using Twilio.Http;
 using Twilio.Rest.Api.V2010.Account;
+using static System.Net.WebRequestMethods;
 
 namespace OtpAPI.Services
 {
@@ -16,13 +19,19 @@ namespace OtpAPI.Services
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
         private readonly APIBAL _otpBAL;
+        private readonly string _apiKey;
+        private readonly System.Net.Http.HttpClient _httpClient;
         private static ConcurrentDictionary<string, string> _otpStore = new();
 
-        public OtpService(IConfiguration configuration, ApplicationDbContext context, APIBAL otpBAL)
+        public OtpService(IConfiguration configuration, ApplicationDbContext context, APIBAL otpBAL, System.Net.Http.HttpClient httpClient)
         {
             _configuration = configuration;
             _context = context;
             _otpBAL = otpBAL;
+            _httpClient = httpClient;
+            _apiKey = configuration["TwoFactor:ApiKey"]
+                  ?? throw new InvalidOperationException("2Factor API key not configured.");
+
         }
 
         public string GenerateOtp(string phoneNumber)
@@ -53,19 +62,26 @@ namespace OtpAPI.Services
 
         [HttpPost("send")]
         [EnableRateLimiting("OtpPolicy")]
-        public void SendOtp(string phoneNumber, string otp)
+        public async Task<OtpResult> SendOtp(string phoneNumber, string templateName = "OTP1")
         {
-            string accountSid = _configuration["Twilio:AccountSid"];
-            string authToken = _configuration["Twilio:AuthToken"];
-            string fromNumber = _configuration["Twilio:FromNumber"];
+            var url = $"https://2factor.in/API/V1/{_apiKey}/SMS/{phoneNumber}/AUTOGEN2/{templateName}";
 
-            TwilioClient.Init(accountSid, authToken);
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
 
-            MessageResource.Create(
-                body: $"Your OTP is {otp}",
-                from: new Twilio.Types.PhoneNumber(fromNumber),
-                to: new Twilio.Types.PhoneNumber(phoneNumber)
-            );
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<OtpResult>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            var otpEntity = new OtpEntity
+            {
+                PhoneNumber = phoneNumber,
+                OtpCode = result.OTP,
+            };
+            _ = _otpBAL.SaveOtp(otpEntity);
+
+            return result ?? throw new Exception("Failed to deserialize OTP response.");
         }
     }
 }

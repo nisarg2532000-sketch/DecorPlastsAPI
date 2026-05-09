@@ -27,7 +27,7 @@ namespace OtpAPI.Controllers
         }
 
         [HttpPost("GenerateOtp")]
-        public IActionResult GenerateOtp([FromBody] APIRequest request)
+        public async Task<IActionResult> GenerateOtp([FromBody] APIRequest request)
         {
             try
             {
@@ -35,9 +35,8 @@ namespace OtpAPI.Controllers
                 if (!IsMobileExists)
                     return BadRequest(new { Message = "Mobile number not found" });
 
-                string otp = _otpService.GenerateOtp(request.PhoneNumber);
                 var mobileno = "+91" + request.PhoneNumber;
-                _otpService.SendOtp(mobileno, otp);
+                await _otpService.SendOtp(mobileno);
 
                 return Ok(new { Message = "OTP Sent Successfully" });
             }
