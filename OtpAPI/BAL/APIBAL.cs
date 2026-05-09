@@ -27,7 +27,8 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@PhoneNumber", PhoneNumber);
 
-            return _DB.ExecuteSP("USP_CheckMobileExists", param) > 0;
+            var result = _DB.QueryFirstOrDefault<int>("USP_CheckMobileExists", param, commandType: CommandType.StoredProcedure);
+            return result > 0;
         }
         public bool SaveOtp(OtpEntity otpEntity)
         {

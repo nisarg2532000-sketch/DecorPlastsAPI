@@ -39,11 +39,11 @@ namespace DecorPlastsAPI.Interface
             return new Tuple<IEnumerable<T1>, IEnumerable<T2>>(result1, result2);
         }
 
-        public T QueryFirstOrDefault<T>(string storedProcedure, dynamic param = null)
+        public T QueryFirstOrDefault<T>(string storedProcedure, dynamic param = null, CommandType commandType = CommandType.StoredProcedure)
         {
             using var connection = new MySqlConnection(_connectionString); // ✅
             connection.Open();
-            return connection.QueryFirstOrDefault<T>(storedProcedure, param: (object?)param, commandType: CommandType.StoredProcedure);
+            return connection.QueryFirstOrDefault<T>(storedProcedure, param: (object?)param, commandType: commandType)!;
         }
     }
 }

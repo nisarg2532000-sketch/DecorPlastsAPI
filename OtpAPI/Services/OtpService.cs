@@ -16,41 +16,17 @@ namespace OtpAPI.Services
 {
     public class OtpService
     {
-        private readonly IConfiguration _configuration;
-        private readonly ApplicationDbContext _context;
         private readonly APIBAL _otpBAL;
         private readonly string _apiKey;
         private readonly System.Net.Http.HttpClient _httpClient;
         private static ConcurrentDictionary<string, string> _otpStore = new();
 
-        public OtpService(IConfiguration configuration, ApplicationDbContext context, APIBAL otpBAL, System.Net.Http.HttpClient httpClient)
+        public OtpService(IConfiguration configuration, APIBAL otpBAL, HttpClient httpClient)
         {
-            _configuration = configuration;
-            _context = context;
             _otpBAL = otpBAL;
             _httpClient = httpClient;
-            _apiKey = configuration["TwoFactor:ApiKey"]
-                  ?? throw new InvalidOperationException("2Factor API key not configured.");
-
-        }
-
-        public string GenerateOtp(string phoneNumber)
-        {
-            var otp = new Random().Next(100000, 999999).ToString();
-
-            var otpEntity = new OtpEntity
-            {
-                PhoneNumber = phoneNumber,
-                OtpCode = otp,
-                ExpiryTime = DateTime.Now.AddMinutes(5), // ✅ 5 minutes expiry
-                IsVerified = false,
-                CreatedAt = DateTime.Now
-            };
-
-           _= _context.OtpVerifications.Add(otpEntity);
-           _= _otpBAL.SaveOtp(otpEntity);
-
-            return otp;
+            _apiKey = configuration["TwoFactor:ApiKey"];
+            
         }
 
         public IsverifyOtp VerifyOtp(string phoneNumber, string otp)
