@@ -7,10 +7,6 @@ using OtpAPI.Data;
 using OtpAPI.Models;
 using System.Collections.Concurrent;
 using System.Text.Json;
-using Twilio;
-using Twilio.Http;
-using Twilio.Rest.Api.V2010.Account;
-using static System.Net.WebRequestMethods;
 
 namespace OtpAPI.Services
 {

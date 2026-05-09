@@ -6,8 +6,6 @@ using Microsoft.OpenApi.MicrosoftExtensions;
 using OtpAPI.BAL;
 using OtpAPI.Models;
 using OtpAPI.Services;
-using System.Drawing;
-using Twilio.TwiML.Messaging;
 
 namespace OtpAPI.Controllers
 {
