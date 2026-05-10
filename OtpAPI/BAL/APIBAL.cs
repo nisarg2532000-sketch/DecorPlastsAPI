@@ -8,6 +8,8 @@ using MySql.Data.MySqlClient;
 using OtpAPI.Models;
 using System;
 using System.Data;
+using System.Reflection.Metadata;
+using Twilio.Jwt.AccessToken;
 namespace OtpAPI.BAL
 {
     public class APIBAL
@@ -289,24 +291,38 @@ namespace OtpAPI.BAL
             }
             return dict.Values.ToList();
         }
-        public List<SpResult> InsertUpdateOrder(InsertUpdateOrder insertUpdateOrder)
+        public List<SpResult> InsertUpdateOrder(InsertUpdateOrder insertUpdateOrder, bool isFutureOrder)
         {
             var results = new List<SpResult>();
+            string spName = isFutureOrder ? "USP_InsertUpdateFutureOrder"
+                                          : "USP_InsertUpdateOrder";
+
             foreach (var item in insertUpdateOrder.items)
             {
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
-                parameters.Add("@p_OrderId", insertUpdateOrder.OrderId);
-                parameters.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
-                parameters.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
-                parameters.Add("@p_OrderSizeId", Convert.ToInt32(item.SizeId));
-                parameters.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
-                parameters.Add("@p_Status", insertUpdateOrder.Status);
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
+                param.Add("@p_OrderId", insertUpdateOrder.OrderId);
+                param.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
+                param.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
+                param.Add("@p_OrderSizeId", Convert.ToInt32(item.SizeId));
+                param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
+                param.Add("@p_Status", insertUpdateOrder.Status);
 
-                var result = _DB.Query<SpResult>("USP_InsertUpdateOrder", parameters).FirstOrDefault();
+                var result = _DB.QueryFirstOrDefault<SpResult>(spName, param);
                 results.Add(result);
             }
             return results;
+        }
+        public bool CheckStock(int categoryId, int codeId, int sizeId, int quantity)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_OrderCategoryId", categoryId);
+            param.Add("@p_OrderCodeId", codeId);
+            param.Add("@p_OrderSizeId", sizeId);
+            param.Add("@p_Quantity", quantity);
+
+            var result = _DB.QueryFirstOrDefault<StockCheckResult>("USP_CheckStock", param);
+            return result?.IsAvailable ?? false;
         }
         public SpResult UserLogout(int userid)
         {

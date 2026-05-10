@@ -138,13 +138,13 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                //bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                //if (issucess)
-                //{
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
                     var category = _otpBAL.GetAllCategoryByID(Convert.ToInt32(CategoryId));
                     return Ok(category);
-                //}
-                //return BadRequest(new { Message = "Token not verified" });
+                }
+                return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
@@ -397,20 +397,27 @@ namespace OtpAPI.Controllers
                     {
                         insertUpdateOrder.OrderId = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % int.MaxValue);
                     }
-                    var orders = insertUpdateOrder.items.Select(item =>
-                    {
-                        var singleOrder = new InsertUpdateOrder
-                        {
-                            userid = insertUpdateOrder.userid,
-                            token = insertUpdateOrder.token,
-                            OrderId = insertUpdateOrder.OrderId,
-                            Status = insertUpdateOrder.Status,
-                            items = new List<InsertUpdateOrderitem> { item }
-                        };
-                        return _otpBAL.InsertUpdateOrder(singleOrder);
-                    }).ToList();
+                    bool anyOutOfStock = false;
 
-                    return Ok(orders);
+                    foreach (var item in insertUpdateOrder.items)
+                    {
+                        bool isAvailable = _otpBAL.CheckStock(
+                            Convert.ToInt32(item.CategoryId),
+                            Convert.ToInt32(item.CodeId),
+                            Convert.ToInt32(item.SizeId),
+                            Convert.ToInt32(item.Quantity)
+                        );
+
+                        if (!isAvailable)
+                        {
+                            anyOutOfStock = true;
+                            break;
+                        }
+                    }
+                    var results = _otpBAL.InsertUpdateOrder(insertUpdateOrder, anyOutOfStock);
+
+
+                    return Ok(results);
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }
