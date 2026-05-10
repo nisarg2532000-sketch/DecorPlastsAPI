@@ -260,4 +260,11 @@
     {
         public string NotificationCount { get; set; }
     }
+    public class AppVersionResponse
+    {
+        public string LatestVersion { get; set; } = "";
+        public bool ForceUpdate { get; set; }
+
+        public string Message { get; set; } = "";
+    }
 }

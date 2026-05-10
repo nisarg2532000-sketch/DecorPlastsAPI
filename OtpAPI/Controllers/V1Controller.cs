@@ -23,7 +23,21 @@ namespace OtpAPI.Controllers
             _otpBAL = otpBAL;
             _jwtService = jwtService;
         }
+        [HttpPost("GetAppVersion")]
+        public IActionResult GetAppVersion()
+        {
 
+            var response = new AppVersionResponse
+            {
+                LatestVersion = "1.0.1",
+
+                ForceUpdate = true,
+
+                Message = "New order and stock management features added."
+            };
+
+            return Ok(response);
+        }
         [HttpPost("GenerateOtp")]
         public async Task<IActionResult> GenerateOtp([FromBody] APIRequest request)
         {
