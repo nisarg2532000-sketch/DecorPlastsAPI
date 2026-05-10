@@ -65,7 +65,7 @@ namespace OtpAPI.Controllers
             {
 
                 var mobileno = "+91" + request.PhoneNumber;
-                IsverifyOtp IsverifyOtp = _otpService.VerifyOtp(mobileno, request.Otp);
+                IsverifyOtp IsverifyOtp = _otpService.VerifyOtp(request.PhoneNumber, request.Otp);
                 if (!IsverifyOtp.Status)
                     return BadRequest(new { IsverifyOtp.Message });
 
