@@ -31,9 +31,9 @@ namespace OtpAPI.BAL
         public bool SaveOtp(OtpEntity otpEntity)
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("@PhoneNumber", otpEntity.PhoneNumber);
-            param.Add("@OtpCode", otpEntity.OtpCode);
-            param.Add("@ExpiryTime", DateTime.Now.AddMinutes(60));
+            param.Add("@P_PhoneNumber", otpEntity.PhoneNumber);
+            param.Add("@P_OtpCode", otpEntity.OtpCode);
+            param.Add("@P_ExpiryTime", DateTime.Now.AddMinutes(60));
             var result = _DB.QueryFirstOrDefault<int>("USP_InsertUpdateOtp", param, commandType: CommandType.StoredProcedure);
 
             return result > 0;
@@ -52,8 +52,8 @@ namespace OtpAPI.BAL
         public bool SaveToken(string token, string mobileno)
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("@PhoneNumber", mobileno);
-            param.Add("@TokenValue", token);
+            param.Add("@P_PhoneNumber", mobileno);
+            param.Add("@P_TokenValue", token);
             return _DB.ExecuteSP("USP_SaveToken", param) > 0;
         }
         public bool Verifytoken(string userid, string token)
