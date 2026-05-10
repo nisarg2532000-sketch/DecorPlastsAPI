@@ -188,6 +188,11 @@
         public string Size { get; set; }
         public string Quantity { get; set; }
     }
+    public class StockCheckResult
+    {
+        public bool IsAvailable { get; set; }
+        public int AvailableStock { get; set; }
+    }
     public class GetOrderList
     {
         public string userid { get; set; }

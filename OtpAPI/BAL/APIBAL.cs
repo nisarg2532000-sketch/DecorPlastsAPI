@@ -8,8 +8,6 @@ using MySql.Data.MySqlClient;
 using OtpAPI.Models;
 using System;
 using System.Data;
-using System.Reflection.Metadata;
-using Twilio.Jwt.AccessToken;
 namespace OtpAPI.BAL
 {
     public class APIBAL
