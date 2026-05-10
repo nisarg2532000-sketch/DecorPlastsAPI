@@ -289,6 +289,51 @@ namespace OtpAPI.BAL
             }
             return dict.Values.ToList();
         }
+        public List<GetOrderList> GetFutureOrder(getdata getdata)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
+
+            // Query flat rows from SP
+            var rows = _DB.Query<dynamic>("USP_GetFutureOrderList", param).ToList();
+
+            if (rows == null || !rows.Any())
+                return null;
+
+            var dict = new Dictionary<long, GetOrderList>();
+            foreach (var row in rows)
+            {
+                long orderId = (long)row.OrderId;
+
+                if (!dict.ContainsKey(orderId))
+                {
+                    dict[orderId] = new GetOrderList
+                    {
+
+                        userid = row.UserId.ToString(),
+                        username = row.UserName,
+                        MobileNo = row.MobileNo.ToString(),
+                        OrderId = row.OrderId,
+                        Status = row.Status,
+                        DateTime = row.CreatedAt.ToString(),
+                        items = new List<OrderItem>()
+                    };
+                }
+                dict[orderId].items.Add(new OrderItem
+                {
+                    // Map each row to OrderItem
+
+                    CategoryId = row.OrderCategoryId.ToString(),
+                    CategoryName = row.CategoryName,
+                    CodeId = row.OrderCodeId.ToString(),
+                    CodeName = row.CodeName,
+                    SizeId = row.OrderSizeId.ToString(),
+                    Size = row.Size,
+                    Quantity = row.Quantity.ToString()
+                });
+            }
+            return dict.Values.ToList();
+        }
         public List<SpResult> InsertUpdateOrder(InsertUpdateOrder insertUpdateOrder, bool isFutureOrder)
         {
             var results = new List<SpResult>();
@@ -328,24 +373,6 @@ namespace OtpAPI.BAL
             param.Add("@UserId", userid);
             var result = _DB.Query<SpResult>("USP_Logout", param).FirstOrDefault();
             return result;
-        }
-        public List<Notifications> GetAllNotifications(int userid)
-        {
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@p_UserId", userid);
-            return _DB.Query<Notifications>("USP_GetAllNotifications").ToList();
-        }
-        public List<Notifications> GetUnreadNotifications(int userid)
-        {
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@p_UserId", userid);
-            return _DB.Query<Notifications>("USP_GetUnreadNotifications").ToList();
-        }
-        public Count GetUnreadNotificationCount(int userid)
-        {
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@p_UserId", userid);
-            return _DB.Query<Count>("USP_GetUnreadCount", param).FirstOrDefault();
         }
         public SpResult InsertUpdateCart(InsertUpdateCart insertUpdateCart)
         {
