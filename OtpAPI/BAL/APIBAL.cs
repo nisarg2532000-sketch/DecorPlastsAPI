@@ -34,8 +34,9 @@ namespace OtpAPI.BAL
             param.Add("@PhoneNumber", otpEntity.PhoneNumber);
             param.Add("@OtpCode", otpEntity.OtpCode);
             param.Add("@ExpiryTime", DateTime.Now.AddMinutes(60));
+            var result = _DB.QueryFirstOrDefault<int>("USP_InsertUpdateOtp", param, commandType: CommandType.StoredProcedure);
 
-            return _DB.ExecuteSP("USP_InsertUpdateOtp", param) > 0;
+            return result > 0;
         }
 
         public IsverifyOtp VerifyOtp(string phoneNumber, string otp)

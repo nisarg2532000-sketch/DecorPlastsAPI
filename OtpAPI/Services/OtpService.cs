@@ -42,15 +42,13 @@ namespace OtpAPI.Services
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<OtpResult>(json, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            var result = JsonSerializer.Deserialize<OtpResult>(json, new JsonSerializerOptions{ PropertyNameCaseInsensitive = true });
             var otpEntity = new OtpEntity
             {
                 PhoneNumber = phoneNumber,
                 OtpCode = result.OTP,
             };
+            Console.WriteLine($"Saving OTP for {phoneNumber}: {result.OTP}");
             _ = _otpBAL.SaveOtp(otpEntity);
 
             return result ?? throw new Exception("Failed to deserialize OTP response.");
