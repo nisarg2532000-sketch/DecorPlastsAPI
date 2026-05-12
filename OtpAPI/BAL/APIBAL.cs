@@ -149,7 +149,7 @@ namespace OtpAPI.BAL
         public List<GetSize> GetSizeByID(int SizeId)
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("@SizeId", SizeId);
+            param.Add("@p_SizeId", SizeId);
             return _DB.Query<GetSize>("UPS_GetSizeByID", param).ToList();
         }
 
