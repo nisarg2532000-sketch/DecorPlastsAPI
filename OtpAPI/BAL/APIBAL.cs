@@ -105,8 +105,8 @@ namespace OtpAPI.BAL
         public List<GetCodeByCategory> GetCodeByID(int CodeId, int CategoryId)
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("@CodeId", CodeId);
-            param.Add("@CategoryId", CategoryId);
+            param.Add("@p_CodeId", CodeId);
+            param.Add("@p_CategoryId", CategoryId);
             var rawList = _DB.Query<GetCodeRaw>("USP_GetCodesById", param).ToList();
             if (!rawList.Any()) return new List<GetCodeByCategory>();
 
