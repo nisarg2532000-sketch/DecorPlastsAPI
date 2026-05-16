@@ -238,7 +238,7 @@ namespace OtpAPI.BAL
             var result = _DB.Query<SpResult>("USP_DeleteCategory", param).FirstOrDefault();
             return result;
         }
-        public SpResult AddStock(AddStock addStock)
+        public SpResult AddUpdateStock(AddUpdateStock addStock)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_CategoryId", Convert.ToInt32(addStock.CategoryId));
@@ -247,6 +247,13 @@ namespace OtpAPI.BAL
             param.Add("@p_Quantity", Convert.ToInt32(addStock.Quantity));
             var result = _DB.Query<SpResult>("USP_AddUpdateStock", param).FirstOrDefault();
             return result;
+        }
+        public List<GetStock> GetStock(string id)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_Id", Convert.ToInt32(id));
+            var stockList = _DB.Query<GetStock>("USP_GetStock", param).ToList();
+            return stockList;
         }
         public List<GetOrderList> GetOrder(getdata getdata)
         {

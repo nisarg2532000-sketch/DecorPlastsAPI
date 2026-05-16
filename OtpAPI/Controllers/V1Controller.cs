@@ -349,22 +349,39 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Delete Category", Details = ex.Message });
             }
         }
-        [HttpPost("AddStock")]
-        public IActionResult AddStock([FromBody] AddStock AddStock)
+        [HttpPost("AddUpdateStock")]
+        public IActionResult AddUpdateStock([FromBody] AddUpdateStock AddStock)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(AddStock.userid, AddStock.token);
                 if (issucess)
                 {
-                    SpResult addstock = _otpBAL.AddStock(AddStock);
+                    SpResult addstock = _otpBAL.AddUpdateStock(AddStock);
                     return Ok(addstock);
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while Add Stock", Details = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while Add Update Stock", Details = ex.Message });
+            }
+        }
+        public IActionResult GetStock([FromBody] getdata getdata,string id)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var stocklist = _otpBAL.GetStock(id);
+                    return Ok(stocklist);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Add Update Stock", Details = ex.Message });
             }
         }
         [HttpPost("GetOrder")]

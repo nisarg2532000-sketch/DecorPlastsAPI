@@ -171,7 +171,7 @@ namespace OtpAPI.Models
         public string Id { get; set; }
         public string IsDelete { get; set; }
     }
-    public class AddStock
+    public class AddUpdateStock
     {
         public string userid { get; set; }
         public string token { get; set; }
@@ -180,6 +180,17 @@ namespace OtpAPI.Models
         public string SizeId { get; set; }
         public string Quantity { get; set; }
         public string Status { get; set; }
+    }
+    public class GetStock
+    {
+        public string id { get; set; }
+        public string CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string CodeId { get; set; }
+        public string CodeName { get; set; }
+        public string SizeId { get; set; }
+        public string Size { get; set; }
+        public string Quantity { get; set; }
     }
     public class OrderItem
     {
