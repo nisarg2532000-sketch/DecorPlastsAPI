@@ -1,13 +1,16 @@
 ﻿
 using Dapper;
 using DecorPlastsAPI.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
 using OtpAPI.Models;
 using System;
 using System.Data;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace OtpAPI.BAL
 {
     public class APIBAL
@@ -335,14 +338,14 @@ namespace OtpAPI.BAL
             }
             return dict.Values.ToList();
         }
-        public List<SpResult> InsertUpdateOrder(InsertUpdateOrder insertUpdateOrder, bool isFutureOrder)
+        public List<SpResult> InsertOrder(InsertUpdateOrder insertUpdateOrder)
         {
             var results = new List<SpResult>();
-            string spName = isFutureOrder ? "USP_InsertUpdateFutureOrder"
-                                          : "USP_InsertUpdateOrder";
 
             foreach (var item in insertUpdateOrder.items)
             {
+                string spName = item.IsInStock ? "USP_InsertFutureOrder"
+                                         : "USP_InsertOrder";
                 DynamicParameters param = new DynamicParameters();
                 param.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
                 param.Add("@p_OrderId", insertUpdateOrder.OrderId);
@@ -356,6 +359,26 @@ namespace OtpAPI.BAL
                 results.Add(result);
             }
             return results;
+        }
+        public SpResult UpdateOrder(InsertUpdateOrder insertUpdateOrder)
+        {
+            SpResult result = new SpResult();
+            foreach (var item in insertUpdateOrder.items)
+            {
+                var param = new DynamicParameters();
+                param.Add("p_userid", Convert.ToInt32(insertUpdateOrder.userid));
+                param.Add("p_orderid", insertUpdateOrder.OrderId);
+                param.Add("p_ordercategoryid", Convert.ToInt32(item.CategoryId));
+                param.Add("p_ordercodeid", Convert.ToInt32(item.CodeId));
+                param.Add("p_ordersizeid", Convert.ToInt32(item.SizeId));
+                param.Add("p_quantity", Convert.ToInt32(item.Quantity));
+                param.Add("p_remainquantity", Convert.ToInt32(item.RemainQuantity));
+                param.Add("p_totalquantity", Convert.ToInt32(item.TotalQuantity));
+                param.Add("p_status", insertUpdateOrder.Status);
+
+                result = _DB.QueryFirstOrDefault<SpResult>("usp_UpdateOrder",param,commandType: CommandType.StoredProcedure);
+            }
+            return result;
         }
         public bool CheckStock(int categoryId, int codeId, int sizeId, int quantity)
         {

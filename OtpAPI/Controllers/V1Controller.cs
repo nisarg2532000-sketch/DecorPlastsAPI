@@ -403,36 +403,27 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Get Future Order", Details = ex.Message });
             }
         }
-        [HttpPost("InsertUpdateOrder")]
-        public IActionResult InsertUpdateOrder([FromBody] InsertUpdateOrder insertUpdateOrder)
+        [HttpPost("InsertOrder")]
+        public IActionResult InsertOrder([FromBody] InsertUpdateOrder insertUpdateOrder)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
                 if (issucess)
                 {
-                    if (insertUpdateOrder.OrderId == 0)
-                    {
-                        insertUpdateOrder.OrderId = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % int.MaxValue);
-                    }
-                    bool anyOutOfStock = false;
+                    
+                    insertUpdateOrder.OrderId = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % int.MaxValue);
 
                     foreach (var item in insertUpdateOrder.items)
                     {
-                        bool isAvailable = _otpBAL.CheckStock(
+                        item.IsInStock = _otpBAL.CheckStock(
                             Convert.ToInt32(item.CategoryId),
                             Convert.ToInt32(item.CodeId),
                             Convert.ToInt32(item.SizeId),
                             Convert.ToInt32(item.Quantity)
                         );
-
-                        if (!isAvailable)
-                        {
-                            anyOutOfStock = true;
-                            break;
-                        }
                     }
-                    var results = _otpBAL.InsertUpdateOrder(insertUpdateOrder, anyOutOfStock);
+                    var results = _otpBAL.InsertOrder(insertUpdateOrder);
 
 
                     return Ok(results);
@@ -441,9 +432,27 @@ namespace OtpAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while Insert Update Order", Details = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while Insert Order", Details = ex.Message });
             }
         }
+        [HttpPost("UpdateOrder")]
+        public IActionResult UpdateOrder([FromBody] InsertUpdateOrder insertUpdateOrder)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
+                if (issucess)
+                {
+
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Update Order", Details = ex.Message });
+            }
+        }
+
         [HttpPost("InsertUpdateCart")]
         public IActionResult InsertUpdateCart([FromBody] InsertUpdateCart insertUpdateCart)
         {
