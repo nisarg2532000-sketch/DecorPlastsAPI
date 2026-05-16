@@ -367,6 +367,7 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Add Update Stock", Details = ex.Message });
             }
         }
+        [HttpPost("GetStock")]
         public IActionResult GetStock([FromBody] getdata getdata,string id)
         {
             try
