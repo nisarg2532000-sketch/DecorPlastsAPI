@@ -261,7 +261,7 @@ namespace OtpAPI.BAL
             param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
 
             // Query flat rows from SP
-            var rows = _DB.Query<dynamic>("USP_GetOrderList", param).ToList();
+            var rows = _DB.Query<dynamic>("USP_GetOrderList", param, commandType: CommandType.StoredProcedure).ToList();
 
             if (rows == null || !rows.Any())
                 return null;

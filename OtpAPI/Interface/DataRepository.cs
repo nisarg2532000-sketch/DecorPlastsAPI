@@ -15,7 +15,7 @@ namespace DecorPlastsAPI.Interface
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public IEnumerable<T> Query<T>(string storedProcedure, dynamic param = null)
+        public IEnumerable<T> Query<T>(string storedProcedure, dynamic param = null, CommandType commandType = default)
         {
             using var connection = new MySqlConnection(_connectionString); // ✅
             connection.Open();
