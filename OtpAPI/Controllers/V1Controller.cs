@@ -29,7 +29,7 @@ namespace OtpAPI.Controllers
 
             var response = new AppVersionResponse
             {
-                LatestVersion = "1.0.1",
+                LatestVersion = "1.0.0",
 
                 ForceUpdate = true,
 
