@@ -91,8 +91,9 @@ namespace OtpAPI.Models
     {
         public int CodeId { get; set; }
         public string CodeName { get; set; }
-        public List<SizeItem> Sizes { get; set; } 
         public string Status { get; set; }
+        public List<SizeItem> Sizes { get; set; } 
+        
     }
     public class GetCodeRaw
     {
