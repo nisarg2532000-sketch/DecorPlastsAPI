@@ -93,7 +93,7 @@ namespace OtpAPI.BAL
             AdminDashboard dashboardData = new AdminDashboard();
 
             DynamicParameters param = new DynamicParameters();
-            param.Add("@Userid", userid);
+            param.Add("@p_UserId", userid);
 
             var result = _DB.QueryFirstOrDefault<AdminDashboard>("USP_GetDashboardCounts", param);
             return result;
