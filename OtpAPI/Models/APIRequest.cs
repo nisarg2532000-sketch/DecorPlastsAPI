@@ -65,9 +65,9 @@ namespace OtpAPI.Models
     public class AdminDashboard 
     {
         public string Name { get; set; }
-        public string PandingOrdercount { get; set; }
-        public string CompletedOrderCount { get; set; }
-        public string Availavlestockcount { get; set; }
+        public string totalOrdersCount { get; set; }
+        public string FutureOrdersCount { get; set; }
+        public string AvailableStockCount { get; set; }
         public string totalUsercount { get; set; }
     }
     public class getdata
