@@ -88,6 +88,13 @@ namespace OtpAPI.BAL
             var result = _DB.Query<SpResult>("USP_InsertUpdateUser", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
+        public SpResult DeleteUser(int Id,int userId) {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_Id", Id);
+            param.Add("@p_UserId", userId);
+            var result = _DB.Query<SpResult>("USP_DeleteUser", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            return result;
+        }
         public AdminDashboard GetAdminDashboardData(int userid)
         {
             AdminDashboard dashboardData = new AdminDashboard();
@@ -351,8 +358,6 @@ namespace OtpAPI.BAL
 
             foreach (var item in insertUpdateOrder.items)
             {
-                string spName = item.IsInStock ? "USP_InsertFutureOrder"
-                                         : "USP_InsertOrder";
                 DynamicParameters param = new DynamicParameters();
                 param.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
                 param.Add("@p_OrderId", insertUpdateOrder.OrderId);
@@ -362,7 +367,7 @@ namespace OtpAPI.BAL
                 param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
                 param.Add("@p_Status", insertUpdateOrder.Status);
 
-                var result = _DB.QueryFirstOrDefault<SpResult>(spName, param);
+                var result = _DB.QueryFirstOrDefault<SpResult>("USP_InsertUpdateOrder", param, commandType: CommandType.StoredProcedure);
                 results.Add(result);
             }
             return results;
@@ -379,8 +384,6 @@ namespace OtpAPI.BAL
                 param.Add("p_ordercodeid", Convert.ToInt32(item.CodeId));
                 param.Add("p_ordersizeid", Convert.ToInt32(item.SizeId));
                 param.Add("p_quantity", Convert.ToInt32(item.Quantity));
-                param.Add("p_remainquantity", Convert.ToInt32(item.RemainQuantity));
-                param.Add("p_totalquantity", Convert.ToInt32(item.TotalQuantity));
                 param.Add("p_status", insertUpdateOrder.Status);
 
                 result = _DB.QueryFirstOrDefault<SpResult>("usp_UpdateOrder",param,commandType: CommandType.StoredProcedure);

@@ -231,8 +231,7 @@ namespace OtpAPI.Models
         public string CodeId { get; set; }
         public string SizeId { get; set; }
         public string Quantity { get; set; }
-        public int RemainQuantity { get; set; }
-        public int TotalQuantity { get; set; }
+        
         [JsonIgnore]
         public bool IsInStock { get; set; }
     }

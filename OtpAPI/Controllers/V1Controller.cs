@@ -115,6 +115,24 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Get User Data", Details = ex.Message });
             }
         }
+        [HttpDelete("DeleteUser")]
+        public IActionResult DeleteUser([FromBody] getdata getdata, string id)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var status = _otpBAL.DeleteUser(Convert.ToInt32(id), Convert.ToInt32(getdata.userid));
+                    return Ok(status);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Delete User", Details = ex.Message });
+            }
+        }
         [HttpPost("GetAdminDashbord")]
         public IActionResult GetAdminDashbordData([FromBody] getdata getdata)
         {
@@ -431,20 +449,11 @@ namespace OtpAPI.Controllers
                 {
                     
                     insertUpdateOrder.OrderId = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % int.MaxValue);
-
-                    foreach (var item in insertUpdateOrder.items)
-                    {
-                        item.IsInStock = _otpBAL.CheckStock(
-                            Convert.ToInt32(item.CategoryId),
-                            Convert.ToInt32(item.CodeId),
-                            Convert.ToInt32(item.SizeId),
-                            Convert.ToInt32(item.Quantity)
-                        );
+                    if (insertUpdateOrder.OrderId != 0) 
+                    { 
+                        var results = _otpBAL.InsertOrder(insertUpdateOrder);
+                        return Ok(results);
                     }
-                    var results = _otpBAL.InsertOrder(insertUpdateOrder);
-
-
-                    return Ok(results);
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }
@@ -461,7 +470,8 @@ namespace OtpAPI.Controllers
                 bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
                 if (issucess)
                 {
-
+                    var results = _otpBAL.UpdateOrder(insertUpdateOrder); 
+                    return Ok(results);
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }
