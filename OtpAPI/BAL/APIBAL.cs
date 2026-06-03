@@ -52,6 +52,13 @@ namespace OtpAPI.BAL
 
             return result ?? new IsverifyOtp { Status = false, Message = "Something went wrong" };
         }
+        public IsverifyOtp GetToken(string PhoneNumber)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@P_PhoneNumber", PhoneNumber);
+            var result = _DB.Query<IsverifyOtp>("USP_GetToken", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            return result ?? new IsverifyOtp { Status = false, Message = "Invalid token" };
+        }
         public bool SaveToken(string token, string mobileno)
         {
             DynamicParameters param = new DynamicParameters();

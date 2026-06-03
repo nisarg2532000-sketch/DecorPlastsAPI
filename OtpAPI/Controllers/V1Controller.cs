@@ -69,6 +69,11 @@ namespace OtpAPI.Controllers
                 if (!IsverifyOtp.Status)
                     return BadRequest(new { IsverifyOtp.Message });
 
+                IsverifyOtp = _otpBAL.GetToken(request.PhoneNumber);
+                if (IsverifyOtp.Status != true)
+                {
+                    return Ok(IsverifyOtp);
+                }
                 IsverifyOtp.Token = _jwtService.GenerateToken(request.PhoneNumber);
                 _otpBAL.SaveToken(IsverifyOtp.Token, request.PhoneNumber);
 
