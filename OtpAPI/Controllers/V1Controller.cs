@@ -70,7 +70,7 @@ namespace OtpAPI.Controllers
                     return BadRequest(new { IsverifyOtp.Message });
 
                 IsverifyOtp = _otpBAL.GetToken(request.PhoneNumber);
-                if (IsverifyOtp.Status != true)
+                if (IsverifyOtp.Token != null)
                 {
                     return Ok(IsverifyOtp);
                 }
