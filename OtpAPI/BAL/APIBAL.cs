@@ -203,7 +203,7 @@ namespace OtpAPI.BAL
         public bool AddCategory(AddCategory AddCategory)
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("@UserId", Convert.ToInt32(AddCategory.userid));
+            param.Add("@p_UserId", Convert.ToInt32(AddCategory.userid));
             param.Add("@C_CategoryName", AddCategory.Category);
 
             var result = _DB.Query<int>("USP_AddCategory", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
