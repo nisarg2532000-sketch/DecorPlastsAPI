@@ -259,6 +259,7 @@ namespace OtpAPI.BAL
             param.Add("@p_CodeId", Convert.ToInt32(addStock.CodeId));
             param.Add("@p_SizeId", Convert.ToInt32(addStock.SizeId));
             param.Add("@p_Quantity", Convert.ToInt32(addStock.Quantity));
+            param.Add("@p_Weight", Convert.ToDouble(addStock.Weight));
             var result = _DB.Query<SpResult>("USP_AddUpdateStock", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
@@ -374,7 +375,7 @@ namespace OtpAPI.BAL
                 param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
                 param.Add("@p_Status", insertUpdateOrder.Status);
 
-                var result = _DB.QueryFirstOrDefault<SpResult>("USP_InsertUpdateOrder", param, commandType: CommandType.StoredProcedure);
+                var result = _DB.QueryFirstOrDefault<SpResult>("USP_InsertOrder", param, commandType: CommandType.StoredProcedure);
                 results.Add(result);
             }
             return results;
