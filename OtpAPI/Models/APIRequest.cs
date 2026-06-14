@@ -179,6 +179,7 @@ namespace OtpAPI.Models
         public string CodeId { get; set; }
         public string SizeId { get; set; }
         public string Quantity { get; set; }
+        [JsonIgnore]
         public string Weight { get; set; }
         public string Status { get; set; }
     }
