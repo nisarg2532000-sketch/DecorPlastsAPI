@@ -315,7 +315,7 @@ namespace OtpAPI.BAL
             }
             return dict.Values.ToList();
         }
-        public List<GetOrderList> GetFutureOrder(getdata getdata)
+        public List<GetFutureOrderList> GetFutureOrder(getdata getdata)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
@@ -326,14 +326,14 @@ namespace OtpAPI.BAL
             if (rows == null || !rows.Any())
                 return null;
 
-            var dict = new Dictionary<long, GetOrderList>();
+            var dict = new Dictionary<long, GetFutureOrderList>();
             foreach (var row in rows)
             {
                 long orderId = (long)row.OrderId;
 
                 if (!dict.ContainsKey(orderId))
                 {
-                    dict[orderId] = new GetOrderList
+                    dict[orderId] = new GetFutureOrderList
                     {
 
                         userid = row.UserId.ToString(),
@@ -342,12 +342,12 @@ namespace OtpAPI.BAL
                         OrderId = row.OrderId,
                         Status = row.Status,
                         DateTime = row.CreatedAt.ToString(),
-                        items = new List<OrderItem>()
+                        items = new List<FutureOrderItem>()
                     };
                 }
-                dict[orderId].items.Add(new OrderItem
+                dict[orderId].items.Add(new FutureOrderItem
                 {
-                    // Map each row to OrderItem
+                    // Map each row to FutureOrderItem
 
                     CategoryId = row.OrderCategoryId.ToString(),
                     CategoryName = row.CategoryName,
@@ -355,7 +355,8 @@ namespace OtpAPI.BAL
                     CodeName = row.CodeName,
                     SizeId = row.OrderSizeId.ToString(),
                     Size = row.Size,
-                    Quantity = row.Quantity.ToString()
+                    RemainQuantity = row.RemainQuantity.ToString(),
+                    TotalQuantity = row.TotalQuantity.ToString()
                 });
             }
             return dict.Values.ToList();
