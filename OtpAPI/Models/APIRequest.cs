@@ -213,7 +213,7 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string username { get; set; }
         public string MobileNo { get; set; }
-        public int OrderId { get; set; }
+        public long OrderId { get; set; }
         public List<OrderItem> items { get; set; }
         public string Status { get; set; }
         public string DateTime { get; set; }
@@ -223,7 +223,7 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string username { get; set; }
         public string MobileNo { get; set; }
-        public int OrderId { get; set; }
+        public long OrderId { get; set; }
         public List<FutureOrderItem> items { get; set; }
         public string Status { get; set; }
         public string DateTime { get; set; }
