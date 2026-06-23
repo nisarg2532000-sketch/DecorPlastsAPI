@@ -145,7 +145,7 @@ namespace OtpAPI.BAL
                                 .Select(c => new SizeItem
                                 {
                                     SizeId = c.SizeId,
-                                    Size = c.Sizes,
+                                    Size = c.Size,
                                     Quantity = c.Quantity,
                                     Weight = c.Weight,
                                 }).ToList()

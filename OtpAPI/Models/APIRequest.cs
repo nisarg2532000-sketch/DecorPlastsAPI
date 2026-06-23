@@ -101,7 +101,7 @@ namespace OtpAPI.Models
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int SizeId { get; set; }    
-        public string Sizes { get; set; } 
+        public string Size { get; set; } 
         public int Quantity { get; set; }
         public int Weight { get; set; }
         public string Status { get; set; }
