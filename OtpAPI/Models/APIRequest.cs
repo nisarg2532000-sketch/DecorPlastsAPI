@@ -100,9 +100,10 @@ namespace OtpAPI.Models
         public string CodeName { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string SizeId { get; set; }    // "1,2,3"
-        public string Sizes { get; set; }     // "22 x 78, 25 x 78, 31 x 78"
-        public string Quantity { get; set; }
+        public int SizeId { get; set; }    
+        public string Sizes { get; set; } 
+        public int Quantity { get; set; }
+        public int Weight { get; set; }
         public string Status { get; set; }
     }
 
@@ -111,6 +112,7 @@ namespace OtpAPI.Models
         public int SizeId { get; set; }
         public string Size { get; set; }
         public int Quantity { get; set; }
+        public float Weight { get; set; }
     }
     public class GetSize
     {
@@ -155,8 +157,9 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string token { get; set; }
         public string CodeName { get; set; }
-        public List<int> SizeIds { get; set; }
+        public string SizeId { get; set; }
         public string CategoryId { get; set; }
+        public string Weight { get; set; }
     }
     public class AddSize
     {

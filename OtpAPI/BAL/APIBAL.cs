@@ -127,40 +127,29 @@ namespace OtpAPI.BAL
             var rawList = _DB.Query<GetCodeRaw>("USP_GetCodesById", param, commandType: CommandType.StoredProcedure).ToList();
             if (!rawList.Any()) return new List<GetCodeByCategory>();
 
+
             return rawList
-                .GroupBy(c => new { c.CategoryId, c.CategoryName })  // Group by category
-                .Select(group => new GetCodeByCategory
+                .GroupBy(c => new { c.CategoryId, c.CategoryName })   // group by category
+                .Select(catGroup => new GetCodeByCategory
                 {
-                    CategoryId = group.Key.CategoryId,
-                    CategoryName = group.Key.CategoryName,
-                    Codes = group.Select(c =>
-                    {
-                        var sizeIdArray = c.SizeId?.Split(',')
-                                             .Select(s => int.Parse(s.Trim()))
-                                             .ToList() ?? new List<int>();
-
-                        var sizeNameArray = c.Sizes?.Split(',')
-                                             .Select(s => s.Trim())
-                                             .ToList() ?? new List<string>();
-
-                        var quantityArray = c.Quantity?.Split(',')
-                                             .Select(s => int.Parse(s.Trim()))
-                                             .ToList() ?? new List<int>();
-
-                        return new GetCode
+                    CategoryId = catGroup.Key.CategoryId,
+                    CategoryName = catGroup.Key.CategoryName,
+                    Codes = catGroup
+                        .GroupBy(c => c.CodeName)                      // group by CodeName, NOT CodeId
+                        .Select(codeGroup => new GetCode
                         {
-                            CodeId = c.CodeId,
-                            CodeName = c.CodeName,
-                            Status = c.Status,
-                            Sizes = sizeIdArray
-                                .Select((id, index) => new SizeItem
+                            CodeId = codeGroup.Min(c => c.CodeId),      // pick a representative row id
+                            CodeName = codeGroup.Key,
+                            Status = codeGroup.First().Status,
+                            Sizes = codeGroup
+                                .Select(c => new SizeItem
                                 {
-                                    SizeId = id,
-                                    Size = sizeNameArray.ElementAtOrDefault(index) ?? "",
-                                    Quantity = quantityArray.ElementAtOrDefault(index)
+                                    SizeId = c.SizeId,
+                                    Size = c.Sizes,
+                                    Quantity = c.Quantity,
+                                    Weight = c.Weight,
                                 }).ToList()
-                        };
-                    }).ToList()
+                        }).ToList()
                 }).ToList();
         }
         public List<GetSize> GetSizeByID(int SizeId)
@@ -214,8 +203,9 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_UserId", Convert.ToInt32(AddCode.userid));
             param.Add("@p_CodeName", AddCode.CodeName);
-            param.Add("@p_SizeId", string.Join(",", AddCode.SizeIds));
+            param.Add("@p_SizeId", Convert.ToInt32(AddCode.SizeId));
             param.Add("@p_CategoryId", Convert.ToInt32(AddCode.CategoryId));
+            param.Add("@p_Weight", Convert.ToDouble(AddCode.Weight));
             SpResult result = _DB.Query<SpResult>("USP_AddCode", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }

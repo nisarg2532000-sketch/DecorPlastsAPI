@@ -355,7 +355,7 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("DeleteCategory")]
-        public IActionResult DeleteCrategory([FromBody] Delete DeleteCategory)
+        public IActionResult DeleteCrategory([FromBody] Delete DeleteCategory, int id)
         {
             try
             {
