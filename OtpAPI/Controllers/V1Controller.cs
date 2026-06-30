@@ -192,24 +192,6 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Get Category", Details = ex.Message });
             }
         }
-        [HttpPost("GetSizeById")]
-        public IActionResult GetSize([FromBody] getdata getdata, string SizeId)
-        {
-            try
-            {
-                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                if (issucess)
-                {
-                    var size = _otpBAL.GetSizeByID(Convert.ToInt32(SizeId));
-                    return Ok(size);
-                }
-                return BadRequest(new { Message = "Token not verified" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while Get Category", Details = ex.Message });
-            }
-        }
         [HttpPost("UpdateCategory")]
         public IActionResult UpdateCategory([FromBody] UpdateCategory UpdateCategory)
         {
@@ -451,14 +433,11 @@ namespace OtpAPI.Controllers
             {
                 bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
                 if (issucess)
-                {
+                {   
+                   
+                    var results = _otpBAL.InsertOrder(insertUpdateOrder);
+                    return Ok(results);
                     
-                    insertUpdateOrder.OrderId = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % int.MaxValue);
-                    if (insertUpdateOrder.OrderId != 0) 
-                    { 
-                        var results = _otpBAL.InsertOrder(insertUpdateOrder);
-                        return Ok(results);
-                    }
                 }
                 return BadRequest(new { Message = "Token not verified" });
             }

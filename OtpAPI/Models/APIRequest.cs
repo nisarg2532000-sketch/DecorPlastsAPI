@@ -99,8 +99,7 @@ namespace OtpAPI.Models
         public int CodeId { get; set; }
         public string CodeName { get; set; }
         public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public int SizeId { get; set; }    
+        public string CategoryName { get; set; }  
         public string Size { get; set; } 
         public int Quantity { get; set; }
         public int Weight { get; set; }
@@ -109,7 +108,6 @@ namespace OtpAPI.Models
 
     public class SizeItem
     {
-        public int SizeId { get; set; }
         public string Size { get; set; }
         public int Quantity { get; set; }
         public float Weight { get; set; }

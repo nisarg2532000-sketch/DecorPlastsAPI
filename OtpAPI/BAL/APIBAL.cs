@@ -144,19 +144,12 @@ namespace OtpAPI.BAL
                             Sizes = codeGroup
                                 .Select(c => new SizeItem
                                 {
-                                    SizeId = c.SizeId,
                                     Size = c.Size,
                                     Quantity = c.Quantity,
                                     Weight = c.Weight,
                                 }).ToList()
                         }).ToList()
                 }).ToList();
-        }
-        public List<GetSize> GetSizeByID(int SizeId)
-        {
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@p_SizeId", SizeId);
-            return _DB.Query<GetSize>("UPS_GetSizeByID", param, commandType: CommandType.StoredProcedure).ToList();
         }
 
         public bool UpdateCategory(UpdateCategory UpdateCategory)
