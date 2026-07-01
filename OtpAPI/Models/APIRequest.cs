@@ -132,8 +132,9 @@ namespace OtpAPI.Models
         public string token { get; set; }
         public string CodeId { get; set; }
         public string CodeName { get;set; }
-        public List<int> SizeIds { get; set; }
+        public string Size { get; set; }
         public string CategoryId { get; set; }
+        public float Weight{ get; set; }
         public string Status { get; set; }
     }
     public class UpdateSize
@@ -155,7 +156,7 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string token { get; set; }
         public string CodeName { get; set; }
-        public string SizeId { get; set; }
+        public string Size { get; set; }
         public string CategoryId { get; set; }
         public string Weight { get; set; }
     }

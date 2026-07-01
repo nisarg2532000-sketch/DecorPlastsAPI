@@ -69,9 +69,10 @@ namespace OtpAPI.Controllers
                 if (!IsverifyOtp.Status)
                     return BadRequest(new { IsverifyOtp.Message });
 
-                IsverifyOtp = _otpBAL.GetToken(request.PhoneNumber);
-                if (IsverifyOtp.Token != null)
+                var token = _otpBAL.GetToken(request.PhoneNumber);
+                if (token != null)
                 {
+                    IsverifyOtp.Token = token.Token; 
                     return Ok(IsverifyOtp);
                 }
                 IsverifyOtp.Token = _jwtService.GenerateToken(request.PhoneNumber);
@@ -228,24 +229,7 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Update Codes", Details = ex.Message });
             }
         }
-        [HttpPost("UpdateSize")]
-        public IActionResult UpdateSize([FromBody] UpdateSize UpdateSize)
-        {
-            try
-            {
-                bool issucess = _otpBAL.Verifytoken(UpdateSize.userid, UpdateSize.token);
-                if (issucess)
-                {
-                    var size = _otpBAL.UpdateSize(UpdateSize);
-                    return Ok(size);
-                }
-                return BadRequest(new { Message = "Token not verified" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while Update Codes", Details = ex.Message });
-            }
-        }
+       
         [HttpPost("AddCategory")]
         public IActionResult AddCategory([FromBody] AddCategory AddCategory)
         {
