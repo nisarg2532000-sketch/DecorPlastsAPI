@@ -179,9 +179,7 @@ namespace OtpAPI.Models
         public string token { get; set; }
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
-        public string SizeId { get; set; }
-        public string Quantity { get; set; }
-        public string Weight { get; set; } 
+        public string Quantity { get; set; } 
         public string Status { get; set; }
     }
     public class GetStock
@@ -191,7 +189,6 @@ namespace OtpAPI.Models
         public string CategoryName { get; set; }
         public string CodeId { get; set; }
         public string CodeName { get; set; }
-        public string SizeId { get; set; }
         public string Size { get; set; }
         public string Quantity { get; set; }
     }
@@ -201,9 +198,11 @@ namespace OtpAPI.Models
         public string CategoryName { get; set; }
         public string CodeId { get; set; }
         public string CodeName { get; set; }
-        public string SizeId { get; set; }
         public string Size { get; set; }
         public string Quantity { get; set; }
+        public float Weight { get; set; }
+        public string VehicleNo { get; set; }
+        public string InvoiceNo { get; set; }
     }
     public class StockCheckResult
     {
@@ -236,10 +235,12 @@ namespace OtpAPI.Models
         public string CategoryName { get; set; }
         public string CodeId { get; set; }
         public string CodeName { get; set; }
-        public string SizeId { get; set; }
         public string Size { get; set; }
         public string RemainQuantity { get; set; }
         public string TotalQuantity { get; set; }
+        public float Weight { get; set; }
+        public string VehicleNo { get; set; }
+        public string InvoiceNo { get; set; }
     }
     public class InsertUpdateOrder
     {
@@ -247,17 +248,17 @@ namespace OtpAPI.Models
         public string token { get; set; }
         public int OrderId { get; set; }
         public List<InsertUpdateOrderitem> items { get; set; }
-        public string Status { get; set; }
+        public bool Status { get; set; }
     }
     public class InsertUpdateOrderitem
     {
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
-        public string SizeId { get; set; }
         public string Quantity { get; set; }
-        
-        [JsonIgnore]
-        public bool IsInStock { get; set; }
+        public float Weight { get; set; }
+        public string VehicleNo { get; set; }
+        public string InvoiceNo { get; set; }
+
     }
     public class OrderDetails
     {
@@ -268,7 +269,7 @@ namespace OtpAPI.Models
         public string OrderSizeId {  get; set; }
         public string SizeName { get; set; }
         public string Quantity { get; set; }
-        public string Status { get; set; }
+        public bool Status { get; set; }
     }
     public class InsertUpdateCart
     {
@@ -277,7 +278,6 @@ namespace OtpAPI.Models
         public string CartId { get; set; }
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
-        public string SizeId { get; set; }
         public string Quantity { get; set; }
     }
     public class GetCart

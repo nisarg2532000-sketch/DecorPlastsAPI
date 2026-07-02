@@ -187,42 +187,23 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_UserId", Convert.ToInt32(AddCode.userid));
             param.Add("@p_CodeName", AddCode.CodeName);
-            param.Add("@p_SizeId", AddCode.Size);
+            param.Add("@p_Size", AddCode.Size);
             param.Add("@p_CategoryId", Convert.ToInt32(AddCode.CategoryId));
             param.Add("@p_Weight", Convert.ToDouble(AddCode.Weight));
             SpResult result = _DB.Query<SpResult>("USP_AddCode", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
-        public SpResult AddSize(AddSize AddSize)
+        public SpResult DeleteCode(Delete DeleteCode)//need to create storeoprocedure 
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("@p_UserId", Convert.ToInt32(AddSize.userid));
-            param.Add("@p_Size", AddSize.Size);
-            var result = _DB.Query<SpResult>("USP_AddSize", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            param.Add("@p_Id", Convert.ToInt32(DeleteCode.Id));
+            var result = _DB.Query<SpResult>("USP_DeleteCode", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
-        public SpResult DeleteSize(Delete DeleteSize)
+        public SpResult DeleteCategory(Delete DeleteCategory)//need to create storeoprocedure 
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("@SizeId", Convert.ToInt32(DeleteSize.Id));
-            param.Add("@I_IsDelete", DeleteSize.IsDelete);
-
-            var result = _DB.Query<SpResult>("USP_DeleteSize", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
-            return result;
-        }
-        public SpResult DeleteCode(Delete DeleteCode)
-        {
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@CodeId", Convert.ToInt32(DeleteCode.Id));
-            param.Add("@I_IsDelete", DeleteCode.IsDelete);
-            var result = _DB.Query<SpResult>("USP_DeleteSize", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
-            return result;
-        }
-        public SpResult DeleteCategory(Delete DeleteCategory)
-        {
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@I_CategoryId", Convert.ToInt32(DeleteCategory.Id));
-            param.Add("@I_IsDelete", DeleteCategory.IsDelete);
+            param.Add("@p_Id", Convert.ToInt32(DeleteCategory.Id));
             var result = _DB.Query<SpResult>("USP_DeleteCategory", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
@@ -231,9 +212,7 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_CategoryId", Convert.ToInt32(addStock.CategoryId));
             param.Add("@p_CodeId", Convert.ToInt32(addStock.CodeId));
-            param.Add("@p_SizeId", Convert.ToInt32(addStock.SizeId));
             param.Add("@p_Quantity", Convert.ToInt32(addStock.Quantity));
-            param.Add("@p_Weight", Convert.ToDouble(addStock.Weight));
             var result = _DB.Query<SpResult>("USP_AddUpdateStock", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
@@ -272,7 +251,7 @@ namespace OtpAPI.BAL
                         Status = row.Status,
                         DateTime = row.CreatedAt.ToString(),
                         items = new List<OrderItem>()
-                    };
+                    };  
                 }
                 dict[orderId].items.Add(new OrderItem
                 {
@@ -282,9 +261,12 @@ namespace OtpAPI.BAL
                     CategoryName = row.CategoryName,
                     CodeId = row.OrderCodeId.ToString(),
                     CodeName = row.CodeName,
-                    SizeId = row.OrderSizeId.ToString(),
                     Size = row.Size,
-                    Quantity = row.Quantity.ToString()
+                    Quantity = row.Quantity.ToString(),
+                    Weight = row.Weight,     
+                    VehicleNo = row.VehicleNo,
+                    InvoiceNo = row.InvoiceNo
+
                 });
             }
             return dict.Values.ToList();
@@ -327,10 +309,12 @@ namespace OtpAPI.BAL
                     CategoryName = row.CategoryName,
                     CodeId = row.OrderCodeId.ToString(),
                     CodeName = row.CodeName,
-                    SizeId = row.OrderSizeId.ToString(),
                     Size = row.Size,
                     RemainQuantity = row.RemainQuantity.ToString(),
-                    TotalQuantity = row.TotalQuantity.ToString()
+                    TotalQuantity = row.TotalQuantity.ToString(),
+                    Weight = row.Weight,
+                    VehicleNo = row.VehicleNo,
+                    InvoiceNo = row.InvoiceNo
                 });
             }
             return dict.Values.ToList();
@@ -346,8 +330,10 @@ namespace OtpAPI.BAL
                 param.Add("@p_OrderId", insertUpdateOrder.OrderId);
                 param.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
                 param.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
-                param.Add("@p_OrderSizeId", Convert.ToInt32(item.SizeId));
                 param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
+                param.Add("@p_Weight", item.Weight);
+                param.Add("@p_VehicleNo", item.VehicleNo);
+                param.Add("@p_InvoiceNo", item.InvoiceNo);
                 param.Add("@p_Status", insertUpdateOrder.Status);
 
                 var result = _DB.QueryFirstOrDefault<SpResult>("USP_InsertOrder", param, commandType: CommandType.StoredProcedure);
@@ -365,20 +351,21 @@ namespace OtpAPI.BAL
                 param.Add("p_orderid", insertUpdateOrder.OrderId);
                 param.Add("p_ordercategoryid", Convert.ToInt32(item.CategoryId));
                 param.Add("p_ordercodeid", Convert.ToInt32(item.CodeId));
-                param.Add("p_ordersizeid", Convert.ToInt32(item.SizeId));
                 param.Add("p_quantity", Convert.ToInt32(item.Quantity));
+                param.Add("p_weight", item.Weight);
+                param.Add("p_vehicleNo", item.VehicleNo);
+                param.Add("p_invoiceNo", item.InvoiceNo);
                 param.Add("p_status", insertUpdateOrder.Status);
 
                 result = _DB.QueryFirstOrDefault<SpResult>("usp_UpdateOrder",param,commandType: CommandType.StoredProcedure);
             }
             return result;
         }
-        public bool CheckStock(int categoryId, int codeId, int sizeId, int quantity)
+        public bool CheckStock(int categoryId, int codeId,  int quantity)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_OrderCategoryId", categoryId);
             param.Add("@p_OrderCodeId", codeId);
-            param.Add("@p_OrderSizeId", sizeId);
             param.Add("@p_Quantity", quantity);
 
             var result = _DB.QueryFirstOrDefault<StockCheckResult>("USP_CheckStock", param, commandType: CommandType.StoredProcedure);
@@ -396,9 +383,8 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_id", Convert.ToInt32(insertUpdateCart.CartId));
             param.Add("@p_UserId", Convert.ToInt32(insertUpdateCart.userid));
-            param.Add("@p_categoryid", Convert.ToInt32(insertUpdateCart.CategoryId));
-            param.Add("@p_codeid", Convert.ToInt32(insertUpdateCart.CodeId));
-            param.Add("@p_sizeid", Convert.ToInt32(insertUpdateCart.SizeId));
+            param.Add("@p_CartCategoryId", Convert.ToInt32(insertUpdateCart.CategoryId));
+            param.Add("@p_CartCodeId", Convert.ToInt32(insertUpdateCart.CodeId));
             param.Add("@p_quantity", Convert.ToInt32(insertUpdateCart.Quantity));
             var result = _DB.Query<SpResult>("USP_InsertUpdateCart", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;

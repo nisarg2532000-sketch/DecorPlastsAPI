@@ -266,42 +266,6 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Add Codes", Details = ex.Message });
             }
         }
-        [HttpPost("AddSize")]
-        public IActionResult AddSize([FromBody] AddSize AddSize)
-        {
-            try
-            {
-                bool issucess = _otpBAL.Verifytoken(AddSize.userid, AddSize.token);
-                if (issucess)
-                {
-                    var size = _otpBAL.AddSize(AddSize);
-                    return Ok(size);
-                }
-                return BadRequest(new { Message = "Token not verified" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while Add Size", Details = ex.Message });
-            }
-        }
-        [HttpPost("DeleteSize")]
-        public IActionResult DeleteSize([FromBody] Delete DeleteSize)
-        {
-            try
-            {
-                bool issucess = _otpBAL.Verifytoken(DeleteSize.userid, DeleteSize.token);
-                if (issucess)
-                {
-                    var deletesize = _otpBAL.DeleteSize(DeleteSize);
-                    return Ok(deletesize);
-                }
-                return BadRequest(new { Message = "Token not verified" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while Delete Size", Details = ex.Message });
-            }
-        }
         [HttpPost("DeleteCode")]
         public IActionResult DeleteCode([FromBody] Delete DeleteCode)
         {
