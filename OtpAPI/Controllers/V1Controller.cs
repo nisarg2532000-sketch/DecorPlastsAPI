@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.MicrosoftExtensions;
+using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using OtpAPI.BAL;
 using OtpAPI.Models;
 using OtpAPI.Services;
@@ -69,10 +70,9 @@ namespace OtpAPI.Controllers
                 if (!IsverifyOtp.Status)
                     return BadRequest(new { IsverifyOtp.Message });
 
-                var token = _otpBAL.GetToken(request.PhoneNumber);
-                if (token != null)
-                {
-                    IsverifyOtp.Token = token.Token; 
+                IsverifyOtp = _otpBAL.GetToken(request.PhoneNumber);
+                if (IsverifyOtp.Token != null)
+                { 
                     return Ok(IsverifyOtp);
                 }
                 IsverifyOtp.Token = _jwtService.GenerateToken(request.PhoneNumber);
