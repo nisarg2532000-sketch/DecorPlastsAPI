@@ -141,13 +141,9 @@ namespace OtpAPI.BAL
                             CodeId = codeGroup.Min(c => c.CodeId),      // pick a representative row id
                             CodeName = codeGroup.Key,
                             Status = codeGroup.First().Status,
-                            Sizes = codeGroup
-                                .Select(c => new SizeItem
-                                {
-                                    Size = c.Size,
-                                    Quantity = c.Quantity,
-                                    Weight = c.Weight,
-                                }).ToList()
+                            Size = codeGroup.First().Size,
+                            Quantity = codeGroup.First().Quantity,
+                            Weight = codeGroup.First().Weight,
                         }).ToList()
                 }).ToList();
         }

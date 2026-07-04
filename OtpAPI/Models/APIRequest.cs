@@ -90,9 +90,11 @@ namespace OtpAPI.Models
     {
         public int CodeId { get; set; }
         public string CodeName { get; set; }
-        public string Status { get; set; }
-        public List<SizeItem> Sizes { get; set; } 
-        
+        public bool Status { get; set; }
+        public string Size { get; set; } 
+        public int Quantity { get; set; }
+        public decimal Weight { get; set; }
+
     }
     public class GetCodeRaw
     {
@@ -102,8 +104,8 @@ namespace OtpAPI.Models
         public string CategoryName { get; set; }  
         public string Size { get; set; } 
         public int Quantity { get; set; }
-        public int Weight { get; set; }
-        public string Status { get; set; }
+        public decimal Weight { get; set; }
+        public bool Status { get; set; }
     }
 
     public class SizeItem
