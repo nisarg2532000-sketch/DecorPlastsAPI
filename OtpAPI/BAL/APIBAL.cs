@@ -46,7 +46,7 @@ namespace OtpAPI.BAL
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@P_PhoneNumber", phoneNumber);
-            param.Add("@O_OtpCode", otp);
+            param.Add("@P_OtpCode", otp);
 
             var result = _DB.Query<IsverifyOtp>("USP_VerifyOtp", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
 
