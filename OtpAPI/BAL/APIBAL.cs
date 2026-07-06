@@ -52,13 +52,6 @@ namespace OtpAPI.BAL
 
             return result ?? new IsverifyOtp { Status = false, Message = "Something went wrong" };
         }
-        //public string GetToken(string PhoneNumber)
-        //{
-        //    DynamicParameters param = new DynamicParameters();
-        //    param.Add("@P_PhoneNumber", PhoneNumber);
-        //    var result = _DB.Query<IsverifyOtp>("USP_GetToken", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
-        //    return result ?? new IsverifyOtp { Status = false, Message = "Invalid token" };
-        //}
         public bool SaveToken(string token, string mobileno)
         {
             DynamicParameters param = new DynamicParameters();
@@ -219,10 +212,11 @@ namespace OtpAPI.BAL
             var stockList = _DB.Query<GetStock>("USP_GetStock", param, commandType: CommandType.StoredProcedure).ToList();
             return stockList;
         }
-        public List<GetOrderList> GetOrder(getdata getdata)
+        public List<GetOrderList> GetOrder(getdata getdata, bool status)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
+            param.Add("@u_Sttus", status);
 
             // Query flat rows from SP
             var rows = _DB.Query<dynamic>("USP_GetOrderList", param, commandType: CommandType.StoredProcedure).ToList();
@@ -267,10 +261,11 @@ namespace OtpAPI.BAL
             }
             return dict.Values.ToList();
         }
-        public List<GetFutureOrderList> GetFutureOrder(getdata getdata)
+        public List<GetFutureOrderList> GetFutureOrder(getdata getdata, bool status)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
+            param.Add("@u_Sttus", status);
 
             // Query flat rows from SP
             var rows = _DB.Query<dynamic>("USP_GetFutureOrderList", param, commandType: CommandType.StoredProcedure).ToList();
@@ -327,7 +322,6 @@ namespace OtpAPI.BAL
                 param.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
                 param.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
                 param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
-                param.Add("@p_Weight", item.Weight);
                 param.Add("@p_VehicleNo", item.VehicleNo);
                 param.Add("@p_InvoiceNo", item.InvoiceNo);
                 param.Add("@p_Status", insertUpdateOrder.Status);

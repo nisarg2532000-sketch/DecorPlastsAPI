@@ -339,14 +339,14 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetOrder")]
-        public IActionResult GetOrder([FromBody] getdata getdata)
+        public IActionResult GetOrder([FromBody] getdata getdata, bool status)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var getOrderList = _otpBAL.GetOrder(getdata);
+                    var getOrderList = _otpBAL.GetOrder(getdata, status);
                     return Ok(getOrderList);
                 }
                 return BadRequest(new { Message = "Token not verified" });
@@ -357,14 +357,14 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetFutureOrder")]
-        public IActionResult GetFutureOrder([FromBody] getdata getdata)
+        public IActionResult GetFutureOrder([FromBody] getdata getdata, bool status)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var getFutureOrderList = _otpBAL.GetFutureOrder(getdata);
+                    var getFutureOrderList = _otpBAL.GetFutureOrder(getdata, status);
                     return Ok(getFutureOrderList);
                 }
                 return BadRequest(new { Message = "Token not verified" });
@@ -394,24 +394,24 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Insert Order", Details = ex.Message });
             }
         }
-        [HttpPost("UpdateOrder")]
-        public IActionResult UpdateOrder([FromBody] InsertUpdateOrder insertUpdateOrder)
-        {
-            try
-            {
-                bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
-                if (issucess)
-                {
-                    var results = _otpBAL.UpdateOrder(insertUpdateOrder); 
-                    return Ok(results);
-                }
-                return BadRequest(new { Message = "Token not verified" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while Update Order", Details = ex.Message });
-            }
-        }
+        //[HttpPost("UpdateOrder")]
+        //public IActionResult UpdateOrder([FromBody] InsertUpdateOrder insertUpdateOrder)
+        //{
+        //    try
+        //    {
+        //        bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
+        //        if (issucess)
+        //        {
+        //            var results = _otpBAL.UpdateOrder(insertUpdateOrder); 
+        //            return Ok(results);
+        //        }
+        //        return BadRequest(new { Message = "Token not verified" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { Message = "An error occurred while Update Order", Details = ex.Message });
+        //    }
+        //}
 
         [HttpPost("InsertUpdateCart")]
         public IActionResult InsertUpdateCart([FromBody] InsertUpdateCart insertUpdateCart)
