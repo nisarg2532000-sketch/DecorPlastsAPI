@@ -182,7 +182,6 @@ namespace OtpAPI.Models
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
         public string Quantity { get; set; } 
-        public string Status { get; set; }
     }
     public class GetStock
     {
@@ -257,7 +256,6 @@ namespace OtpAPI.Models
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
         public string Quantity { get; set; }
-        public float Weight { get; set; }
         public string VehicleNo { get; set; }
         public string InvoiceNo { get; set; }
 
