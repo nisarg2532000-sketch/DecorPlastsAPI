@@ -212,11 +212,11 @@ namespace OtpAPI.BAL
             var stockList = _DB.Query<GetStock>("USP_GetStock", param, commandType: CommandType.StoredProcedure).ToList();
             return stockList;
         }
-        public List<GetOrderList> GetOrder(getdata getdata, bool status)
+        public List<GetOrderList> GetOrder(getdata getdata, string status)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
-            param.Add("@u_Sttus", status);
+            param.Add("@u_Sttus", Convert.ToInt32(status));
 
             // Query flat rows from SP
             var rows = _DB.Query<dynamic>("USP_GetOrderList", param, commandType: CommandType.StoredProcedure).ToList();
@@ -261,11 +261,11 @@ namespace OtpAPI.BAL
             }
             return dict.Values.ToList();
         }
-        public List<GetFutureOrderList> GetFutureOrder(getdata getdata, bool status)
+        public List<GetFutureOrderList> GetFutureOrder(getdata getdata, string status)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
-            param.Add("@u_Status", status);
+            param.Add("@u_Status", Convert.ToInt32(status));
 
             // Query flat rows from SP
             var rows = _DB.Query<dynamic>("USP_GetFutureOrderList", param, commandType: CommandType.StoredProcedure).ToList();

@@ -339,7 +339,7 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetOrder")]
-        public IActionResult GetOrder([FromBody] getdata getdata, bool status)
+        public IActionResult GetOrder([FromBody] getdata getdata, string status)
         {
             try
             {
@@ -357,7 +357,7 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetFutureOrder")]
-        public IActionResult GetFutureOrder([FromBody] getdata getdata, bool status)
+        public IActionResult GetFutureOrder([FromBody] getdata getdata, string status)
         {
             try
             {
