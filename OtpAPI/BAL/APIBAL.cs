@@ -216,7 +216,7 @@ namespace OtpAPI.BAL
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
-            param.Add("@u_Sttus", Convert.ToInt32(status));
+            param.Add("@u_Status", Convert.ToInt32(status));
 
             // Query flat rows from SP
             var rows = _DB.Query<dynamic>("USP_GetOrderList", param, commandType: CommandType.StoredProcedure).ToList();
