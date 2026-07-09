@@ -238,7 +238,7 @@ namespace OtpAPI.BAL
                         username = row.UserName,
                         MobileNo = row.MobileNo.ToString(),
                         OrderId = row.OrderId,
-                        Status = row.Status,
+                        Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString(),
                         items = new List<OrderItem>()
                     };  
@@ -287,7 +287,7 @@ namespace OtpAPI.BAL
                         username = row.UserName,
                         MobileNo = row.MobileNo.ToString(),
                         OrderId = row.OrderId,
-                        Status = row.Status,
+                        Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString(),
                         items = new List<FutureOrderItem>()
                     };
