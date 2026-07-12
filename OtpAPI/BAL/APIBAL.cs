@@ -122,23 +122,21 @@ namespace OtpAPI.BAL
 
 
             return rawList
-                .GroupBy(c => new { c.CategoryId, c.CategoryName })   // group by category
-                .Select(catGroup => new GetCodeByCategory
+            .GroupBy(c => new { c.CategoryId, c.CategoryName })
+            .Select(catGroup => new GetCodeByCategory
+            {
+                CategoryId = catGroup.Key.CategoryId,
+                CategoryName = catGroup.Key.CategoryName,
+                Codes = catGroup.Select(c => new GetCode
                 {
-                    CategoryId = catGroup.Key.CategoryId,
-                    CategoryName = catGroup.Key.CategoryName,
-                    Codes = catGroup
-                        .GroupBy(c => c.CodeName)                      // group by CodeName, NOT CodeId
-                        .Select(codeGroup => new GetCode
-                        {
-                            CodeId = codeGroup.Min(c => c.CodeId),      // pick a representative row id
-                            CodeName = codeGroup.Key,
-                            Status = codeGroup.First().Status,
-                            Size = codeGroup.First().Size,
-                            Quantity = codeGroup.First().Quantity,
-                            Weight = codeGroup.First().Weight,
-                        }).ToList()
-                }).ToList();
+                    CodeId = c.CodeId,
+                    CodeName = c.CodeName,
+                    Status = c.Status,
+                    Size = c.Size,
+                    Quantity = c.Quantity,
+                    Weight = c.Weight,
+                }).ToList()
+            }).ToList();
         }
 
         public bool UpdateCategory(UpdateCategory UpdateCategory)
@@ -330,6 +328,13 @@ namespace OtpAPI.BAL
                 results.Add(result);
             }
             return results;
+        }
+        public GetTotalWeightByUser GetTotalWeightByUser(int UserId)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("p_UserId", UserId);
+            var result = _DB.QueryFirstOrDefault<GetTotalWeightByUser>("USP_CheckStock", param, commandType: CommandType.StoredProcedure);
+            return result;
         }
         public SpResult UpdateOrder(InsertUpdateOrder insertUpdateOrder)
         {

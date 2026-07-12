@@ -285,7 +285,7 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("DeleteCategory")]
-        public IActionResult DeleteCrategory([FromBody] Delete DeleteCategory, int id)
+        public IActionResult DeleteCrategory([FromBody] Delete DeleteCategory)
         {
             try
             {
@@ -412,7 +412,26 @@ namespace OtpAPI.Controllers
         //        return StatusCode(500, new { Message = "An error occurred while Update Order", Details = ex.Message });
         //    }
         //}
-
+        [HttpPost("GetTotalWeightByUser")]
+        public IActionResult GetTotalWeightByUser([FromBody] getdata getdata, string Id)
+        {
+            {
+                try
+                {
+                    bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                    if (issucess)
+                    {
+                        var totalWeight = _otpBAL.GetTotalWeightByUser(Convert.ToInt32(Id));
+                        return Ok(totalWeight);
+                    }
+                    return BadRequest(new { Message = "Token not verified" });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, new { Message = "An error occurred while Get Total Weight By User", Details = ex.Message });
+                }
+            }
+        }
         [HttpPost("InsertUpdateCart")]
         public IActionResult InsertUpdateCart([FromBody] InsertUpdateCart insertUpdateCart)
         {

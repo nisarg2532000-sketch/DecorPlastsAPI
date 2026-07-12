@@ -78,7 +78,7 @@ namespace OtpAPI.Models
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string Status { get; set; }
+        public bool Status { get; set; }
     }
     public class GetCodeByCategory
     {
@@ -173,7 +173,6 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string token { get; set; }
         public string Id { get; set; }
-        public string IsDelete { get; set; }
     }
     public class AddUpdateStock
     {
@@ -270,6 +269,12 @@ namespace OtpAPI.Models
         public string SizeName { get; set; }
         public string Quantity { get; set; }
         public bool Status { get; set; }
+    }
+    public class GetTotalWeightByUser
+    {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string Weight { get; set; }
     }
     public class InsertUpdateCart
     {
