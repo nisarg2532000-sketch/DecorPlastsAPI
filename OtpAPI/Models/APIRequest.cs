@@ -274,7 +274,7 @@ namespace OtpAPI.Models
     {
         public string UserId { get; set; }
         public string UserName { get; set; }
-        public string Weight { get; set; }
+        public string TotalWeight { get; set; }
     }
     public class InsertUpdateCart
     {
