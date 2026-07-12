@@ -329,10 +329,10 @@ namespace OtpAPI.BAL
             }
             return results;
         }
-        public GetTotalWeightByUser GetTotalWeightByUser(int UserId)
+        public GetTotalWeightByUser GetTotalWeightByUser(int Id)
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("p_UserId", UserId);
+            param.Add("p_UserId", Id);
             var result = _DB.QueryFirstOrDefault<GetTotalWeightByUser>("USP_GetTotalWeightByUserId", param, commandType: CommandType.StoredProcedure);
             return result;
         }
