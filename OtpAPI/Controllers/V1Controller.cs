@@ -415,22 +415,22 @@ namespace OtpAPI.Controllers
         [HttpPost("GetTotalWeightByUser")]
         public IActionResult GetTotalWeightByUser([FromBody] getdata getdata, string Id)
         {
+            
+            try
             {
-                try
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
                 {
-                    bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                    if (issucess)
-                    {
-                        var totalWeight = _otpBAL.GetTotalWeightByUser(Convert.ToInt32(Id));
-                        return Ok(totalWeight);
-                    }
-                    return BadRequest(new { Message = "Token not verified" });
+                    var totalWeight = _otpBAL.GetTotalWeightByUser(Convert.ToInt32(Id));
+                    return Ok(totalWeight);
                 }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, new { Message = "An error occurred while Get Total Weight By User", Details = ex.Message });
-                }
+                return BadRequest(new { Message = "Token not verified" });
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Total Weight By User", Details = ex.Message });
+            }
+            
         }
         [HttpPost("InsertUpdateCart")]
         public IActionResult InsertUpdateCart([FromBody] InsertUpdateCart insertUpdateCart)

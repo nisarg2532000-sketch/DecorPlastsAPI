@@ -333,7 +333,7 @@ namespace OtpAPI.BAL
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("p_UserId", UserId);
-            var result = _DB.QueryFirstOrDefault<GetTotalWeightByUser>("USP_CheckStock", param, commandType: CommandType.StoredProcedure);
+            var result = _DB.QueryFirstOrDefault<GetTotalWeightByUser>("USP_GetTotalWeightByUserId", param, commandType: CommandType.StoredProcedure);
             return result;
         }
         public SpResult UpdateOrder(InsertUpdateOrder insertUpdateOrder)
