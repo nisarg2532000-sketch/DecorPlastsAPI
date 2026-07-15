@@ -267,7 +267,7 @@ namespace OtpAPI.Models
         public string Quantity { get; set; }
         public string VehicleNo { get; set; }
         public string InvoiceNo { get; set; }
-        public bool Status { get; set; }
+        public int Status { get; set; }
     }
 
     public class GetTotalWeightByUser
