@@ -375,14 +375,13 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("InsertOrder")]
-        public IActionResult InsertOrder([FromBody] InsertUpdateOrder insertUpdateOrder)
+        public IActionResult InsertOrder([FromBody] InsertOrder insertUpdateOrder)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
                 if (issucess)
                 {   
-                   
                     var results = _otpBAL.InsertOrder(insertUpdateOrder);
                     return Ok(results);
                     
@@ -394,24 +393,24 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Insert Order", Details = ex.Message });
             }
         }
-        //[HttpPost("UpdateOrder")]
-        //public IActionResult UpdateOrder([FromBody] InsertUpdateOrder insertUpdateOrder)
-        //{
-        //    try
-        //    {
-        //        bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
-        //        if (issucess)
-        //        {
-        //            var results = _otpBAL.UpdateOrder(insertUpdateOrder); 
-        //            return Ok(results);
-        //        }
-        //        return BadRequest(new { Message = "Token not verified" });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { Message = "An error occurred while Update Order", Details = ex.Message });
-        //    }
-        //}
+        [HttpPost("UpdateOrder")]
+        public IActionResult UpdateOrder([FromBody] UpdateOrder updateOrder)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(updateOrder.userid, updateOrder.token);
+                if (issucess)
+                {
+                    var results = _otpBAL.UpdateOrder(updateOrder);
+                    return Ok(results);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Update Order", Details = ex.Message });
+            }
+        }
         [HttpPost("GetTotalWeightByUser")]
         public IActionResult GetTotalWeightByUser([FromBody] getdata getdata, string Id)
         {

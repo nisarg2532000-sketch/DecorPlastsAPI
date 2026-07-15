@@ -308,7 +308,7 @@ namespace OtpAPI.BAL
             }
             return dict.Values.ToList();
         }
-        public List<SpResult> InsertOrder(InsertUpdateOrder insertUpdateOrder)
+        public List<SpResult> InsertOrder(InsertOrder insertUpdateOrder)
         {
             var results = new List<SpResult>();
 
@@ -336,23 +336,19 @@ namespace OtpAPI.BAL
             var result = _DB.Query<GetTotalWeightByUser>("USP_GetTotalWeightByUserId", param, commandType: CommandType.StoredProcedure).ToList();
             return result;
         }
-        public SpResult UpdateOrder(InsertUpdateOrder insertUpdateOrder)
+        public SpResult UpdateOrder(UpdateOrder insertUpdateOrder)
         {
             SpResult result = new SpResult();
-            foreach (var item in insertUpdateOrder.items)
-            {
+            
                 var param = new DynamicParameters();
-                param.Add("p_userid", Convert.ToInt32(insertUpdateOrder.userid));
+
                 param.Add("p_orderid", insertUpdateOrder.OrderId);
-                param.Add("p_ordercategoryid", Convert.ToInt32(item.CategoryId));
-                param.Add("p_ordercodeid", Convert.ToInt32(item.CodeId));
-                param.Add("p_quantity", Convert.ToInt32(item.Quantity));
-                param.Add("p_vehicleNo", item.VehicleNo);
-                param.Add("p_invoiceNo", item.InvoiceNo);
+                param.Add("p_vehicleNo", insertUpdateOrder.VehicleNo);
+                param.Add("p_invoiceNo", insertUpdateOrder.InvoiceNo);
                 param.Add("p_status", insertUpdateOrder.Status);
 
                 result = _DB.QueryFirstOrDefault<SpResult>("usp_UpdateOrder",param,commandType: CommandType.StoredProcedure);
-            }
+            
             return result;
         }
         public bool CheckStock(int categoryId, int codeId,  int quantity)

@@ -242,15 +242,15 @@ namespace OtpAPI.Models
         public string VehicleNo { get; set; }
         public string InvoiceNo { get; set; }
     }
-    public class InsertUpdateOrder
+    public class InsertOrder
     {
         public string userid { get; set; }
         public string token { get; set; }
         public int OrderId { get; set; }
-        public List<InsertUpdateOrderitem> items { get; set; }
+        public List<InsertOrderitem> items { get; set; }
         public bool Status { get; set; }
     }
-    public class InsertUpdateOrderitem
+    public class InsertOrderitem
     {
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
@@ -259,17 +259,17 @@ namespace OtpAPI.Models
         public string InvoiceNo { get; set; }
 
     }
-    public class OrderDetails
+    public class UpdateOrder
     {
-        public string OrderCategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public string OrderCodeId { get; set; }
-        public string CodeName { get; set; }
-        public string OrderSizeId {  get; set; }
-        public string SizeName { get; set; }
+        public string userid { get; set; }
+        public string token { get; set; }
+        public int OrderId { get; set; }
         public string Quantity { get; set; }
+        public string VehicleNo { get; set; }
+        public string InvoiceNo { get; set; }
         public bool Status { get; set; }
     }
+
     public class GetTotalWeightByUser
     {
         public string UserId { get; set; }
