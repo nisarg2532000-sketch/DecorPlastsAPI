@@ -351,6 +351,55 @@ namespace OtpAPI.BAL
             
             return result;
         }
+        public List<GetOrderList> GetOrderByUserId(getdata getdata, string status)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
+            param.Add("@u_Status", Convert.ToInt32(status));
+
+            // Query flat rows from SP
+            var rows = _DB.Query<dynamic>("USP_GetOrderListByUserId", param, commandType: CommandType.StoredProcedure).ToList();
+
+            if (rows == null || !rows.Any())
+                return null;
+
+            var dict = new Dictionary<long, GetOrderList>();
+            foreach (var row in rows)
+            {
+                long orderId = (long)row.OrderId;
+
+                if (!dict.ContainsKey(orderId))
+                {
+                    dict[orderId] = new GetOrderList
+                    {
+
+                        userid = row.UserId.ToString(),
+                        username = row.UserName,
+                        MobileNo = row.MobileNo.ToString(),
+                        OrderId = row.OrderId,
+                        Status = Convert.ToString(row.Status),
+                        DateTime = row.CreatedAt.ToString(),
+                        items = new List<OrderItem>()
+                    };
+                }
+                dict[orderId].items.Add(new OrderItem
+                {
+                    // Map each row to OrderItem
+
+                    CategoryId = row.OrderCategoryId.ToString(),
+                    CategoryName = row.CategoryName,
+                    CodeId = row.OrderCodeId.ToString(),
+                    CodeName = row.CodeName,
+                    Size = row.Size,
+                    Quantity = row.Quantity.ToString(),
+                    Weight = row.Weight,
+                    VehicleNo = row.VehicleNo,
+                    InvoiceNo = row.InvoiceNo
+
+                });
+            }
+            return dict.Values.ToList();
+        }
         public bool CheckStock(int categoryId, int codeId,  int quantity)
         {
             DynamicParameters param = new DynamicParameters();
