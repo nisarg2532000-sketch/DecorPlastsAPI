@@ -319,8 +319,8 @@ namespace OtpAPI.BAL
                 param.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
                 param.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
                 param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
-                param.Add("@p_VehicleNo", insertUpdateOrder.VehicleNo);
-                param.Add("@p_InvoiceNo", insertUpdateOrder.InvoiceNo);
+                param.Add("@p_VehicleNo", string.IsNullOrWhiteSpace(insertUpdateOrder.VehicleNo) ? null : insertUpdateOrder.VehicleNo);
+                param.Add("@p_InvoiceNo", string.IsNullOrWhiteSpace(insertUpdateOrder.InvoiceNo) ? null : insertUpdateOrder.InvoiceNo);
                 param.Add("@p_Status", insertUpdateOrder.Status);
 
                 var result = _DB.QueryFirstOrDefault<SpResult>("USP_InsertOrder", param, commandType: CommandType.StoredProcedure);
