@@ -341,7 +341,7 @@ namespace OtpAPI.BAL
             SpResult result = new SpResult();
             
                 var param = new DynamicParameters();
-
+                param.Add("p_UserId", Convert.ToInt16(insertUpdateOrder.userid));
                 param.Add("p_orderid", insertUpdateOrder.OrderId);
                 param.Add("p_vehicleNo", insertUpdateOrder.VehicleNo);
                 param.Add("p_invoiceNo", insertUpdateOrder.InvoiceNo);
