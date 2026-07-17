@@ -238,6 +238,8 @@ namespace OtpAPI.BAL
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString(),
+                        VehicleNo = row.VehicleNo,
+                        InvoiceNo = row.InvoiceNo,
                         items = new List<OrderItem>()
                     };  
                 }
@@ -251,10 +253,7 @@ namespace OtpAPI.BAL
                     CodeName = row.CodeName,
                     Size = row.Size,
                     Quantity = row.Quantity.ToString(),
-                    Weight = row.Weight,     
-                    VehicleNo = row.VehicleNo,
-                    InvoiceNo = row.InvoiceNo
-
+                    Weight = row.Weight    
                 });
             }
             return dict.Values.ToList();
@@ -287,6 +286,8 @@ namespace OtpAPI.BAL
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString(),
+                        VehicleNo = row.VehicleNo,
+                        InvoiceNo = row.InvoiceNo,
                         items = new List<FutureOrderItem>()
                     };
                 }
@@ -301,9 +302,7 @@ namespace OtpAPI.BAL
                     Size = row.Size,
                     RemainQuantity = row.RemainQuantity.ToString(),
                     TotalQuantity = row.TotalQuantity.ToString(),
-                    Weight = row.Weight,
-                    VehicleNo = row.VehicleNo,
-                    InvoiceNo = row.InvoiceNo
+                    Weight = row.Weight                 
                 });
             }
             return dict.Values.ToList();
@@ -320,8 +319,8 @@ namespace OtpAPI.BAL
                 param.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
                 param.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
                 param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
-                param.Add("@p_VehicleNo", item.VehicleNo);
-                param.Add("@p_InvoiceNo", item.InvoiceNo);
+                param.Add("@p_VehicleNo", insertUpdateOrder.VehicleNo);
+                param.Add("@p_InvoiceNo", insertUpdateOrder.InvoiceNo);
                 param.Add("@p_Status", insertUpdateOrder.Status);
 
                 var result = _DB.QueryFirstOrDefault<SpResult>("USP_InsertOrder", param, commandType: CommandType.StoredProcedure);
@@ -379,6 +378,8 @@ namespace OtpAPI.BAL
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString(),
+                        VehicleNo = row.VehicleNo,
+                        InvoiceNo = row.InvoiceNo,
                         items = new List<OrderItem>()
                     };
                 }
@@ -392,9 +393,7 @@ namespace OtpAPI.BAL
                     CodeName = row.CodeName,
                     Size = row.Size,
                     Quantity = row.Quantity.ToString(),
-                    Weight = row.Weight,
-                    VehicleNo = row.VehicleNo,
-                    InvoiceNo = row.InvoiceNo
+                    Weight = row.Weight
 
                 });
             }

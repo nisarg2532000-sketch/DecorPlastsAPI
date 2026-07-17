@@ -201,8 +201,6 @@ namespace OtpAPI.Models
         public string Size { get; set; }
         public string Quantity { get; set; }
         public float Weight { get; set; }
-        public string VehicleNo { get; set; }
-        public string InvoiceNo { get; set; }
     }
     public class StockCheckResult
     {
@@ -217,6 +215,8 @@ namespace OtpAPI.Models
         public long OrderId { get; set; }
         public List<OrderItem> items { get; set; }
         public string Status { get; set; }
+        public string VehicleNo { get; set; }
+        public string InvoiceNo { get; set; }
         public string DateTime { get; set; }
     }
     public class GetFutureOrderList
@@ -227,6 +227,8 @@ namespace OtpAPI.Models
         public long OrderId { get; set; }
         public List<FutureOrderItem> items { get; set; }
         public string Status { get; set; }
+        public string VehicleNo { get; set; }
+        public string InvoiceNo { get; set; }
         public string DateTime { get; set; }
     }
     public class FutureOrderItem
@@ -239,8 +241,6 @@ namespace OtpAPI.Models
         public string RemainQuantity { get; set; }
         public string TotalQuantity { get; set; }
         public float Weight { get; set; }
-        public string VehicleNo { get; set; }
-        public string InvoiceNo { get; set; }
     }
     public class InsertOrder
     {
@@ -249,14 +249,14 @@ namespace OtpAPI.Models
         public int OrderId { get; set; }
         public List<InsertOrderitem> items { get; set; }
         public bool Status { get; set; }
+        public string VehicleNo { get; set; }
+        public string InvoiceNo { get; set; }
     }
     public class InsertOrderitem
     {
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
         public string Quantity { get; set; }
-        public string VehicleNo { get; set; }
-        public string InvoiceNo { get; set; }
 
     }
     public class UpdateOrder
