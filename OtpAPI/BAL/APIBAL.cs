@@ -79,10 +79,10 @@ namespace OtpAPI.BAL
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_Id", Convert.ToInt32(insertUpdateUser.Id));
-            param.Add("@p_OwnerName", string.IsNullOrWhiteSpace(insertUpdateUser.OwnerName) ? null : insertUpdateUser.OwnerName));
+            param.Add("@p_OwnerName", string.IsNullOrWhiteSpace(insertUpdateUser.OwnerName) ? null : insertUpdateUser.OwnerName);
             param.Add("@p_ShopName", insertUpdateUser.ShopName);
             param.Add("@p_MobileNo", insertUpdateUser.MobileNo);
-            param.Add("@p_Address", string.IsNullOrWhiteSpace(insertUpdateUser.Address) ? null : insertUpdateUser.Address));
+            param.Add("@p_Address", string.IsNullOrWhiteSpace(insertUpdateUser.Address) ? null : insertUpdateUser.Address);
             param.Add("@p_Role", insertUpdateUser.Role);
             param.Add("@p_IsActive", Convert.ToInt32(insertUpdateUser.IsActive));
             var result = _DB.Query<SpResult>("USP_InsertUpdateUser", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
