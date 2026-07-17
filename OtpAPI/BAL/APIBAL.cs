@@ -79,10 +79,10 @@ namespace OtpAPI.BAL
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_Id", Convert.ToInt32(insertUpdateUser.Id));
-            param.Add("@p_OwnerName", insertUpdateUser.OwnerName);
+            param.Add("@p_OwnerName", string.IsNullOrWhiteSpace(insertUpdateUser.OwnerName) ? null : insertUpdateUser.OwnerName));
             param.Add("@p_ShopName", insertUpdateUser.ShopName);
             param.Add("@p_MobileNo", insertUpdateUser.MobileNo);
-            param.Add("@p_Address", insertUpdateUser.Address);
+            param.Add("@p_Address", string.IsNullOrWhiteSpace(insertUpdateUser.Address) ? null : insertUpdateUser.Address));
             param.Add("@p_Role", insertUpdateUser.Role);
             param.Add("@p_IsActive", Convert.ToInt32(insertUpdateUser.IsActive));
             var result = _DB.Query<SpResult>("USP_InsertUpdateUser", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
@@ -335,18 +335,16 @@ namespace OtpAPI.BAL
             var result = _DB.Query<GetTotalWeightByUser>("USP_GetTotalWeightByUserId", param, commandType: CommandType.StoredProcedure).ToList();
             return result;
         }
-        public SpResult UpdateOrder(UpdateOrder insertUpdateOrder)
+        public SpResult UpdateOrder(UpdateOrder UpdateOrder)
         {
-            SpResult result = new SpResult();
-            
-                var param = new DynamicParameters();
-                param.Add("p_UserId", Convert.ToInt16(insertUpdateOrder.userid));
-                param.Add("p_orderid", insertUpdateOrder.OrderId);
-                param.Add("p_vehicleNo", insertUpdateOrder.VehicleNo);
-                param.Add("p_invoiceNo", insertUpdateOrder.InvoiceNo);
-                param.Add("p_status", insertUpdateOrder.Status);
+            var param = new DynamicParameters();
+            param.Add("p_UserId", Convert.ToInt16(UpdateOrder.userid));
+            param.Add("p_orderid", UpdateOrder.OrderId);
+            param.Add("p_vehicleNo", string.IsNullOrWhiteSpace(UpdateOrder.VehicleNo) ? null : UpdateOrder.VehicleNo);
+            param.Add("p_InvoiceNo", string.IsNullOrWhiteSpace(UpdateOrder.InvoiceNo) ? null : UpdateOrder.InvoiceNo);
+            param.Add("p_status", UpdateOrder.Status);
 
-                result = _DB.QueryFirstOrDefault<SpResult>("usp_UpdateOrder",param,commandType: CommandType.StoredProcedure);
+            SpResult result = _DB.QueryFirstOrDefault<SpResult>("usp_UpdateOrder",param,commandType: CommandType.StoredProcedure);
             
             return result;
         }
