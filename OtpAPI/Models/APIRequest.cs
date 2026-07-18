@@ -249,8 +249,8 @@ namespace OtpAPI.Models
         public int OrderId { get; set; }
         public List<InsertOrderitem> items { get; set; }
         public bool Status { get; set; }
-        public string VehicleNo { get; set; }
-        public string InvoiceNo { get; set; }
+        public string? VehicleNo { get; set; }
+        public string? InvoiceNo { get; set; }
     }
     public class InsertOrderitem
     {
