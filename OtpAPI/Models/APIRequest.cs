@@ -264,7 +264,6 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string token { get; set; }
         public int OrderId { get; set; }
-        public string Quantity { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public int Status { get; set; }
