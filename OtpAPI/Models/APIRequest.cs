@@ -192,6 +192,15 @@ namespace OtpAPI.Models
         public string Size { get; set; }
         public string Quantity { get; set; }
     }
+    public class OrderuserItem
+    {
+        public string CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string CodeId { get; set; }
+        public string CodeName { get; set; }
+        public string Size { get; set; }
+        public string Quantity { get; set; }
+    }
     public class OrderItem
     {
         public string CategoryId { get; set; }
@@ -214,6 +223,16 @@ namespace OtpAPI.Models
         public string MobileNo { get; set; }
         public long OrderId { get; set; }
         public List<OrderItem> items { get; set; }
+        public string Status { get; set; }
+        public string? VehicleNo { get; set; }
+        public string? InvoiceNo { get; set; }
+        public string DateTime { get; set; }
+    }
+    public class GetUserOrder
+    {
+        public string userid { get; set; }
+        public long OrderId { get; set; }
+        public List<OrderuserItem> items { get; set; }
         public string Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
