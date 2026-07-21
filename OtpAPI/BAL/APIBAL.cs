@@ -352,10 +352,9 @@ namespace OtpAPI.BAL
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
-            param.Add("@u_Status", Convert.ToInt32(status));
 
             // Query flat rows from SP
-            var rows = _DB.Query<dynamic>("USP_GetOrderListByUserId", param, commandType: CommandType.StoredProcedure).ToList();
+            var rows = _DB.Query<dynamic>("USP_GetOrderByUserId", param, commandType: CommandType.StoredProcedure).ToList();
 
             if (rows == null || !rows.Any())
                 return null;
@@ -371,8 +370,6 @@ namespace OtpAPI.BAL
                     {
 
                         userid = row.UserId.ToString(),
-                        username = row.UserName,
-                        MobileNo = row.MobileNo.ToString(),
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString(),
@@ -390,8 +387,7 @@ namespace OtpAPI.BAL
                     CodeId = row.OrderCodeId.ToString(),
                     CodeName = row.CodeName,
                     Size = row.Size,
-                    Quantity = row.Quantity.ToString(),
-                    Weight = row.Weight
+                    Quantity = row.Quantity.ToString()
 
                 });
             }
