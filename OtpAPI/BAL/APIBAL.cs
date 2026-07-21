@@ -348,7 +348,7 @@ namespace OtpAPI.BAL
             
             return result;
         }
-        public List<GetOrderList> GetOrderByUserId(int userid)
+        public List<GetUserOrder> GetOrderByUserId(int userid)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_UserId", userid);
@@ -359,14 +359,14 @@ namespace OtpAPI.BAL
             if (rows == null || !rows.Any())
                 return null;
 
-            var dict = new Dictionary<long, GetOrderList>();
+            var dict = new Dictionary<long, GetUserOrder>();
             foreach (var row in rows)
             {
                 long orderId = (long)row.OrderId;
 
                 if (!dict.ContainsKey(orderId))
                 {
-                    dict[orderId] = new GetOrderList
+                    dict[orderId] = new GetUserOrder
                     {
 
                         userid = row.UserId.ToString(),
@@ -375,10 +375,10 @@ namespace OtpAPI.BAL
                         DateTime = row.CreatedAt.ToString(),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
-                        items = new List<OrderItem>()
+                        items = new List<OrderuserItem>()
                     };
                 }
-                dict[orderId].items.Add(new OrderItem
+                dict[orderId].items.Add(new OrderuserItem
                 {
                     // Map each row to OrderItem
 
