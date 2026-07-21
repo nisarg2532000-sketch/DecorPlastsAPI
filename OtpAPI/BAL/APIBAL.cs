@@ -348,10 +348,10 @@ namespace OtpAPI.BAL
             
             return result;
         }
-        public List<GetOrderList> GetOrderByUserId(getdata getdata, string status)
+        public List<GetOrderList> GetOrderByUserId(int userid)
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
+            param.Add("@p_UserId", userid);
 
             // Query flat rows from SP
             var rows = _DB.Query<dynamic>("USP_GetOrderByUserId", param, commandType: CommandType.StoredProcedure).ToList();

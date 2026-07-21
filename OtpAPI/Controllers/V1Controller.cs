@@ -357,14 +357,14 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetOrderByUserId")]
-        public IActionResult GetOrderByUserId([FromBody] getdata getdata, string status)
+        public IActionResult GetOrderByUserId([FromBody] getdata getdata)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var getOrderList = _otpBAL.GetOrderByUserId(getdata, status);
+                    var getOrderList = _otpBAL.GetOrderByUserId(Convert.ToInt32(getdata.userid));
                     return Ok(getOrderList);
                 }
                 return BadRequest(new { Message = "Token not verified" });
