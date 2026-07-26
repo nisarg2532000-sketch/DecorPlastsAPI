@@ -399,7 +399,11 @@ namespace OtpAPI.Controllers
             {
                 bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
                 if (issucess)
-                {   
+                {
+                    if (Convert.ToInt16(insertUpdateOrder.OrderId) == 0)
+                    {
+                        insertUpdateOrder.OrderId = (int)_otpBAL.GetOrderId();
+                    }
                     var results = _otpBAL.InsertOrder(insertUpdateOrder);
                     return Ok(results);
                     

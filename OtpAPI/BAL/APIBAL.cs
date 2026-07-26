@@ -10,6 +10,7 @@ using MySqlX.XDevAPI.Common;
 using OtpAPI.Models;
 using System;
 using System.Data;
+using System.Reflection.Metadata;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace OtpAPI.BAL
 {
@@ -428,6 +429,12 @@ namespace OtpAPI.BAL
             param.Add("@p_UserId", Convert.ToInt32(userid));
             var result = _DB.Query<GetCart>("USP_GetCart", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
+        }
+        public long GetOrderId()
+        {
+            long orderid = _DB.Query<long>("USP_CreateOrderId", commandType: CommandType.StoredProcedure).FirstOrDefault();
+
+            return orderid;
         }
     }
 }

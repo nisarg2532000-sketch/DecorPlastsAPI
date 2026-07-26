@@ -17,7 +17,7 @@ namespace DecorPlastsAPI.Interface
 
         public IEnumerable<T> Query<T>(string storedProcedure, dynamic param = null, CommandType commandType = default)
         {
-            using var connection = new MySqlConnection(_connectionString); // ✅
+            using var connection = new MySqlConnection(_connectionString);
             connection.Open();
             return connection.Query<T>(storedProcedure, param: (object?)param, commandType: CommandType.StoredProcedure);
         }
@@ -44,6 +44,6 @@ namespace DecorPlastsAPI.Interface
             using var connection = new MySqlConnection(_connectionString); // ✅
             connection.Open();
             return connection.QueryFirstOrDefault<T>(storedProcedure, param: (object?)param, commandType: commandType)!;
-        }
+        }  
     }
 }
