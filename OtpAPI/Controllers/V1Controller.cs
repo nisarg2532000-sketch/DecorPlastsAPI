@@ -139,24 +139,24 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Delete User", Details = ex.Message });
             }
         }
-        [HttpPost("GetAdminDashbord")]
-        public IActionResult GetAdminDashbordData([FromBody] getdata getdata)
-        {
-            try
-            {
-                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                if (issucess)
-                {
-                    AdminDashboard AdminDasshboard = _otpBAL.GetAdminDashboardData(Convert.ToInt32(getdata.userid));
-                    return Ok(AdminDasshboard);
-                }
-                return BadRequest(new { Message = "Token not verified" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while Get Admin Dashbord Data", Details = ex.Message });
-            }
-        }
+        //[HttpPost("GetAdminDashbord")]
+        //public IActionResult GetAdminDashbordData([FromBody] getdata getdata)
+        //{
+        //    try
+        //    {
+        //        bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+        //        if (issucess)
+        //        {
+        //            AdminDashboard AdminDasshboard = _otpBAL.GetAdminDashboardData(Convert.ToInt32(getdata.userid));
+        //            return Ok(AdminDasshboard);
+        //        }
+        //        return BadRequest(new { Message = "Token not verified" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { Message = "An error occurred while Get Admin Dashbord Data", Details = ex.Message });
+        //    }
+        //}
         [HttpPost("GetCategoryById")]
         public IActionResult GetCategory([FromBody] getdata getdata, string CategoryId)
         {
