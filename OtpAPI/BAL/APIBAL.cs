@@ -238,7 +238,7 @@ namespace OtpAPI.BAL
                         MobileNo = row.MobileNo.ToString(),
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
-                        DateTime = row.CreatedAt.ToString(),
+                        DateTime = row.CreatedAt.ToString("HH:mm:ss"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
                         items = new List<OrderItem>()
@@ -316,7 +316,7 @@ namespace OtpAPI.BAL
             {
                 DynamicParameters param = new DynamicParameters();
                 param.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
-                param.Add("@p_OrderId", insertUpdateOrder.OrderId);
+                param.Add("@p_OrderId", insertUpdateOrder.OrderId.ToString());
                 param.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
                 param.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
                 param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
