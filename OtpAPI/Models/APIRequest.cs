@@ -228,6 +228,19 @@ namespace OtpAPI.Models
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
     }
+    public class GetOrderListDemo
+    {
+        public string userid { get; set; }
+        public string username { get; set; }
+        public string MobileNo { get; set; }
+        public long OrderId { get; set; }
+        public List<OrderItem> items { get; set; }
+        public string Status { get; set; }
+        public string? VehicleNo { get; set; }
+        public string? InvoiceNo { get; set; }
+        public string DateTime { get; set; }
+        public string? UpdatedDatetime { get; set; }
+    }
     public class GetUserOrder
     {
         public string userid { get; set; }
@@ -249,6 +262,19 @@ namespace OtpAPI.Models
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
+    }
+    public class GetFutureOrderListDemo
+    {
+        public string userid { get; set; }
+        public string username { get; set; }
+        public string MobileNo { get; set; }
+        public long OrderId { get; set; }
+        public List<FutureOrderItem> items { get; set; }
+        public string Status { get; set; }
+        public string? VehicleNo { get; set; }
+        public string? InvoiceNo { get; set; }
+        public string DateTime { get; set; }
+        public string? UpdatedDateTime { get; set; } 
     }
     public class FutureOrderItem
     {

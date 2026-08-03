@@ -254,7 +254,7 @@ namespace OtpAPI.BAL
                     CodeName = row.CodeName,
                     Size = row.Size,
                     Quantity = row.Quantity.ToString(),
-                    Weight = row.Weight    
+                    Weight = row.Weight
                 });
             }
             return dict.Values.ToList();
@@ -304,6 +304,56 @@ namespace OtpAPI.BAL
                     RemainQuantity = row.RemainQuantity.ToString(),
                     TotalQuantity = row.TotalQuantity.ToString(),
                     Weight = row.Weight                 
+                });
+            }
+            return dict.Values.ToList();
+        }
+        public List<GetFutureOrderListDemo> GetFutureOrderDemo(getdata getdata, string status)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
+            param.Add("@u_Status", Convert.ToInt32(status));
+
+            // Query flat rows from SP
+            var rows = _DB.Query<dynamic>("USP_GetFutureOrderListDemo", param, commandType: CommandType.StoredProcedure).ToList();
+
+            if (rows == null || !rows.Any())
+                return null;
+
+            var dict = new Dictionary<long, GetFutureOrderListDemo>();
+            foreach (var row in rows)
+            {
+                long orderId = (long)row.OrderId;
+
+                if (!dict.ContainsKey(orderId))
+                {
+                    dict[orderId] = new GetFutureOrderListDemo
+                    {
+
+                        userid = row.UserId.ToString(),
+                        username = row.UserName,
+                        MobileNo = row.MobileNo.ToString(),
+                        OrderId = row.OrderId,
+                        Status = Convert.ToString(row.Status),
+                        DateTime = row.CreatedAt.ToString("HH:mm:ss"),
+                        UpdatedDateTime = row.UpdatedAt?.ToString(),
+                        VehicleNo = row.VehicleNo,
+                        InvoiceNo = row.InvoiceNo,
+                        items = new List<FutureOrderItem>()
+                    };
+                }
+                dict[orderId].items.Add(new FutureOrderItem
+                {
+                    // Map each row to FutureOrderItem
+
+                    CategoryId = row.OrderCategoryId.ToString(),
+                    CategoryName = row.CategoryName,
+                    CodeId = row.OrderCodeId.ToString(),
+                    CodeName = row.CodeName,
+                    Size = row.Size,
+                    RemainQuantity = row.RemainQuantity.ToString(),
+                    TotalQuantity = row.TotalQuantity.ToString(),
+                    Weight = row.Weight
                 });
             }
             return dict.Values.ToList();
@@ -390,6 +440,55 @@ namespace OtpAPI.BAL
                     Size = row.Size,
                     Quantity = row.Quantity.ToString()
 
+                });
+            }
+            return dict.Values.ToList();
+        }
+        public List<GetOrderListDemo> GetOrderDemo(getdata getdata, string status)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@u_UserId", Convert.ToInt32(getdata.userid));
+            param.Add("@u_Status", Convert.ToInt32(status));
+
+            // Query flat rows from SP
+            var rows = _DB.Query<dynamic>("USP_GetOrderListDemo", param, commandType: CommandType.StoredProcedure).ToList();
+
+            if (rows == null || !rows.Any())
+                return null;
+
+            var dict = new Dictionary<long, GetOrderListDemo>();
+            foreach (var row in rows)
+            {
+                long orderId = (long)row.OrderId;
+
+                if (!dict.ContainsKey(orderId))
+                {
+                    dict[orderId] = new GetOrderListDemo
+                    {
+
+                        userid = row.UserId.ToString(),
+                        username = row.UserName,
+                        MobileNo = row.MobileNo.ToString(),
+                        OrderId = row.OrderId,
+                        Status = Convert.ToString(row.Status),
+                        DateTime = row.CreatedAt.ToString("HH:mm:ss"),
+                        UpdatedDatetime = row.UpdatedAt?.ToString(),
+                        VehicleNo = row.VehicleNo,
+                        InvoiceNo = row.InvoiceNo,
+                        items = new List<OrderItem>()
+                    };
+                }
+                dict[orderId].items.Add(new OrderItem
+                {
+                    // Map each row to OrderItem
+
+                    CategoryId = row.OrderCategoryId.ToString(),
+                    CategoryName = row.CategoryName,
+                    CodeId = row.OrderCodeId.ToString(),
+                    CodeName = row.CodeName,
+                    Size = row.Size,
+                    Quantity = row.Quantity.ToString(),
+                    Weight = row.Weight
                 });
             }
             return dict.Values.ToList();

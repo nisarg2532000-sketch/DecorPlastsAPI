@@ -356,6 +356,24 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Get Order", Details = ex.Message });
             }
         }
+        [HttpPost("GetOrderDemo")]
+        public IActionResult GetOrderDemo([FromBody] getdata getdata, string status)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var getOrderList = _otpBAL.GetOrderDemo(getdata, status);
+                    return Ok(getOrderList);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Order", Details = ex.Message });
+            }
+        }
         [HttpPost("GetOrderByUserId")]
         public IActionResult GetOrderByUserId([FromBody] getdata getdata)
         {
@@ -383,6 +401,24 @@ namespace OtpAPI.Controllers
                 if (issucess)
                 {
                     var getFutureOrderList = _otpBAL.GetFutureOrder(getdata, status);
+                    return Ok(getFutureOrderList);
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Get Future Order", Details = ex.Message });
+            }
+        }
+        [HttpPost("GetFutureOrderDemo")]
+        public IActionResult GetFutureOrderDemo([FromBody] getdata getdata, string status)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var getFutureOrderList = _otpBAL.GetFutureOrderDemo(getdata, status);
                     return Ok(getFutureOrderList);
                 }
                 return BadRequest(new { Message = "Token not verified" });
