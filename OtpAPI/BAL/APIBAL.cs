@@ -472,7 +472,7 @@ namespace OtpAPI.BAL
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString("HH:mm:ss"),
-                        UpdatedDatetime = row.UpdatedAt?.ToString(),
+                        UpdatedDatetime = row.UptadedAtt?.ToString(),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
                         items = new List<OrderItem>()
