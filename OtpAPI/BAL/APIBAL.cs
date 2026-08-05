@@ -535,5 +535,9 @@ namespace OtpAPI.BAL
 
             return orderid;
         }
+        public List<ExcelGetStock> ExcelGetStock()
+        {
+            return _DB.Query<ExcelGetStock>("USP_GetExelofStock", commandType: CommandType.StoredProcedure).ToList();
+        }
     }
 }

@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OfficeOpenXml;
 using OtpAPI.BAL;
 using OtpAPI.Data;
 using OtpAPI.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+ExcelPackage.License.SetNonCommercialPersonal("DecorPlast");
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",

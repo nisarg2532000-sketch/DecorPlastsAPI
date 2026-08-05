@@ -362,4 +362,12 @@ namespace OtpAPI.Models
  
         public string Message { get; set; } = "";
     }
+    public class ExcelGetStock
+    {
+        public string Category { get; set; }
+        public string Code { get; set; }
+        public string Size { get; set; }
+        public string Weight { get; set; }
+        public string Quantity { get; set; }
+    }
 }
