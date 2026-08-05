@@ -20,37 +20,43 @@ public class ExcelController : ControllerBase
     [HttpGet("download")]
     public IActionResult DownloadExcel()
     {
-
-        using var package = new ExcelPackage();
-        var sheet = package.Workbook.Worksheets.Add("Stocks");
-
-        // Header row\
-        sheet.Cells[1, 1].Value = "CategoryName";
-        sheet.Cells[1, 2].Value = "CodeName";
-        sheet.Cells[1, 3].Value = "Size";
-        sheet.Cells[1, 4].Value = "Weight";
-        sheet.Cells[1, 5].Value = "Stock Quantity";
-
-        // Sample data rows — load from BAL
-        var data = _apiBAL.ExcelGetStock();
-        for (int i = 0; i < data.Count; i++)
+        try
         {
-            sheet.Cells[i + 2, 1].Value = data[i].Category;
-            sheet.Cells[i + 2, 2].Value = data[i].Code;
-            sheet.Cells[i + 2, 3].Value = data[i].Size;
-            sheet.Cells[i + 2, 4].Value = data[i].Weight;
-            sheet.Cells[i + 2, 5].Value = data[i].Quantity;
+            using var package = new ExcelPackage();
+            var sheet = package.Workbook.Worksheets.Add("Stocks");
+
+            // Header row\
+            sheet.Cells[1, 1].Value = "CategoryName";
+            sheet.Cells[1, 2].Value = "CodeName";
+            sheet.Cells[1, 3].Value = "Size";
+            sheet.Cells[1, 4].Value = "Weight";
+            sheet.Cells[1, 5].Value = "Stock Quantity";
+
+            // Sample data rows — load from BAL
+            var data = _apiBAL.ExcelGetStock();
+            for (int i = 0; i < data.Count; i++)
+            {
+                sheet.Cells[i + 2, 1].Value = data[i].Category;
+                sheet.Cells[i + 2, 2].Value = data[i].Code;
+                sheet.Cells[i + 2, 3].Value = data[i].Size;
+                sheet.Cells[i + 2, 4].Value = data[i].Weight;
+                sheet.Cells[i + 2, 5].Value = data[i].Quantity;
+            }
+
+            // Auto-fit columns
+            sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
+
+            var fileBytes = package.GetAsByteArray();
+            return File(
+                fileBytes,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Stock.xlsx"
+            );
         }
-
-        // Auto-fit columns
-        sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
-
-        var fileBytes = package.GetAsByteArray();
-        return File(
-            fileBytes,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "Stock.xlsx"
-        );
+        catch (Exception ex)
+        {
+            return BadRequest(StatusCode(500, new { Message = "An error occurred while Downloading excel", Details = ex.Message }));
+        }
     }
 
     // ───────────────────────────────────────────
