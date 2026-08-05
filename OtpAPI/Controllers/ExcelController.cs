@@ -25,22 +25,25 @@ public class ExcelController : ControllerBase
             using var package = new ExcelPackage();
             var sheet = package.Workbook.Worksheets.Add("Stocks");
 
-            // Header row\
-            sheet.Cells[1, 1].Value = "CategoryName";
-            sheet.Cells[1, 2].Value = "CodeName";
-            sheet.Cells[1, 3].Value = "Size";
-            sheet.Cells[1, 4].Value = "Weight";
-            sheet.Cells[1, 5].Value = "Stock Quantity";
-
+            // Header row
+            sheet.Cells[1, 1].Value = "CategoryId";
+            sheet.Cells[1, 2].Value = "CategoryName";
+            sheet.Cells[1, 3].Value = "CodeId";
+            sheet.Cells[1, 4].Value = "CodeName";
+            sheet.Cells[1, 5].Value = "Size";
+            sheet.Cells[1, 6].Value = "Weight";
+            sheet.Cells[1, 7].Value = "Stock Quantity";
             // Sample data rows — load from BAL
             var data = _apiBAL.ExcelGetStock();
             for (int i = 0; i < data.Count; i++)
             {
-                sheet.Cells[i + 2, 1].Value = data[i].Category;
-                sheet.Cells[i + 2, 2].Value = data[i].Code;
-                sheet.Cells[i + 2, 3].Value = data[i].Size;
-                sheet.Cells[i + 2, 4].Value = data[i].Weight;
-                sheet.Cells[i + 2, 5].Value = data[i].Quantity;
+                sheet.Cells[i + 2, 1].Value = data[i].CategoryId;
+                sheet.Cells[i + 2, 2].Value = data[i].Category;
+                sheet.Cells[i + 2, 3].Value = data[i].CodeId;
+                sheet.Cells[i + 2, 4].Value = data[i].Code;
+                sheet.Cells[i + 2, 5].Value = data[i].Size;
+                sheet.Cells[i + 2, 6].Value = data[i].Weight;
+                sheet.Cells[i + 2, 7].Value = data[i].Quantity;
             }
 
             // Auto-fit columns
