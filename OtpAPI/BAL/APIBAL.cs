@@ -539,5 +539,34 @@ namespace OtpAPI.BAL
         {
             return _DB.Query<ExcelGetStock>("USP_GetExelofStock", commandType: CommandType.StoredProcedure).ToList();
         }
+
+        // Save list of stock records imported from Excel
+        public int SaveStock(List<ExcelGetStock> stocks)
+        {
+            if (stocks == null || !stocks.Any()) return 0;
+
+            int affected = 0;
+
+            foreach (var s in stocks)
+            {
+                decimal weight = 0;
+                if (!string.IsNullOrWhiteSpace(s.Weight))
+                    decimal.TryParse(s.Weight, out weight);
+
+                // Skip only if both quantity and weight are 0 (nothing meaningful to save)
+                if (s.Quantity <= 0 && weight <= 0) continue;
+
+                var param = new DynamicParameters();
+                param.Add("@p_CategoryId", int.TryParse(s.CategoryId, out var cid) ? cid : 0);
+                param.Add("@p_CodeId", int.TryParse(s.CodeId, out var coid) ? coid : 0);
+                param.Add("@p_Quantity", s.Quantity);
+                param.Add("@p_Weight", weight);
+
+                // Assuming a stored procedure 'USP_SaveStockFromExcel' that inserts/updates stock row
+                affected += _DB.ExecuteSP("USP_SaveStockFromExcel", param);
+            }
+
+            return affected;
+        }
     }
 }

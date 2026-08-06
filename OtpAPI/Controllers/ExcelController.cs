@@ -17,7 +17,7 @@ public class ExcelController : ControllerBase
     // ───────────────────────────────────────────
     // DOWNLOAD — Generate and return an Excel file
     // ───────────────────────────────────────────
-    [HttpGet("download")]
+    [HttpGet("DownloadExcel")]
     public IActionResult DownloadExcel()
     {
         try
@@ -65,42 +65,40 @@ public class ExcelController : ControllerBase
     // ───────────────────────────────────────────
     // UPLOAD — Read an Excel file and process it
     // ───────────────────────────────────────────
-   // [HttpPost("upload")]
-    //public async Task<IActionResult> UploadExcel(IFormFile file)
-   // {
-    //    if (file == null || file.Length == 0)
-    //        return BadRequest("No file uploaded.");
-//
- //       if (!file.FileName.EndsWith(".xlsx"))
-  //          return BadRequest("Only .xlsx files are allowed.");
-  //
-   //     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-   //
-    //    var results = new List<OrderDto>();
-    //
-//        using var stream = new MemoryStream();
-      //  await file.CopyToAsync(stream);
+    [HttpPost("UploadExcel")]
+    public async Task<IActionResult> UploadExcel(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded.");
 
-     //   using var package = new ExcelPackage(stream);
-       // var sheet = package.Workbook.Worksheets[0]; // First sheet
-       // int rowCount = sheet.Dimension.Rows;
+        if (!file.FileName.EndsWith(".xlsx"))
+            return BadRequest("Only .xlsx files are allowed.");
 
-//        for (int row = 2; row <= rowCount; row++) // row 1 = header
-  //      {
-    //        var order = new OrderDto
-      //      {
-        //        OrderId = sheet.Cells[row, 1].Text,
-          //      CustomerName = sheet.Cells[row, 2].Text,
-            //    Product = sheet.Cells[row, 3].Text,
-             //   Quantity = int.TryParse(sheet.Cells[row, 4].Text, out int qty) ? qty : 0,
-             //   Total = decimal.TryParse(sheet.Cells[row, 5].Text, out decimal tot) ? tot : 0
-           // };
-           // results.Add(order);
-        //}
 
-        // TODO: Save results to your DB here
-        // await _orderService.SaveOrders(results);
+        var results = new List<ExcelGetStock>();
 
-        //return Ok(new { message = $"{results.Count} records imported.", data = results });
-    //}
+        using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
+
+        using var package = new ExcelPackage(stream);
+        var sheet = package.Workbook.Worksheets[0]; // First sheet
+        int rowCount = sheet.Dimension.Rows;
+
+        for (int row = 2; row <= rowCount; row++) // row 1 = header
+        {
+            var Stock = new ExcelGetStock
+            {
+                CategoryId = sheet.Cells[row, 1].Text,
+                CodeId = sheet.Cells[row, 3].Text,
+                Weight = sheet.Cells[row, 6].Text,
+                Quantity = int.TryParse(sheet.Cells[row, 7].Text, out int qty) ? qty : 0
+            };
+            results.Add(Stock);
+        }
+
+        // TODO: Save results to your DB here (synchronous)
+        var saved = _apiBAL.SaveStock(results);
+
+        return Ok(new { message = $"{results.Count} records imported.", savedRows = saved, data = results });
+    }
 }

@@ -370,6 +370,7 @@ namespace OtpAPI.Models
         public string Code { get; set; }
         public string Size { get; set; }
         public string Weight { get; set; }
-        public string Quantity { get; set; }
+        // Quantity as integer for processing
+        public int Quantity { get; set; }
     }
 }
