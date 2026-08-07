@@ -99,6 +99,6 @@ public class ExcelController : ControllerBase
         // TODO: Save results to your DB here (synchronous)
         var saved = _apiBAL.SaveStock(results);
 
-        return Ok(new { message = $"{results.Count} records imported.", savedRows = saved, data = results });
+        return Ok(new { message = $"{results.Count} records imported.", savedRows = saved });
     }
 }
