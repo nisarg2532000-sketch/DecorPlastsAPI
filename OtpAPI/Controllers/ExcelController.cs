@@ -50,11 +50,12 @@ public class ExcelController : ControllerBase
             sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
 
             var fileBytes = package.GetAsByteArray();
-            return File(
-                fileBytes,
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "Stock.xlsx"
-            );
+            const string fileName = "Stock.xlsx";
+            const string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.Headers.Add("Content-Disposition", $"attachment; filename={fileName}");
+
+            return File(fileBytes, contentType, fileName);
+
         }
         catch (Exception ex)
         {

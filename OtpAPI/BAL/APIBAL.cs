@@ -1,17 +1,8 @@
 ﻿
 using Dapper;
 using DecorPlastsAPI.Interface;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using MySql.Data;
-using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI.Common;
 using OtpAPI.Models;
-using System;
 using System.Data;
-using System.Reflection.Metadata;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace OtpAPI.BAL
 {
     public class APIBAL

@@ -1,9 +1,6 @@
 ﻿using DecorPlastsAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.MicrosoftExtensions;
-using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using OtpAPI.BAL;
 using OtpAPI.Models;
 using OtpAPI.Services;
