@@ -178,7 +178,7 @@ namespace OtpAPI.BAL
             param.Add("@p_Size", AddCode.Size);
             param.Add("@p_CategoryId", Convert.ToInt32(AddCode.CategoryId));
             param.Add("@p_Weight", Convert.ToDouble(AddCode.Weight));
-            param.Add("p_Quentity", Convert.ToInt16(AddCode.Quantity));
+            param.Add("p_Quentity", Convert.ToInt16(AddCode.Quantity) == 0 ? 0 : Convert.ToInt16(AddCode.Quantity));
             SpResult result = _DB.Query<SpResult>("USP_AddCode", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
