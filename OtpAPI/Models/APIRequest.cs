@@ -8,6 +8,12 @@ namespace OtpAPI.Models
         public int Status { get; set; }
         public string Message { get; set; }
     }
+    public class SpResultcode
+    {
+        public int Status { get; set; }
+        public string Message { get; set; }
+        public int CodeId { get; set; }
+    }
     public class APIRequest
     {
         public string PhoneNumber { get; set; }

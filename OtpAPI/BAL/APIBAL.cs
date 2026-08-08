@@ -161,7 +161,7 @@ namespace OtpAPI.BAL
             var result = _DB.Query<int>("USP_AddCategory", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result == 1;
         }
-        public string AddCode(AddCode AddCode)
+        public SpResultcode AddCode(AddCode AddCode)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_UserId", Convert.ToInt32(AddCode.userid));
@@ -170,7 +170,7 @@ namespace OtpAPI.BAL
             param.Add("@p_CategoryId", Convert.ToInt32(AddCode.CategoryId));
             param.Add("@p_Weight", Convert.ToDouble(AddCode.Weight));
             param.Add("p_Quentity", Convert.ToInt16(AddCode.Quantity) == 0 ? 0 : Convert.ToInt16(AddCode.Quantity));
-            string result = _DB.Query<string>("USP_AddCode", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            SpResultcode result = _DB.Query<SpResultcode>("USP_AddCode", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
         public SpResult DeleteCode(Delete DeleteCode)//need to create storeoprocedure 
