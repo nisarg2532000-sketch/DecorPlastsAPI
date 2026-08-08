@@ -507,8 +507,8 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Insert Update Cart", Details = ex.Message });
             }
         }
-        [HttpPost("InsertOrder")]
-        public IActionResult InsertOrder([FromBody] InsertOrderbyAdmin insertUpdateOrder)
+        [HttpPost("InsertOrderByAdmin")]
+        public IActionResult InsertOrderByAdmin([FromBody] InsertOrderbyAdmin insertUpdateOrder)
         {
             try
             {
