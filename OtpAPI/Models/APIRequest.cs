@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using OtpAPI.Models;
+using System.Text.Json.Serialization;
 
 namespace OtpAPI.Models
 {
@@ -373,4 +374,15 @@ namespace OtpAPI.Models
         // Quantity as integer for processing
         public int Quantity { get; set; }
     }
+}
+public class InsertOrderbyAdmin
+{
+    public string AdminId { get; set; }
+    public string token { get; set; }
+    public string userid { get; set; }
+    public long OrderId { get; set; }
+    public List<InsertOrderitem> items { get; set; }
+    public bool Status { get; set; }
+    public string? VehicleNo { get; set; }
+    public string? InvoiceNo { get; set; }
 }

@@ -379,6 +379,27 @@ namespace OtpAPI.BAL
             }
             return results;
         }
+        public List<SpResult> InsertOrder(InsertOrderbyAdmin insertUpdateOrder)
+        {
+            var results = new List<SpResult>();
+
+            foreach (var item in insertUpdateOrder.items)
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
+                param.Add("@p_OrderId", insertUpdateOrder.OrderId.ToString());
+                param.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
+                param.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
+                param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
+                param.Add("@p_VehicleNo", string.IsNullOrWhiteSpace(insertUpdateOrder.VehicleNo) ? null : insertUpdateOrder.VehicleNo);
+                param.Add("@p_InvoiceNo", string.IsNullOrWhiteSpace(insertUpdateOrder.InvoiceNo) ? null : insertUpdateOrder.InvoiceNo);
+                param.Add("@p_Status", insertUpdateOrder.Status);
+
+                var result = _DB.QueryFirstOrDefault<SpResult>("USP_InsertOrder", param, commandType: CommandType.StoredProcedure);
+                results.Add(result);
+            }
+            return results;
+        }
         public List<GetTotalWeightByUser> GetTotalWeightByUser(int Id)
         {
             DynamicParameters param = new DynamicParameters();
