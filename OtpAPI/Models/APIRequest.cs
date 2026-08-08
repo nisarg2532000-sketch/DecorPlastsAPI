@@ -162,6 +162,7 @@ namespace OtpAPI.Models
         public string Size { get; set; }
         public string CategoryId { get; set; }
         public string Weight { get; set; }
+        public int? Quantity { get; set; }
     }
     public class AddSize
     {
