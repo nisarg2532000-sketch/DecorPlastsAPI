@@ -12,7 +12,7 @@ namespace OtpAPI.Models
     {
         public int Status { get; set; }
         public string Message { get; set; }
-        public int CodeId { get; set; }
+        public int CodeId { get; set; } = 0;
     }
     public class APIRequest
     {
