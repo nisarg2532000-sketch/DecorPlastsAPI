@@ -544,9 +544,10 @@ namespace OtpAPI.BAL
         }
         public long GetOrderId()
         {
-            long orderid = _DB.Query<long>("USP_CreateOrderId", commandType: CommandType.StoredProcedure).FirstOrDefault();
+            var parameters = new DynamicParameters();
+            parameters.Add("p_OrderId", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
-            return orderid;
+            return _DB.ExecuteSPWithOutput<long>("USP_CreateOrderId", parameters, "p_OrderId");
         }
         public List<ExcelGetStock> ExcelGetStock()
         {

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using Dapper;
+using System.Data;
 
 namespace DecorPlastsAPI.Interface
 {
@@ -8,5 +9,6 @@ namespace DecorPlastsAPI.Interface
         int ExecuteSP(string storedProcedure, dynamic param = null);
         Tuple<IEnumerable<T1>, IEnumerable<T2>> QueryMultipleSP<T1, T2>(string storedProcedure, dynamic param = null);
         T QueryFirstOrDefault<T>(string storedProcedure, dynamic param = null, CommandType commandType = CommandType.StoredProcedure);
+        T ExecuteSPWithOutput<T>(string storedProcedure, DynamicParameters param, string outputParamName);
     }
 }

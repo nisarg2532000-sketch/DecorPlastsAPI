@@ -44,6 +44,13 @@ namespace DecorPlastsAPI.Interface
             using var connection = new MySqlConnection(_connectionString); // ✅
             connection.Open();
             return connection.QueryFirstOrDefault<T>(storedProcedure, param: (object?)param, commandType: commandType)!;
-        }  
+        }
+        public T ExecuteSPWithOutput<T>(string storedProcedure, DynamicParameters param, string outputParamName)
+        {
+            using var connection = new MySqlConnection(_connectionString);
+            connection.Open();
+            connection.Execute(storedProcedure, param, commandType: CommandType.StoredProcedure);
+            return param.Get<T>(outputParamName);
+        }
     }
 }
