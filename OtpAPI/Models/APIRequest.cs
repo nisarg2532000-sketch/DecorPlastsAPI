@@ -372,9 +372,7 @@ namespace OtpAPI.Models
     }
     public class ExcelGetStock
     {
-        public string CategoryId { get; set; }
         public string Category { get; set; }
-        public string CodeId { get; set; }
         public string Code { get; set; }
         public string Size { get; set; }
         public string Weight { get; set; }
