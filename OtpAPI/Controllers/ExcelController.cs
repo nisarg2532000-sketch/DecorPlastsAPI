@@ -31,6 +31,8 @@ public class ExcelController : ControllerBase
             sheet.Cells[1, 3].Value = "Size";
             sheet.Cells[1, 4].Value = "Weight";
             sheet.Cells[1, 5].Value = "Stock Quantity";
+
+            sheet.Cells["A1:E1"].Style.Font.Bold = true;
             // Sample data rows — load from BAL
             var data = _apiBAL.ExcelGetStock();
             for (int i = 0; i < data.Count; i++)
