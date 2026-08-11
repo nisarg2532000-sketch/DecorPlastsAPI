@@ -87,10 +87,11 @@ public class ExcelController : ControllerBase
         {
             var Stock = new ExcelGetStock
             {
-                Category = sheet.Cells[row, 2].Text,
-                Code = sheet.Cells[row, 4].Text,
-                Weight = sheet.Cells[row, 6].Text,
-                Quantity = int.TryParse(sheet.Cells[row, 7].Text, out int qty) ? qty : 0
+                Category = sheet.Cells[row, 1].Text,
+                Code = sheet.Cells[row, 2].Text,
+                Size = sheet.Cells[row, 3].Text,
+                Weight = sheet.Cells[row, 4].Text,
+                Quantity = int.TryParse(sheet.Cells[row, 5].Text, out int qty) ? qty : 0
             };
             results.Add(Stock);
         }

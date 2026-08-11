@@ -571,8 +571,9 @@ namespace OtpAPI.BAL
                 if (s.Quantity <= 0 && weight <= 0) continue;
 
                 var param = new DynamicParameters();
-               // param.Add("@p_CategoryId", int.TryParse(s.CategoryId, out var cid) ? cid : 0);
-               // param.Add("@p_CodeId", int.TryParse(s.CodeId, out var coid) ? coid : 0);
+                param.Add("@p_CategoryName", s.Category);
+                param.Add("@p_CodeName", s.Code);
+                param.Add("@p_Size", s.Size);
                 param.Add("@p_Quantity", s.Quantity);
                 param.Add("@p_Weight", weight);
 
