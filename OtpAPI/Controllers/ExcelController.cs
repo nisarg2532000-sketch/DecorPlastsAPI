@@ -67,38 +67,45 @@ public class ExcelController : ControllerBase
     [HttpPost("UploadExcel")]
     public async Task<IActionResult> UploadExcel(IFormFile file)
     {
-        if (file == null || file.Length == 0)
-            return BadRequest("No file uploaded.");
-
-        if (!file.FileName.EndsWith(".xlsx"))
-            return BadRequest("Only .xlsx files are allowed.");
-
-
-        var results = new List<ExcelGetStock>();
-
-        using var stream = new MemoryStream();
-        await file.CopyToAsync(stream);
-
-        using var package = new ExcelPackage(stream);
-        var sheet = package.Workbook.Worksheets[0]; // First sheet
-        int rowCount = sheet.Dimension.Rows;
-
-        for (int row = 2; row <= rowCount; row++) // row 1 = header
+        try
         {
-            var Stock = new ExcelGetStock
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            if (!file.FileName.EndsWith(".xlsx"))
+                return BadRequest("Only .xlsx files are allowed.");
+
+
+            var results = new List<ExcelGetStock>();
+
+            using var stream = new MemoryStream();
+            await file.CopyToAsync(stream);
+
+            using var package = new ExcelPackage(stream);
+            var sheet = package.Workbook.Worksheets[0]; // First sheet
+            int rowCount = sheet.Dimension.Rows;
+
+            for (int row = 2; row <= rowCount; row++) // row 1 = header
             {
-                Category = sheet.Cells[row, 1].Text,
-                Code = sheet.Cells[row, 2].Text,
-                Size = sheet.Cells[row, 3].Text,
-                Weight = sheet.Cells[row, 4].Text,
-                Quantity = int.TryParse(sheet.Cells[row, 5].Text, out int qty) ? qty : 0
-            };
-            results.Add(Stock);
+                var Stock = new ExcelGetStock
+                {
+                    Category = sheet.Cells[row, 1].Text,
+                    Code = sheet.Cells[row, 2].Text,
+                    Size = sheet.Cells[row, 3].Text,
+                    Weight = sheet.Cells[row, 4].Text,
+                    Quantity = int.TryParse(sheet.Cells[row, 5].Text, out int qty) ? qty : 0
+                };
+                results.Add(Stock);
+            }
+
+            // TODO: Save results to your DB here (synchronous)
+            var saved = _apiBAL.SaveStock(results);
+
+            return Ok(new { message = $"{results.Count} records imported.", savedRows = saved });
         }
-
-        // TODO: Save results to your DB here (synchronous)
-        var saved = _apiBAL.SaveStock(results);
-
-        return Ok(new { message = $"{results.Count} records imported.", savedRows = saved });
+        catch(Exception ex)
+        {
+            return BadRequest(StatusCode(500, new { Message = "An error occurred while Upload excel", Details = ex.Message }));
+        }
     }
 }
