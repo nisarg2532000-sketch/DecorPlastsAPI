@@ -307,7 +307,7 @@ namespace OtpAPI.Controllers
                 bool issucess = _otpBAL.Verifytoken(AddStock.userid, AddStock.token);
                 if (issucess)
                 {
-                    SpResult addstock = _otpBAL.AddUpdateStock(AddStock);
+                    var addstock = _otpBAL.AddUpdateStock(AddStock);
                     return Ok(addstock);
                 }
                 return BadRequest(new { Message = "Token not verified" });
