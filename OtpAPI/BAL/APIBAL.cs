@@ -1,6 +1,7 @@
 ﻿
 using Dapper;
 using DecorPlastsAPI.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 using OtpAPI.Models;
 using System.Data;
 namespace OtpAPI.BAL
@@ -187,14 +188,19 @@ namespace OtpAPI.BAL
             var result = _DB.Query<SpResult>("USP_DeleteCategory", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
-        public SpResult AddUpdateStock(AddUpdateStock addStock)
+        public List<SpResult> AddUpdateStock(AddUpdateStock addStock)
         {
+            var results = new List<SpResult>();
             DynamicParameters param = new DynamicParameters();
-            param.Add("@p_CategoryId", Convert.ToInt32(addStock.CategoryId));
-            param.Add("@p_CodeId", Convert.ToInt32(addStock.CodeId));
-            param.Add("@p_Quantity", Convert.ToInt32(addStock.Quantity));
-            var result = _DB.Query<SpResult>("USP_AddUpdateStock", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
-            return result;
+            foreach(var item in addStock.Stockitem)
+            {
+                param.Add("@p_CategoryId", Convert.ToInt32(item.CategoryId));
+                param.Add("@p_CodeId", Convert.ToInt32(item.CodeId));
+                param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
+                var result = _DB.QueryFirstOrDefault<SpResult>("USP_AddUpdateStock", param, commandType: CommandType.StoredProcedure);
+                results.Add(result);
+            }
+            return results;
         }
         public List<GetStock> GetStock(string id)
         {

@@ -186,9 +186,13 @@ namespace OtpAPI.Models
     {
         public string userid { get; set; }
         public string token { get; set; }
+        public List<Stockitem> Stockitem { get; set; }
+    }
+    public class Stockitem
+    {
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
-        public string Quantity { get; set; } 
+        public string Quantity { get; set; }
     }
     public class GetStock
     {
