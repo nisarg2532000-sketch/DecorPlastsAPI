@@ -463,6 +463,52 @@ namespace OtpAPI.BAL
             }
             return dict.Values.ToList();
         }
+        public List<GetUserOrder> GetFutureOrderByUserId(int userid)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_UserId", userid);
+
+            // Query flat rows from SP
+            var rows = _DB.Query<dynamic>("USP_GetFutureOrderByUserId", param, commandType: CommandType.StoredProcedure).ToList();
+
+            if (rows == null || !rows.Any())
+                return null;
+
+            var dict = new Dictionary<long, GetUserOrder>();
+            foreach (var row in rows)
+            {
+                long orderId = (long)row.OrderId;
+
+                if (!dict.ContainsKey(orderId))
+                {
+                    dict[orderId] = new GetUserOrder
+                    {
+
+                        userid = row.UserId.ToString(),
+                        OrderId = row.OrderId,
+                        Status = Convert.ToString(row.Status),
+                        DateTime = row.CreatedAt.ToString("HH:mm:ss"),
+                        VehicleNo = row.VehicleNo,
+                        InvoiceNo = row.InvoiceNo,
+                        items = new List<OrderuserItem>()
+                    };
+                }
+                dict[orderId].items.Add(new OrderuserItem
+                {
+                    // Map each row to OrderItem
+
+                    CategoryId = row.OrderCategoryId.ToString(),
+                    CategoryName = row.CategoryName,
+                    CodeId = row.OrderCodeId.ToString(),
+                    CodeName = row.CodeName,
+                    Size = row.Size,
+                    Quantity = row.Quantity.ToString()
+
+                });
+            }
+            return dict.Values.ToList();
+        }
+
         public List<GetOrderListDemo> GetOrderDemo(getdata getdata, string status)
         {
             DynamicParameters param = new DynamicParameters();
