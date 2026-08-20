@@ -594,12 +594,12 @@ namespace OtpAPI.BAL
             var result = _DB.Query<GetCart>("USP_GetCart", param, commandType: CommandType.StoredProcedure).FirstOrDefault();
             return result;
         }
-        public long GetOrderId()
+        public string GetOrderId()
         {
             var parameters = new DynamicParameters();
-            parameters.Add("p_OrderId", dbType: DbType.Int64, direction: ParameterDirection.Output);
+            parameters.Add("p_OrderId", dbType: DbType.String, direction: ParameterDirection.Output);
 
-            return _DB.ExecuteSPWithOutput<long>("USP_CreateOrderId", parameters, "p_OrderId");
+            return _DB.ExecuteSPWithOutput<string>("USP_CreateOrderId", parameters, "p_OrderId");
         }
         public List<ExcelGetStock> ExcelGetStock()
         {
