@@ -389,15 +389,15 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Get Order", Details = ex.Message });
             }
         }
-        [HttpPost("GetFutureOrderByUserId")]
-        public IActionResult GetFutureOrderByUserId([FromBody] getdata getdata)
+        [HttpPost("GetWishListOrder")]
+        public IActionResult GetWishListOrder([FromBody] getdata getdata)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var getOrderList = _otpBAL.GetFutureOrderByUserId(Convert.ToInt32(getdata.userid));
+                    var getOrderList = _otpBAL.GetWishListOrder(Convert.ToInt32(getdata.userid));
                     return Ok(getOrderList);
                 }
                 return BadRequest(new { Message = "Token not verified" });

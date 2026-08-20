@@ -364,7 +364,7 @@ namespace OtpAPI.BAL
             {
                 DynamicParameters param = new DynamicParameters();
                 param.Add("@p_UserId", Convert.ToInt32(insertUpdateOrder.userid));
-                param.Add("@p_OrderId", insertUpdateOrder.OrderId.ToString());
+                param.Add("@p_OrderId", insertUpdateOrder.OrderId);
                 param.Add("@p_OrderCategoryId", Convert.ToInt32(item.CategoryId));
                 param.Add("@p_OrderCodeId", Convert.ToInt32(item.CodeId));
                 param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
@@ -463,7 +463,7 @@ namespace OtpAPI.BAL
             }
             return dict.Values.ToList();
         }
-        public List<GetUserOrder> GetFutureOrderByUserId(int userid)
+        public List<GetUserOrder> GetWishListOrder(int userid)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_UserId", userid);
