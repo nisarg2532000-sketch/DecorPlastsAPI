@@ -221,10 +221,10 @@ namespace OtpAPI.BAL
             if (rows == null || !rows.Any())
                 return null;
 
-            var dict = new Dictionary<long, GetOrderList>();
+            var dict = new Dictionary<string, GetOrderList>();
             foreach (var row in rows)
             {
-                long orderId = (long)row.OrderId;
+                string orderId = row.OrderId;
 
                 if (!dict.ContainsKey(orderId))
                 {
@@ -269,10 +269,10 @@ namespace OtpAPI.BAL
             if (rows == null || !rows.Any())
                 return null;
 
-            var dict = new Dictionary<long, GetFutureOrderList>();
+            var dict = new Dictionary<string, GetFutureOrderList>();
             foreach (var row in rows)
             {
-                long orderId = (long)row.OrderId;
+                string orderId = row.OrderId;
 
                 if (!dict.ContainsKey(orderId))
                 {
@@ -318,10 +318,10 @@ namespace OtpAPI.BAL
             if (rows == null || !rows.Any())
                 return null;
 
-            var dict = new Dictionary<long, GetFutureOrderListDemo>();
+            var dict = new Dictionary<string, GetFutureOrderListDemo>();
             foreach (var row in rows)
             {
-                long orderId = (long)row.OrderId;
+                string orderId = row.OrderId;
 
                 if (!dict.ContainsKey(orderId))
                 {
@@ -429,10 +429,10 @@ namespace OtpAPI.BAL
             if (rows == null || !rows.Any())
                 return null;
 
-            var dict = new Dictionary<long, GetUserOrder>();
+            var dict = new Dictionary<string, GetUserOrder>();
             foreach (var row in rows)
             {
-                long orderId = (long)row.OrderId;
+                string orderId = row.OrderId;
 
                 if (!dict.ContainsKey(orderId))
                 {
@@ -474,10 +474,10 @@ namespace OtpAPI.BAL
             if (rows == null || !rows.Any())
                 return null;
 
-            var dict = new Dictionary<long, GetUserOrder>();
+            var dict = new Dictionary<string, GetUserOrder>();
             foreach (var row in rows)
             {
-                long orderId = (long)row.OrderId;
+                string orderId = row.OrderId;
 
                 if (!dict.ContainsKey(orderId))
                 {
@@ -521,10 +521,10 @@ namespace OtpAPI.BAL
             if (rows == null || !rows.Any())
                 return null;
 
-            var dict = new Dictionary<long, GetOrderListDemo>();
+            var dict = new Dictionary<string, GetOrderListDemo>();
             foreach (var row in rows)
             {
-                long orderId = (long)row.OrderId;
+                string orderId = row.OrderId;
 
                 if (!dict.ContainsKey(orderId))
                 {
