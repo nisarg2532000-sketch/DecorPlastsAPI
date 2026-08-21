@@ -101,7 +101,7 @@ namespace OtpAPI.Models
         public bool Status { get; set; }
         public string Size { get; set; } 
         public int Quantity { get; set; }
-        public decimal Weight { get; set; }
+        public float Weight { get; set; }
 
     }
     public class GetCodeRaw
