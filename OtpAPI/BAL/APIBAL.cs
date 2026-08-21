@@ -127,7 +127,7 @@ namespace OtpAPI.BAL
                     Status = c.Status,
                     Size = c.Size,
                     Quantity = c.Quantity,
-                    Weight = Math.Round(c.Weight, 1),
+                    Weight = c.Weight,
                 }).ToList()
             }).ToList();
         }
@@ -240,7 +240,7 @@ namespace OtpAPI.BAL
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
                         items = new List<OrderItem>()
-                    };
+                    };  
                 }
                 dict[orderId].items.Add(new OrderItem
                 {
@@ -252,7 +252,7 @@ namespace OtpAPI.BAL
                     CodeName = row.CodeName,
                     Size = row.Size,
                     Quantity = row.Quantity.ToString(),
-                    Weight = Math.Round(row.Weight, 1)
+                    Weight = row.Weight
                 });
             }
             return dict.Values.ToList();
@@ -301,7 +301,7 @@ namespace OtpAPI.BAL
                     Size = row.Size,
                     RemainQuantity = row.RemainQuantity.ToString(),
                     TotalQuantity = row.TotalQuantity.ToString(),
-                    Weight = Math.Round(row.Weight,1)
+                    Weight = row.Weight                 
                 });
             }
             return dict.Values.ToList();
@@ -351,7 +351,7 @@ namespace OtpAPI.BAL
                     Size = row.Size,
                     RemainQuantity = row.RemainQuantity.ToString(),
                     TotalQuantity = row.TotalQuantity.ToString(),
-                    Weight = Math.Round(row.Weight, 1)
+                    Weight = row.Weight
                 });
             }
             return dict.Values.ToList();
@@ -553,7 +553,7 @@ namespace OtpAPI.BAL
                     CodeName = row.CodeName,
                     Size = row.Size,
                     Quantity = row.Quantity.ToString(),
-                    Weight = Math.Round(row.Weight, 1)
+                    Weight = row.Weight
                 });
             }
             return dict.Values.ToList();
