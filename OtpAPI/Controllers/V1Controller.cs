@@ -452,7 +452,7 @@ namespace OtpAPI.Controllers
                 bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
                 if (issucess)
                 {
-                    if (Convert.ToInt16(insertUpdateOrder.OrderId) == 0)
+                    if (!string.IsNullOrEmpty(insertUpdateOrder.OrderId))
                     {
                         insertUpdateOrder.OrderId = _otpBAL.GetOrderId();
                     }
@@ -531,7 +531,7 @@ namespace OtpAPI.Controllers
                 bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.AdminId, insertUpdateOrder.token);
                 if (issucess)
                 {
-                    if (Convert.ToInt16(insertUpdateOrder.OrderId) == 0)
+                    if (!string.IsNullOrEmpty(insertUpdateOrder.OrderId))
                     {
                         insertUpdateOrder.OrderId = _otpBAL.GetOrderId();
                     }
