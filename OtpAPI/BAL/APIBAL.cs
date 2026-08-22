@@ -29,7 +29,6 @@ namespace OtpAPI.BAL
             DynamicParameters param = new DynamicParameters();
             param.Add("@P_PhoneNumber", otpEntity.PhoneNumber);
             param.Add("@P_OtpCode", otpEntity.OtpCode);
-            param.Add("@P_ExpiryTime", DateTime.Now.AddMinutes(60));
             var result = _DB.QueryFirstOrDefault<int>("USP_InsertUpdateOtp", param, commandType: CommandType.StoredProcedure);
 
             return result > 0;
