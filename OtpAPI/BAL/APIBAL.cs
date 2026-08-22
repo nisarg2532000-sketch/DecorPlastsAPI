@@ -236,7 +236,7 @@ namespace OtpAPI.BAL
                         MobileNo = row.MobileNo.ToString(),
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
-                        DateTime = row.CreatedAt.ToString("hh:mm:ss tt")),
+                        DateTime = row.CreatedAt.ToString("hh:mm:ss tt"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
                         items = new List<OrderItem>()
@@ -334,7 +334,7 @@ namespace OtpAPI.BAL
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString("hh:mm:ss tt"),
-                        UpdatedDateTime = row.UpdatedAt?.ToString(),
+                        UpdatedDateTime = row.UpdatedAt?.ToString("dd-MM-yyyy hh:mm:ss tt"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
                         items = new List<FutureOrderItem>()
@@ -537,7 +537,7 @@ namespace OtpAPI.BAL
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString("hh:mm:ss tt"),
-                        UpdatedDatetime = row.UptadedAtt?.ToString(),
+                        UpdatedDatetime = row.UptadedAtt?.ToString("dd-MM-yyyy hh:mm:ss tt"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
                         items = new List<OrderItem>()
