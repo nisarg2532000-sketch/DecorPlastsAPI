@@ -1,4 +1,5 @@
 ﻿using OtpAPI.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection.Metadata;
 using System.Text.Json.Serialization;
 
@@ -194,6 +195,9 @@ namespace OtpAPI.Models
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
         public string Quantity { get; set; }
+
+        [Range(0, 1, ErrorMessage = "IsStockInOut must be 0 or 1.")]
+        public int IsStockInOut { get; set; } = 1;
     }
     public class GetStock
     {

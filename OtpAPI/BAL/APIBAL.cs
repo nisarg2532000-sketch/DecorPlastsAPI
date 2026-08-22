@@ -196,6 +196,7 @@ namespace OtpAPI.BAL
                 param.Add("@p_CategoryId", Convert.ToInt32(item.CategoryId));
                 param.Add("@p_CodeId", Convert.ToInt32(item.CodeId));
                 param.Add("@p_Quantity", Convert.ToInt32(item.Quantity));
+                param.Add("@p_IsStockInOut", item.IsStockInOut);
                 var result = _DB.QueryFirstOrDefault<SpResult>("USP_AddUpdateStock", param, commandType: CommandType.StoredProcedure);
                 results.Add(result);
             }
