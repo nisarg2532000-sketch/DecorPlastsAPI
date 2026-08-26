@@ -1,7 +1,6 @@
 ﻿
 using Dapper;
 using DecorPlastsAPI.Interface;
-using Microsoft.AspNetCore.Http.HttpResults;
 using OtpAPI.Models;
 using System.Data;
 namespace OtpAPI.BAL
