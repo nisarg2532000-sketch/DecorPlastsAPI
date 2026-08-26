@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OtpAPI.BAL;
 using OtpAPI.Models;
 using OtpAPI.Services;
+using System.Reflection.Metadata.Ecma335;
 
 namespace OtpAPI.Controllers
 {
@@ -177,13 +178,18 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                if (issucess)
+                bool isactive = false;
+                if (isactive)
                 {
-                    var codes = _otpBAL.GetCodeByID(Convert.ToInt32(CodeId), Convert.ToInt32(CategoryId));
-                    return Ok(codes);
+                    bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                    if (issucess)
+                    {
+                        var codes = _otpBAL.GetCodeByID(Convert.ToInt32(CodeId), Convert.ToInt32(CategoryId));
+                        return Ok(codes);
+                    }
+                    return BadRequest(new { Message = "Token not verified" });
                 }
-                return BadRequest(new { Message = "Token not verified" });
+                return null;
             }
             catch (Exception ex)
             {
