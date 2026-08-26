@@ -178,18 +178,13 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                bool isactive = false;
-                if (isactive)
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
                 {
-                    bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                    if (issucess)
-                    {
-                        var codes = _otpBAL.GetCodeByID(Convert.ToInt32(CodeId), Convert.ToInt32(CategoryId));
-                        return Ok(codes);
-                    }
-                    return BadRequest(new { Message = "Token not verified" });
+                    var codes = _otpBAL.GetCodeByID(Convert.ToInt32(CodeId), Convert.ToInt32(CategoryId));
+                    return Ok(codes);
                 }
-                return null;
+                return BadRequest(new { Message = "Token not verified" });                
             }
             catch (Exception ex)
             {
@@ -382,18 +377,13 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                bool isactive = false;
-                if (isactive)
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
                 {
-                    bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                    if (issucess)
-                    {
-                        var getOrderList = _otpBAL.GetOrderByUserId(Convert.ToInt32(getdata.userid));
-                        return Ok(getOrderList);
-                    }
-                    return BadRequest(new { Message = "Token not verified" });
+                    var getOrderList = _otpBAL.GetOrderByUserId(Convert.ToInt32(getdata.userid));
+                    return Ok(getOrderList);
                 }
-                return null;
+                return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
