@@ -322,18 +322,13 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                bool isactive = false;
-                if (isactive)
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
                 {
-                    bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                    if (issucess)
-                    {
-                        var stocklist = _otpBAL.GetStock(id);
-                        return Ok(stocklist);
-                    }
-                    return BadRequest(new { Message = "Token not verified" });
+                    var stocklist = _otpBAL.GetStock(id);
+                    return Ok(stocklist);
                 }
-                return null;
+                return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
@@ -381,13 +376,18 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
-                if (issucess)
+                bool isactive = false;
+                if (isactive)
                 {
-                    var getOrderList = _otpBAL.GetOrderByUserId(Convert.ToInt32(getdata.userid));
-                    return Ok(getOrderList);
+                    bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                    if (issucess)
+                    {
+                        var getOrderList = _otpBAL.GetOrderByUserId(Convert.ToInt32(getdata.userid));
+                        return Ok(getOrderList);
+                    }
+                    return BadRequest(new { Message = "Token not verified" });
                 }
-                return BadRequest(new { Message = "Token not verified" });
+                return null;
             }
             catch (Exception ex)
             {
