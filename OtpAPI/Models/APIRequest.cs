@@ -244,6 +244,7 @@ namespace OtpAPI.Models
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
+        public string? UpdatedAt { get; set; }
     }
     public class GetOrderListDemo
     {
