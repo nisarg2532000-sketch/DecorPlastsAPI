@@ -236,6 +236,7 @@ namespace OtpAPI.BAL
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
                         DateTime = row.CreatedAt.ToString("hh:mm:ss tt"),
+                        CreatedDate = row.CreatedAt.ToString("dd-MM-yyyy"),
                         UpdatedAt = row.UptadedAt.ToString("dd-MM-yyyy hh:mm tt"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
