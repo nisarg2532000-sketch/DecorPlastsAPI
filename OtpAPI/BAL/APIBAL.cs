@@ -1,6 +1,7 @@
 ﻿
 using Dapper;
 using DecorPlastsAPI.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 using OtpAPI.Models;
 using System.Data;
 namespace OtpAPI.BAL
@@ -224,6 +225,8 @@ namespace OtpAPI.BAL
             foreach (var row in rows)
             {
                 string orderId = row.OrderId;
+                object createdAt = row.CreatedAt;
+                object updatedAt = row.UpdatedAt;
 
                 if (!dict.ContainsKey(orderId))
                 {
@@ -235,8 +238,9 @@ namespace OtpAPI.BAL
                         MobileNo = row.MobileNo.ToString(),
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
-                        DateTime = row.CreatedAt == null || row.CreatedAt == DBNull.Value ? null : Convert.ToDateTime(row.CreatedAt).ToString("dd-MM-yyyy hh:mm tt"),
-                        UpdatedAt = row.UpdatedAt == null || row.UpdatedAt == DBNull.Value ? null : Convert.ToDateTime(row.UpdatedAt).ToString("dd-MM-yyyy hh:mm tt"),
+                        
+                        DateTime = createdAt == null || Convert.IsDBNull(createdAt) ? null : Convert.ToDateTime(createdAt).ToString("dd-MM-yyyy hh:mm tt"),
+                        UpdatedAt = updatedAt == null || Convert.IsDBNull(updatedAt) ? null : Convert.ToDateTime(updatedAt).ToString("dd-MM-yyyy hh:mm tt"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
                         items = new List<OrderItem>()
