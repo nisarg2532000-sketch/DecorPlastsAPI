@@ -235,8 +235,8 @@ namespace OtpAPI.BAL
                         MobileNo = row.MobileNo.ToString(),
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
-                        DateTime = row.CreatedAt.ToString("hh:mm tt"),
-                        UpdatedAt = string.IsNullOrWhiteSpace(row.UptadedAt.ToString()) ? null : row.UptadedAt.ToString("dd-MM-yyyy hh:mm tt"),
+                        DateTime = row.CreatedAt == null || row.CreatedAt == DBNull.Value ? null : Convert.ToDateTime(row.CreatedAt).ToString("dd-MM-yyyy hh:mm tt"),
+                        UpdatedAt = row.UpdatedAt == null || row.UpdatedAt == DBNull.Value ? null : Convert.ToDateTime(row.UpdatedAt).ToString("dd-MM-yyyy hh:mm tt"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
                         items = new List<OrderItem>()
