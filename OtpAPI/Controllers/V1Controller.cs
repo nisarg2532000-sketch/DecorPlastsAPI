@@ -469,15 +469,15 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpDelete("DeleteOrder")]
-        public IActionResult DeleteOrder([FromBody] InsertOrder insertUpdateOrder)
+        public IActionResult DeleteOrder([FromBody] DeleteOrder deleteOrder)
         {
             try
             {
-                bool issucess = _otpBAL.Verifytoken(insertUpdateOrder.userid, insertUpdateOrder.token);
+                bool issucess = _otpBAL.Verifytoken(deleteOrder.userid, deleteOrder.token);
                 if (issucess)
                 {
                     
-                    var results = _otpBAL.InsertOrder(insertUpdateOrder);
+                    var results = _otpBAL.DeletePrder(deleteOrder);
                     return Ok(results);
 
                 }

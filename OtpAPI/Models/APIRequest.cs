@@ -315,6 +315,13 @@ namespace OtpAPI.Models
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
     }
+    public class DeleteOrder
+    {
+        public string userid { get; set; }
+        public string token { get; set; }
+        public string OrderId { get; set; }
+        public List<InsertOrderitem> items { get; set; }
+    }
     public class InsertOrderitem
     {
         public string CategoryId { get; set; }
