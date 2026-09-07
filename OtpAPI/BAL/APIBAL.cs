@@ -381,6 +381,21 @@ namespace OtpAPI.BAL
             }
             return results;
         }
+        public List<SpResult> DeletePrder(InsertOrder insertUpdateOrder)
+        {
+            var results = new List<SpResult>();
+
+            foreach (var item in insertUpdateOrder.items)
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@o_Orderid", insertUpdateOrder.OrderId);
+                param.Add("@o_Ordercodeid", Convert.ToInt32(item.CodeId));
+                
+                var result = _DB.QueryFirstOrDefault<SpResult>("USP_DeleteOrder", param, commandType: CommandType.StoredProcedure);
+                results.Add(result);
+            }
+            return results;
+        }
         public List<SpResult> InsertOrder(InsertOrderbyAdmin insertUpdateOrder)
         {
             var results = new List<SpResult>();
