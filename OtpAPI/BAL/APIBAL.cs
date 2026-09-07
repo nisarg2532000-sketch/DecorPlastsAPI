@@ -226,7 +226,7 @@ namespace OtpAPI.BAL
             {
                 string orderId = row.OrderId;
                 object createdAt = row.CreatedAt;
-                object updatedAt = row.UpdatedAt;
+                object updatedAt = row.UptadedAt;
 
                 if (!dict.ContainsKey(orderId))
                 {
@@ -243,7 +243,7 @@ namespace OtpAPI.BAL
                         UpdatedAt = updatedAt == null || Convert.IsDBNull(updatedAt) ? null : Convert.ToDateTime(updatedAt).ToString("dd-MM-yyyy hh:mm tt"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
-                        items = new List<OrderItem>()
+                        items = new List<OrderItem>()   
                     };  
                 }
                 dict[orderId].items.Add(new OrderItem
