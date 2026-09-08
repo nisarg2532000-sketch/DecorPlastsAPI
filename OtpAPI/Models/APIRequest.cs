@@ -320,14 +320,17 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string token { get; set; }
         public string OrderId { get; set; }
-        public List<InsertOrderitem> items { get; set; }
+        public List<DeleteOrderitem> items { get; set; }
+    }
+    public class DeleteOrderitem
+    {
+        public string CodeId { get; set; }
     }
     public class InsertOrderitem
     {
         public string CategoryId { get; set; }
         public string CodeId { get; set; }
         public string Quantity { get; set; }
-
     }
     public class UpdateOrder
     {
