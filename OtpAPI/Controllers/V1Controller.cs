@@ -488,6 +488,26 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while Delete Order", Details = ex.Message });
             }
         }
+        [HttpDelete("DeleteFutureOrder")]
+        public IActionResult DeleteFutureOrder([FromBody] DeleteOrder deleteOrder)
+        {
+            try
+            {
+                bool issucess = _otpBAL.Verifytoken(deleteOrder.userid, deleteOrder.token);
+                if (issucess)
+                {
+
+                    var results = _otpBAL.DeletePrder(deleteOrder);
+                    return Ok(results);
+
+                }
+                return BadRequest(new { Message = "Token not verified" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while Delete Order", Details = ex.Message });
+            }
+        }
         [HttpPost("UpdateOrder")]
         public IActionResult UpdateOrder([FromBody] UpdateOrder updateOrder)
         {
