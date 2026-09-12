@@ -497,7 +497,7 @@ namespace OtpAPI.Controllers
                 if (issucess)
                 {
 
-                    var results = _otpBAL.DeletePrder(deleteOrder);
+                    var results = _otpBAL.DeleteFutureOrder(deleteOrder);
                     return Ok(results);
 
                 }
