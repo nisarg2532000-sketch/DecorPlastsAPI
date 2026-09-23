@@ -1,6 +1,7 @@
 ﻿
 using Dapper;
 using DecorPlastsAPI.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 using OtpAPI.Models;
 using System.Data;
 namespace OtpAPI.BAL
@@ -224,6 +225,8 @@ namespace OtpAPI.BAL
             foreach (var row in rows)
             {
                 string orderId = row.OrderId;
+                object createdAt = row.CreatedAt;
+                object updatedAt = row.UptadedAt;
 
                 if (!dict.ContainsKey(orderId))
                 {
@@ -235,12 +238,11 @@ namespace OtpAPI.BAL
                         MobileNo = row.MobileNo.ToString(),
                         OrderId = row.OrderId,
                         Status = Convert.ToString(row.Status),
-                        DateTime = row.CreatedAt.ToString("hh:mm:ss tt"),
-                        CreatedDate = row.CreatedAt.ToString("dd-MM-yyyy"),
-                        UpdatedAt = row.UptadedAt.ToString("dd-MM-yyyy hh:mm tt"),
+                        DateTime = createdAt == null || Convert.IsDBNull(createdAt) ? null : Convert.ToDateTime(createdAt).ToString("hh:mm tt"),
+                        UpdatedAt = updatedAt == null || Convert.IsDBNull(updatedAt) ? null : Convert.ToDateTime(updatedAt).ToString("dd-MM-yyyy hh:mm tt"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
-                        items = new List<OrderItem>()
+                        items = new List<OrderItem>()   
                     };  
                 }
                 dict[orderId].items.Add(new OrderItem
@@ -338,6 +340,7 @@ namespace OtpAPI.BAL
                         UpdatedDateTime = row.UpdatedAt?.ToString("dd-MM-yyyy hh:mm:ss tt"),
                         VehicleNo = row.VehicleNo,
                         InvoiceNo = row.InvoiceNo,
+
                         items = new List<FutureOrderItem>()
                     };
                 }
@@ -374,6 +377,36 @@ namespace OtpAPI.BAL
                 param.Add("@p_Status", insertUpdateOrder.Status);
 
                 var result = _DB.QueryFirstOrDefault<SpResult>("USP_InsertOrder", param, commandType: CommandType.StoredProcedure);
+                results.Add(result);
+            }
+            return results;
+        }
+        public List<SpResult> DeleteOrder(DeleteOrder DeleteOrder)
+        {
+            var results = new List<SpResult>();
+
+            foreach (var item in DeleteOrder.items)
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@o_Orderid", DeleteOrder.OrderId);
+                param.Add("@o_Ordercodeid", Convert.ToInt32(item.CodeId));
+                
+                var result = _DB.QueryFirstOrDefault<SpResult>("USP_DeleteOrder", param, commandType: CommandType.StoredProcedure);
+                results.Add(result);
+            }
+            return results;
+        }
+        public List<SpResult> DeleteFutureOrder(DeleteOrder DeleteOrder)
+        {
+            var results = new List<SpResult>();
+
+            foreach (var item in DeleteOrder.items)
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@o_Orderid", DeleteOrder.OrderId);
+                param.Add("@o_Ordercodeid", Convert.ToInt32(item.CodeId));
+
+                var result = _DB.QueryFirstOrDefault<SpResult>("USP_DeleteFutureOrder", param, commandType: CommandType.StoredProcedure);
                 results.Add(result);
             }
             return results;
