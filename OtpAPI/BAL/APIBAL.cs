@@ -381,7 +381,7 @@ namespace OtpAPI.BAL
             }
             return results;
         }
-        public List<SpResult> DeletePrder(DeleteOrder DeleteOrder)
+        public List<SpResult> DeleteOrder(DeleteOrder DeleteOrder)
         {
             var results = new List<SpResult>();
 
