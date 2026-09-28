@@ -629,16 +629,23 @@ namespace OtpAPI.Controllers
         [HttpGet("DownloadOrderSheet")]
         public async Task<IActionResult> DownloadOrderSheet( int categoryId = 0, bool showStock = false, string? name = null, string? address = null, string? vehicleNo = null)
         {
-            var data = _otpBAL.GetOrderSheetData(categoryId);
-            if (data.Count == 0) return NotFound("No codes found.");
+            try
+            {
+                var data = _otpBAL.GetOrderSheetData(categoryId);
+                if (data.Count == 0) return NotFound("No codes found.");
 
-            var bytes = OrderSheetBuilder.Build(
-                new SheetHeader { Name = name ?? "", Address = address ?? "", VehicleNo = vehicleNo ?? "" },
-                data, showStock);
+                var bytes = OrderSheetBuilder.Build(
+                    new SheetHeader { Name = name ?? "", Address = address ?? "", VehicleNo = vehicleNo ?? "" },
+                    data, showStock);
 
-            return File(bytes,
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                $"OrderSheet_{DateTime.Now:ddMMyyyy}.xlsx");
+                return File(bytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    $"OrderSheet_{DateTime.Now:ddMMyyyy}.xlsx");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while User Logout", Details = ex.Message });
+            }
         }
     }
 }
