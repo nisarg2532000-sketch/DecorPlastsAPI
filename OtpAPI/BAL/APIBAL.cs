@@ -669,5 +669,14 @@ namespace OtpAPI.BAL
 
             return affected;
         }
+        public List<OrderSheetRow> GetOrderSheetData(int categoryId = 0)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_CategoryId", categoryId);
+
+            var rows = _DB.Query<OrderSheetRow>("USP_GetOrderSheetData", param, commandType: CommandType.StoredProcedure).ToList();
+
+            return rows;
+        }
     }
 }

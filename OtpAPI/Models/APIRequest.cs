@@ -412,3 +412,21 @@ public class InsertOrderbyAdmin
     public string? VehicleNo { get; set; }
     public string? InvoiceNo { get; set; }
 }
+public class OrderSheetRow
+{
+    public int CategoryId { get; set; }
+    public string CategoryName { get; set; } = "";
+    public int CodeId { get; set; }
+    public string CodeName { get; set; } = "";
+    public string Size { get; set; } = "";
+    public double Weight { get; set; }
+    public int Quantity { get; set; }
+}
+
+public class SheetHeader
+{
+    public string Name { get; set; } = "";
+    public string Address { get; set; } = "";
+    public string VehicleNo { get; set; } = "";
+    public string Date { get; set; } = DateTime.Now.ToString("dd-MM-yyyy");
+}

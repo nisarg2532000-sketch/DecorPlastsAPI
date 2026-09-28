@@ -1,9 +1,12 @@
-﻿using DecorPlastsAPI.Services;
+﻿using DecorPlast.Excel;
+using DecorPlastsAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.Core.Configuration;
 using OtpAPI.BAL;
 using OtpAPI.Models;
 using OtpAPI.Services;
+
 using System.Reflection.Metadata.Ecma335;
 
 namespace OtpAPI.Controllers
@@ -622,6 +625,20 @@ namespace OtpAPI.Controllers
             {
                 return StatusCode(500, new { Message = "An error occurred while User Logout", Details = ex.Message });
             }
+        }
+        [HttpGet("DownloadOrderSheet")]
+        public async Task<IActionResult> DownloadOrderSheet( int categoryId = 0, bool showStock = false, string? name = null, string? address = null, string? vehicleNo = null)
+        {
+            var data = _otpBAL.GetOrderSheetData(categoryId);
+            if (data.Count == 0) return NotFound("No codes found.");
+
+            var bytes = OrderSheetBuilder.Build(
+                new SheetHeader { Name = name ?? "", Address = address ?? "", VehicleNo = vehicleNo ?? "" },
+                data, showStock);
+
+            return File(bytes,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"OrderSheet_{DateTime.Now:ddMMyyyy}.xlsx");
         }
     }
 }
