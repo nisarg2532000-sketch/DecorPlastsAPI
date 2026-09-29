@@ -635,7 +635,7 @@ namespace OtpAPI.Controllers
                 var data = _otpBAL.ExcelGetStock();
                 var fileBytes = stockBuild(data);
 
-                const string fileName = "Stock.xlsx";
+                string fileName = $"Stock_{DateTime.Now:ddMMyyyyhhmmss}.xlsx";
                 const string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
                 return File(fileBytes, contentType, fileName);
@@ -713,7 +713,7 @@ namespace OtpAPI.Controllers
 
                 var bytes = OrderSheetBuilder.Build( new SheetHeader { Name = name ?? "" }, data);
 
-                return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"OrderSheet_{DateTime.Now:ddMMyyyy}.xlsx");
+                return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"StockSheet_{DateTime.Now:ddMMyyyyhhmmss}.xlsx");
             }
             catch (Exception ex)
             {
