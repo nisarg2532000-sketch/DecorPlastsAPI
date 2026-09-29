@@ -18,8 +18,8 @@ namespace DecorPlast.Excel
         public static byte[] Build(SheetHeader header, List<OrderSheetRow> data, bool showStock = false, int codesPerBlock = 35)
         {
             // EPPlus 5–7:
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            // EPPlus 8+: ExcelPackage.License.SetNonCommercialPersonal("Nisarg");
+            //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            ExcelPackage.License.SetNonCommercialPersonal("DecorPlast");
 
             var categories = data.GroupBy(d => new { d.CategoryId, d.CategoryName }).OrderBy(g => g.Key.CategoryId).ToList();
 
