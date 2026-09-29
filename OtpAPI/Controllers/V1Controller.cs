@@ -717,7 +717,7 @@ namespace OtpAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while getting stock", Details = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while getting stock Excel", Details = ex.Message });
             }
         }
     }
