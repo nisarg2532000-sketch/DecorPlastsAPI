@@ -12,6 +12,7 @@ namespace DecorPlast.Excel
         private static readonly Color GreyHeader = Color.FromArgb(217, 217, 217);
         private static readonly Color GreyDark = Color.FromArgb(166, 166, 166);
         private static readonly Color GreyNA = Color.FromArgb(191, 191, 191);
+        public static readonly Color WhiteNA = Color.FromArgb(255, 255, 255);
 
         /// <param name="showStock">true = each valid cell shows current stock; false = blank cells to fill in</param>
         /// <param name="codesPerBlock">max code columns per block; longer categories wrap into another block (like DECOR TEX on your sheet)</param>
@@ -51,11 +52,7 @@ namespace DecorPlast.Excel
                 foreach (var chunk in allCodes.Chunk(codesPerBlock))
                 {
                     // sizes that exist for at least one code in this block
-                    var sizes = cat
-                        .Where(x => chunk.Contains(x.CodeName))
-                        .Select(x => x.Size.Trim().ToUpper())
-                        .Distinct()
-                        .ToList();
+                    var sizes = cat.Where(x => chunk.Contains(x.CodeName)).Select(x => x.Size.Trim().ToUpper()).Distinct().ToList();
 
                     // ---- block header row ----
                     var title = ws.Cells[row, 1];
@@ -111,7 +108,7 @@ namespace DecorPlast.Excel
                             }
                             else
                             {
-                                Fill(cell, GreyNA);   // this code has no such size
+                                Fill(cell, WhiteNA);   // this code has no such size
                             }
                         }
 
