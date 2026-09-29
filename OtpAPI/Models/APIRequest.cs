@@ -1,7 +1,5 @@
 ﻿using OtpAPI.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata;
-using System.Text.Json.Serialization;
 
 namespace OtpAPI.Models
 {

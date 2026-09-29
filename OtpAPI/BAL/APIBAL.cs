@@ -1,7 +1,6 @@
 ﻿
 using Dapper;
 using DecorPlastsAPI.Interface;
-using Microsoft.AspNetCore.Http.HttpResults;
 using OtpAPI.Models;
 using System.Data;
 namespace OtpAPI.BAL
@@ -669,12 +668,12 @@ namespace OtpAPI.BAL
 
             return affected;
         }
-        public List<OrderSheetRow> GetOrderSheetData(int categoryId = 0)
+        public List<OrderSheetRow> GetStock(int categoryId = 0)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@p_CategoryId", categoryId);
 
-            var rows = _DB.Query<OrderSheetRow>("USP_GetOrderSheetData", param, commandType: CommandType.StoredProcedure).ToList();
+            var rows = _DB.Query<OrderSheetRow>("USP_GetStockSheetData", param, commandType: CommandType.StoredProcedure).ToList();
 
             return rows;
         }

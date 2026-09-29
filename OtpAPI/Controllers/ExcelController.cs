@@ -1,9 +1,8 @@
-﻿using System.Data;
-using System.Drawing;
-using Dapper;
-using MySqlConnector;               // or MySql.Data.MySqlClient – whichever you already use
-using OfficeOpenXml;
+﻿using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using OtpAPI.Models;
+using System.Data;
+using System.Drawing;
 
 namespace DecorPlast.Excel
 {
@@ -11,12 +10,12 @@ namespace DecorPlast.Excel
     {
         private static readonly Color GreyHeader = Color.FromArgb(217, 217, 217);
         private static readonly Color GreyDark = Color.FromArgb(166, 166, 166);
-        private static readonly Color GreyNA = Color.FromArgb(191, 191, 191);
+        //private static readonly Color GreyNA = Color.FromArgb(191, 191, 191);
         public static readonly Color WhiteNA = Color.FromArgb(255, 255, 255);
 
         /// <param name="showStock">true = each valid cell shows current stock; false = blank cells to fill in</param>
         /// <param name="codesPerBlock">max code columns per block; longer categories wrap into another block (like DECOR TEX on your sheet)</param>
-        public static byte[] Build(SheetHeader header, List<OrderSheetRow> data, bool showStock = false, int codesPerBlock = 35)
+        public static byte[] Build(SheetHeader header, List<OrderSheetRow> data, int codesPerBlock = 35)
         {
             // EPPlus 5–7:
             //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -98,12 +97,10 @@ namespace DecorPlast.Excel
 
                             if (map.TryGetValue((chunk[i], size), out var item))
                             {
-                                if (showStock)
-                                {
-                                    cell.Value = item.Quantity;
-                                    if (item.Quantity <= 0)
-                                        cell.Style.Font.Color.SetColor(Color.Red);
-                                }
+                                
+                                cell.Value = item.Quantity;
+                                if (item.Quantity <= 0)
+                                    cell.Style.Font.Color.SetColor(Color.Red);
                                 // else: leave blank for hand / app entry
                             }
                             else
@@ -144,8 +141,7 @@ namespace DecorPlast.Excel
         // ---- top row: NAME | ADDRESS | VEHICLE NO. | DATE ----
         private static void BuildTopRow(ExcelWorksheet ws, SheetHeader h, int totalCols)
         {
-            var parts = new[] { ("NAME", h.Name), ("ADDRESS", h.Address),
-                                ("VEHICLE NO.", h.VehicleNo), ("DATE", h.Date) };
+            var parts = new[] { ("NAME", h.Name), ("ADDRESS", h.Address), ("DATE", h.Date) };
 
             int block = Math.Max(4, totalCols / 4);
             int start = 1;
@@ -189,6 +185,48 @@ namespace DecorPlast.Excel
             r.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
             r.Style.Border.Left.Style = ExcelBorderStyle.Thin;
             r.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+        }
+        
+        public static byte[] stockBuild(List<ExcelGetStock> data)
+        {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
+            ExcelPackage.License.SetNonCommercialPersonal("Nisarg");   // EPPlus 8+
+
+            using var package = new ExcelPackage();
+            var sheet = package.Workbook.Worksheets.Add("Stocks");
+
+            // ---- header row ----
+            string[] headers = { "CategoryName", "CodeName", "Size", "Weight", "Stock Quantity" };
+            for (int c = 0; c < headers.Length; c++)
+                sheet.Cells[1, c + 1].Value = headers[c];
+
+            using (var headerRange = sheet.Cells[1, 1, 1, headers.Length])
+            {
+                headerRange.Style.Font.Bold = true;
+                headerRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                headerRange.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(217, 217, 217));
+                headerRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            }
+
+            // ---- data rows ----
+            for (int i = 0; i < data.Count; i++)
+            {
+                int row = i + 2;
+                sheet.Cells[row, 1].Value = data[i].Category;
+                sheet.Cells[row, 2].Value = data[i].Code;
+                sheet.Cells[row, 3].Value = data[i].Size;
+                sheet.Cells[row, 4].Value = data[i].Weight;
+                sheet.Cells[row, 5].Value = data[i].Quantity;
+            }
+
+            // AutoFitColumns needs at least one row of data, otherwise sheet.Dimension is null
+            if (data.Count > 0)
+                sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
+            else
+                for (int c = 1; c <= headers.Length; c++) sheet.Column(c).Width = 16;
+
+            return package.GetAsByteArray();
         }
     }
 }

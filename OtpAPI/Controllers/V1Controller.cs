@@ -2,12 +2,13 @@
 using DecorPlastsAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver.Core.Configuration;
+using OfficeOpenXml;
 using OtpAPI.BAL;
 using OtpAPI.Models;
 using OtpAPI.Services;
 
 using System.Reflection.Metadata.Ecma335;
+using static DecorPlast.Excel.OrderSheetBuilder;
 
 namespace OtpAPI.Controllers
 {
@@ -626,25 +627,97 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while User Logout", Details = ex.Message });
             }
         }
-        [HttpGet("DownloadOrderSheet")]
-        public async Task<IActionResult> DownloadOrderSheet( int categoryId = 0, bool showStock = false, string? name = null, string? address = null, string? vehicleNo = null)
+        [HttpGet("DownloadExcel")]
+        public IActionResult DownloadExcel()
         {
             try
             {
-                var data = _otpBAL.GetOrderSheetData(categoryId);
-                if (data.Count == 0) return NotFound("No codes found.");
+                var data = _otpBAL.ExcelGetStock();
+                var fileBytes = stockBuild(data);
 
-                var bytes = OrderSheetBuilder.Build(
-                    new SheetHeader { Name = name ?? "", Address = address ?? "", VehicleNo = vehicleNo ?? "" },
-                    data, showStock);
+                const string fileName = "Stock.xlsx";
+                const string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-                return File(bytes,
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    $"OrderSheet_{DateTime.Now:ddMMyyyy}.xlsx");
+                return File(fileBytes, contentType, fileName);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while User Logout", Details = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while downloading excel", Details = ex.Message });
+            }
+        }
+        [HttpPost("UploadExcel")]
+        public async Task<IActionResult> UploadExcel(IFormFile file)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                    return BadRequest("No file uploaded.");
+
+                if (!Path.GetExtension(file.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                    return BadRequest("Only .xlsx files are allowed.");
+
+                ExcelPackage.License.SetNonCommercialPersonal("DecorPlast");   // EPPlus 8+
+
+                var results = new List<ExcelGetStock>();
+
+                using var stream = new MemoryStream();
+                await file.CopyToAsync(stream);         // must await, or the read below can start on a half-copied stream
+                stream.Position = 0;                    // CopyToAsync leaves the position at the end; reset before reading
+
+                using var package = new ExcelPackage(stream);
+                var sheet = package.Workbook.Worksheets.Count > 0 ? package.Workbook.Worksheets[0] : null;
+
+                if (sheet?.Dimension == null)
+                    return BadRequest("The uploaded sheet is empty.");
+
+                int rowCount = sheet.Dimension.Rows;
+
+                for (int row = 2; row <= rowCount; row++)   // row 1 = header
+                {
+                    // skip fully blank rows
+                    if (string.IsNullOrWhiteSpace(sheet.Cells[row, 1].Text) && string.IsNullOrWhiteSpace(sheet.Cells[row, 2].Text))
+                        continue;
+
+                    decimal.TryParse(sheet.Cells[row, 4].Text, out decimal weight);
+                    int.TryParse(sheet.Cells[row, 5].Text, out int qty);
+
+                    results.Add(new ExcelGetStock
+                    {
+                        Category = sheet.Cells[row, 1].Text,
+                        Code = sheet.Cells[row, 2].Text,
+                        Size = sheet.Cells[row, 3].Text,
+                        Weight = weight.ToString(),
+                        Quantity = qty
+                    });
+                }
+
+                if (results.Count == 0)
+                    return BadRequest("No data rows found below the header.");
+
+                var saved = _otpBAL.SaveStock(results);   // synchronous BAL call — fine to call as-is
+
+                return Ok(new { message = $"{results.Count} records imported.", savedRows = saved });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while uploading excel", Details = ex.Message });
+            }
+        }
+        [HttpGet("GetStock")]
+        public async Task<IActionResult> GetStock( int categoryId = 0, string? name = null)
+        {
+            try
+            {
+                var data = _otpBAL.GetStock(categoryId);
+                if (data.Count == 0) return NotFound("No codes found.");
+
+                var bytes = OrderSheetBuilder.Build( new SheetHeader { Name = name ?? "" }, data);
+
+                return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"OrderSheet_{DateTime.Now:ddMMyyyy}.xlsx");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while getting stock", Details = ex.Message });
             }
         }
     }

@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using OtpAPI.BAL;
-using OtpAPI.Data;
 using OtpAPI.Models;
 using System.Collections.Concurrent;
 using System.Text.Json;

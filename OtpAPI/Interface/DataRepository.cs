@@ -1,7 +1,5 @@
 ﻿using Dapper;
-using Microsoft.Extensions.Configuration;
 using MySqlConnector; // ✅ Replace Microsoft.Data.SqlClient
-using System.Collections.Generic;
 using System.Data;
 
 namespace DecorPlastsAPI.Interface
