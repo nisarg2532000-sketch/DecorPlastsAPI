@@ -628,17 +628,22 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpGet("DownloadExcel")]
-        public IActionResult DownloadExcel()
+        public IActionResult DownloadExcel([FromBody] getdata getdata)
         {
             try
             {
-                var data = _otpBAL.ExcelGetStock();
-                var fileBytes = stockBuild(data);
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var data = _otpBAL.ExcelGetStock();
+                    var fileBytes = stockBuild(data);
 
-                string fileName = $"Stock_{DateTime.Now:ddMMyyyyhhmmss}.xlsx";
-                const string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    string fileName = $"Stock_{DateTime.Now:ddMMyyyyhhmmss}.xlsx";
+                    const string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-                return File(fileBytes, contentType, fileName);
+                    return File(fileBytes, contentType, fileName);
+                }
+                return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
@@ -646,57 +651,62 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("UploadExcel")]
-        public async Task<IActionResult> UploadExcel(IFormFile file)
+        public async Task<IActionResult> UploadExcel([FromBody] getdata getdata, IFormFile file)
         {
             try
             {
-                if (file == null || file.Length == 0)
-                    return BadRequest("No file uploaded.");
-
-                if (!Path.GetExtension(file.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
-                    return BadRequest("Only .xlsx files are allowed.");
-
-                ExcelPackage.License.SetNonCommercialPersonal("DecorPlast");   // EPPlus 8+
-
-                var results = new List<ExcelGetStock>();
-
-                using var stream = new MemoryStream();
-                await file.CopyToAsync(stream);         // must await, or the read below can start on a half-copied stream
-                stream.Position = 0;                    // CopyToAsync leaves the position at the end; reset before reading
-
-                using var package = new ExcelPackage(stream);
-                var sheet = package.Workbook.Worksheets.Count > 0 ? package.Workbook.Worksheets[0] : null;
-
-                if (sheet?.Dimension == null)
-                    return BadRequest("The uploaded sheet is empty.");
-
-                int rowCount = sheet.Dimension.Rows;
-
-                for (int row = 2; row <= rowCount; row++)   // row 1 = header
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
                 {
-                    // skip fully blank rows
-                    if (string.IsNullOrWhiteSpace(sheet.Cells[row, 1].Text) && string.IsNullOrWhiteSpace(sheet.Cells[row, 2].Text))
-                        continue;
+                    if (file == null || file.Length == 0)
+                        return BadRequest("No file uploaded.");
 
-                    decimal.TryParse(sheet.Cells[row, 4].Text, out decimal weight);
-                    int.TryParse(sheet.Cells[row, 5].Text, out int qty);
+                    if (!Path.GetExtension(file.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                        return BadRequest("Only .xlsx files are allowed.");
 
-                    results.Add(new ExcelGetStock
+                    ExcelPackage.License.SetNonCommercialPersonal("DecorPlast");   // EPPlus 8+
+
+                    var results = new List<ExcelGetStock>();
+
+                    using var stream = new MemoryStream();
+                    await file.CopyToAsync(stream);         // must await, or the read below can start on a half-copied stream
+                    stream.Position = 0;                    // CopyToAsync leaves the position at the end; reset before reading
+
+                    using var package = new ExcelPackage(stream);
+                    var sheet = package.Workbook.Worksheets.Count > 0 ? package.Workbook.Worksheets[0] : null;
+
+                    if (sheet?.Dimension == null)
+                        return BadRequest("The uploaded sheet is empty.");
+
+                    int rowCount = sheet.Dimension.Rows;
+
+                    for (int row = 2; row <= rowCount; row++)   // row 1 = header
                     {
-                        Category = sheet.Cells[row, 1].Text,
-                        Code = sheet.Cells[row, 2].Text,
-                        Size = sheet.Cells[row, 3].Text,
-                        Weight = weight.ToString(),
-                        Quantity = qty
-                    });
+                        // skip fully blank rows
+                        if (string.IsNullOrWhiteSpace(sheet.Cells[row, 1].Text) && string.IsNullOrWhiteSpace(sheet.Cells[row, 2].Text))
+                            continue;
+
+                        decimal.TryParse(sheet.Cells[row, 4].Text, out decimal weight);
+                        int.TryParse(sheet.Cells[row, 5].Text, out int qty);
+
+                        results.Add(new ExcelGetStock
+                        {
+                            Category = sheet.Cells[row, 1].Text,
+                            Code = sheet.Cells[row, 2].Text,
+                            Size = sheet.Cells[row, 3].Text,
+                            Weight = weight.ToString(),
+                            Quantity = qty
+                        });
+                    }
+
+                    if (results.Count == 0)
+                        return BadRequest("No data rows found below the header.");
+
+                    var saved = _otpBAL.SaveStock(results);   // synchronous BAL call — fine to call as-is
+
+                    return Ok(new { message = $"{results.Count} records imported.", savedRows = saved });
                 }
-
-                if (results.Count == 0)
-                    return BadRequest("No data rows found below the header.");
-
-                var saved = _otpBAL.SaveStock(results);   // synchronous BAL call — fine to call as-is
-
-                return Ok(new { message = $"{results.Count} records imported.", savedRows = saved });
+                return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
@@ -704,16 +714,21 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpGet("GetStockExcel")]
-        public async Task<IActionResult> GetStockExcel( int categoryId = 0, string? name = null)
+        public async Task<IActionResult> GetStockExcel([FromBody] getdata getdata,int categoryId = 0, string? name = null)
         {
             try
             {
-                var data = _otpBAL.GetStock(categoryId);
-                if (data.Count == 0) return NotFound("No codes found.");
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    var data = _otpBAL.GetStock(categoryId);
+                    if (data.Count == 0) return NotFound("No codes found.");
 
-                var bytes = OrderSheetBuilder.Build( new SheetHeader { Name = name ?? "" }, data);
+                    var bytes = OrderSheetBuilder.Build(new SheetHeader { Name = name ?? "" }, data);
 
-                return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"StockSheet_{DateTime.Now:ddMMyyyyhhmmss}.xlsx");
+                    return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"StockSheet_{DateTime.Now:ddMMyyyyhhmmss}.xlsx");
+                }
+                return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {

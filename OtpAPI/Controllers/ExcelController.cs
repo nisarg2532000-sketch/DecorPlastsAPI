@@ -13,7 +13,6 @@ namespace DecorPlast.Excel
         //private static readonly Color GreyNA = Color.FromArgb(191, 191, 191);
         public static readonly Color WhiteNA = Color.FromArgb(255, 255, 255);
 
-        /// <param name="showStock">true = each valid cell shows current stock; false = blank cells to fill in</param>
         /// <param name="codesPerBlock">max code columns per block; longer categories wrap into another block (like DECOR TEX on your sheet)</param>
         public static byte[] Build(SheetHeader header, List<OrderSheetRow> data, int codesPerBlock = 35)
         {
