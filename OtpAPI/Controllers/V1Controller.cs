@@ -714,14 +714,14 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpGet("GetStockExcel")]
-        public async Task<IActionResult> GetStockExcel([FromBody] getdata getdata,int categoryId = 0, string? name = null)
+        public async Task<IActionResult> GetStockExcel([FromBody] getdata getdata, string? name = null)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var data = _otpBAL.GetStock(categoryId);
+                    var data = _otpBAL.GetStock();
                     if (data.Count == 0) return NotFound("No codes found.");
 
                     var bytes = OrderSheetBuilder.Build(new SheetHeader { Name = name ?? "" }, data);

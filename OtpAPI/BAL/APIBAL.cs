@@ -668,12 +668,10 @@ namespace OtpAPI.BAL
 
             return affected;
         }
-        public List<OrderSheetRow> GetStock(int categoryId = 0)
+        public List<OrderSheetRow> GetStock()
         {
-            DynamicParameters param = new DynamicParameters();
-            param.Add("@p_CategoryId", categoryId);
 
-            var rows = _DB.Query<OrderSheetRow>("USP_GetStockSheetData", param, commandType: CommandType.StoredProcedure).ToList();
+            var rows = _DB.Query<OrderSheetRow>("USP_GetStockSheetData", commandType: CommandType.StoredProcedure).ToList();
 
             return rows;
         }

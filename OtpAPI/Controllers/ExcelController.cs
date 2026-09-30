@@ -140,7 +140,7 @@ namespace DecorPlast.Excel
         // ---- top row: NAME | ADDRESS | VEHICLE NO. | DATE ----
         private static void BuildTopRow(ExcelWorksheet ws, SheetHeader h, int totalCols)
         {
-            var parts = new[] { ("NAME", h.Name), ("ADDRESS", h.Address), ("DATE", h.Date) };
+            var parts = new[] { ("NAME", h.Name), ("DATE", h.Date) };
 
             int block = Math.Max(4, totalCols / 4);
             int start = 1;
