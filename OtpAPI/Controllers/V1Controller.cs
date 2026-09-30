@@ -713,7 +713,7 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while uploading excel", Details = ex.Message });
             }
         }
-        [HttpGet("GetStockExcel")]
+        [HttpPost("GetStockExcel")]
         public async Task<IActionResult> GetStockExcel([FromBody] getdata getdata, string? name = null)
         {
             try
