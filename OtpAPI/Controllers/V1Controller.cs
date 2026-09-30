@@ -627,7 +627,7 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while User Logout", Details = ex.Message });
             }
         }
-        [HttpGet("DownloadExcel")]
+        [HttpPost("DownloadExcel")]
         public IActionResult DownloadExcel([FromBody] getdata getdata)
         {
             try
