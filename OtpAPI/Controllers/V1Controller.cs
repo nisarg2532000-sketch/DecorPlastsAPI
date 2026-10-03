@@ -709,17 +709,18 @@ namespace OtpAPI.Controllers
             }
         }
         [HttpPost("GetStockExcel")]
-        public async Task<IActionResult> GetStockExcel([FromBody] getdata getdata, string? name = null)
+        public async Task<IActionResult> GetStockExcel([FromBody] getdata getdata)
         {
             try
             {
                 bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
                 if (issucess)
                 {
-                    var data = _otpBAL.GetStock();
+                    var data = _otpBAL.GetStockExcel();
+                    string name = "DecorPlasst";
                     if (data.Count == 0) return NotFound("No codes found.");
 
-                    var bytes = OrderSheetBuilder.Build(new SheetHeader { Name = name ?? "" }, data);
+                    var bytes = OrderSheetBuilder.Build(new SheetHeader { Name = name }, data);
 
                     return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"StockSheet_{DateTime.Now:ddMMyyyyhhmmss}.xlsx");
                 }
@@ -729,6 +730,20 @@ namespace OtpAPI.Controllers
             {
                 return StatusCode(500, new { Message = "An error occurred while getting stock Excel", Details = ex.Message });
             }
+        }
+        [HttpGet("DownloadOrderPdf")]
+        public async Task<IActionResult> DownloadOrderPdf([FromQuery] string orderId)
+        {
+            if (string.IsNullOrWhiteSpace(orderId))
+                return BadRequest("orderId is required");
+
+            var items = _otpBAL.GetOrderListByOrderId(orderId);
+            if (items == null || items.Count == 0)
+                return NotFound($"No order found for {orderId}");
+
+            var pdf = OrderPdfService.Generate(orderId, items);
+            var safeName = orderId.Replace("/", "-");
+            return File(pdf, "application/pdf", $"Order_{safeName}.pdf");
         }
     }
 }
