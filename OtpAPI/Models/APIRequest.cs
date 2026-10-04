@@ -216,6 +216,11 @@ namespace OtpAPI.Models
         public string Size { get; set; }
         public string Quantity { get; set; }
     }
+    public class StockCheckResult
+    {
+        public bool IsAvailable { get; set; }
+        public int AvailableStock { get; set; }
+    }
     public class OrderItem
     {
         public string CategoryId { get; set; }
@@ -226,11 +231,6 @@ namespace OtpAPI.Models
         public string Quantity { get; set; }
         public float Weight { get; set; }
     }
-    public class StockCheckResult
-    {
-        public bool IsAvailable { get; set; }
-        public int AvailableStock { get; set; }
-    }
     public class GetOrderList
     {
         public string userid { get; set; }
@@ -238,7 +238,7 @@ namespace OtpAPI.Models
         public string MobileNo { get; set; }
         public string OrderId { get; set; }
         public List<OrderItem> items { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
