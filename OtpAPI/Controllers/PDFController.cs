@@ -50,7 +50,7 @@ public static class OrderPdfService
 
                                 t.Header(h =>
                                 {
-                                    foreach (var title in new[] { "#", "Category", "Code", "Qty", "Weight" })
+                                    foreach (var title in new[] { "No.", "Category", "Code", "Qty", "Weight" })
                                         h.Cell().Background(Colors.Grey.Lighten2).Padding(4).Text(title).Bold();
                                 });
 
@@ -66,6 +66,7 @@ public static class OrderPdfService
 
                                 t.Cell().ColumnSpan(3).Padding(4).AlignRight().Text("Order Total").Bold();
                                 t.Cell().Padding(4).Text(g.Sum(x => x.Quantity).ToString()).Bold();
+                                t.Cell().ColumnSpan(3).Padding(4).AlignRight().Text("Weight:").Bold();
                                 t.Cell().Padding(4).Text(g.Sum(x => x.Weight).ToString("0.##")).Bold();
                             });
                         });
@@ -74,7 +75,7 @@ public static class OrderPdfService
                     if (orders.Count > 1)
                     {
                         main.Item().AlignRight().Text(
-                            $"Grand Total - Qty: {items.Sum(x => x.Quantity)}    Weight: {items.Sum(x => x.Weight):0.##}")
+                            $"Grand Total - Qty: {items.Sum(x => x.Quantity)}   Total Weight: {items.Sum(x => x.Weight):0.##}")
                             .Bold().FontSize(12);
                     }
                 });
