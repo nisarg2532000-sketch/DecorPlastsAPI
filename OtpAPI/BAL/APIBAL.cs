@@ -676,12 +676,12 @@ namespace OtpAPI.BAL
 
             return rows;
         }
-        public List<OrderListPDF> GetOrderListByOrderId(string orderId)
+        public List<OrderListPDF> GetOrderListByOrderId(string orderIds)
         {
             DynamicParameters param = new DynamicParameters();
-            param.Add("@p_OrderId", orderId);  // use your existing connection factory
-            var rows = _DB.Query<OrderListPDF>("USP_GetOrderListByOrderId", param, commandType: CommandType.StoredProcedure).ToList();
-            return rows;
+            param.Add("@p_OrderIds", orderIds);
+
+            return _DB.Query<OrderListPDF>("USP_GetOrderListByOrderId", param, commandType: CommandType.StoredProcedure).ToList();
         }
     }
 }

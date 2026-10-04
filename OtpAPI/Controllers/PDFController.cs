@@ -5,10 +5,10 @@ using QuestPDF.Infrastructure;
 
 public static class OrderPdfService
 {
-    public static byte[] Generate(string orderId, List<OrderListPDF> items)
+    public static byte[] Generate(List<OrderListPDF> items)
     {
         QuestPDF.Settings.License = LicenseType.Community;
-        var first = items.First();
+        var orders = items.GroupBy(x => x.OrderId).ToList();
 
         return Document.Create(doc =>
         {
@@ -21,42 +21,62 @@ public static class OrderPdfService
                 page.Header().Column(col =>
                 {
                     col.Item().Text("DecorPlast - Order Details").FontSize(16).Bold();
-                    col.Item().Text($"Order No: {orderId}");
-                    col.Item().Text($"Customer: {first.UserName}    Vehicle No: {first.VehicleNo}    Invoice No: {first.InvoiceNo}");
-                    col.Item().Text($"Date: {first.CreatedAt:dd-MM-yyyy}");
                     col.Item().PaddingBottom(8).LineHorizontal(1);
                 });
 
-                page.Content().Table(t =>
+                page.Content().Column(main =>
                 {
-                    t.ColumnsDefinition(c =>
-                    {
-                        c.ConstantColumn(30);    // #
-                        c.RelativeColumn(2);     // Category
-                        c.RelativeColumn(2);     // Code
-                        c.RelativeColumn(1);     // Qty
-                        c.RelativeColumn(1);     // Weight
-                    });
+                    main.Spacing(14);
 
-                    t.Header(h =>
+                    foreach (var g in orders)
                     {
-                        foreach (var title in new[] { "#", "Category", "Code", "Qty", "Weight" })
-                            h.Cell().Background(Colors.Grey.Lighten2).Padding(4).Text(title).Bold();
-                    });
+                        var first = g.First();
 
-                    int i = 1;
-                    foreach (var r in items)
-                    {
-                        t.Cell().BorderBottom(0.5f).Padding(4).Text(i++.ToString());
-                        t.Cell().BorderBottom(0.5f).Padding(4).Text(r.CategoryName);
-                        t.Cell().BorderBottom(0.5f).Padding(4).Text(r.CodeName);
-                        t.Cell().BorderBottom(0.5f).Padding(4).Text(r.Quantity.ToString());
-                        t.Cell().BorderBottom(0.5f).Padding(4).Text(r.Weight.ToString("0.##"));
+                        main.Item().Column(sec =>
+                        {
+                            sec.Item().Text($"Order No: {g.Key}").Bold().FontSize(12);
+                            sec.Item().Text($"Customer: {first.UserName}    Vehicle No: {first.VehicleNo}    Invoice No: {first.InvoiceNo}    Date: {first.CreatedAt:dd-MM-yyyy}");
+
+                            sec.Item().PaddingTop(4).Table(t =>
+                            {
+                                t.ColumnsDefinition(c =>
+                                {
+                                    c.ConstantColumn(30);
+                                    c.RelativeColumn(2);
+                                    c.RelativeColumn(2);
+                                    c.RelativeColumn(1);
+                                    c.RelativeColumn(1);
+                                });
+
+                                t.Header(h =>
+                                {
+                                    foreach (var title in new[] { "#", "Category", "Code", "Qty", "Weight" })
+                                        h.Cell().Background(Colors.Grey.Lighten2).Padding(4).Text(title).Bold();
+                                });
+
+                                int i = 1;
+                                foreach (var r in g)
+                                {
+                                    t.Cell().BorderBottom(0.5f).Padding(4).Text((i++).ToString());
+                                    t.Cell().BorderBottom(0.5f).Padding(4).Text(r.CategoryName);
+                                    t.Cell().BorderBottom(0.5f).Padding(4).Text(r.CodeName);
+                                    t.Cell().BorderBottom(0.5f).Padding(4).Text(r.Quantity.ToString());
+                                    t.Cell().BorderBottom(0.5f).Padding(4).Text(r.Weight.ToString("0.##"));
+                                }
+
+                                t.Cell().ColumnSpan(3).Padding(4).AlignRight().Text("Order Total").Bold();
+                                t.Cell().Padding(4).Text(g.Sum(x => x.Quantity).ToString()).Bold();
+                                t.Cell().Padding(4).Text(g.Sum(x => x.Weight).ToString("0.##")).Bold();
+                            });
+                        });
                     }
 
-                    t.Cell().ColumnSpan(3).Padding(4).AlignRight().Text("Total").Bold();
-                    t.Cell().Padding(4).Text(items.Sum(x => x.Quantity).ToString()).Bold();
-                    t.Cell().Padding(4).Text(items.Sum(x => x.Weight).ToString("0.##")).Bold();
+                    if (orders.Count > 1)
+                    {
+                        main.Item().AlignRight().Text(
+                            $"Grand Total - Qty: {items.Sum(x => x.Quantity)}    Weight: {items.Sum(x => x.Weight):0.##}")
+                            .Bold().FontSize(12);
+                    }
                 });
 
                 page.Footer().AlignCenter().Text(x =>
