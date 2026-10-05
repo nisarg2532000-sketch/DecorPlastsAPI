@@ -64,10 +64,9 @@ public static class OrderPdfService
                                     t.Cell().BorderBottom(0.5f).Padding(4).Text(r.Weight.ToString("0.##"));
                                 }
 
-                                t.Cell().ColumnSpan(4).Padding(5).AlignRight().Text($"Order Total: {g.Sum(x => x.Quantity)}       Weight:{g.Sum(x => x.Weight): 0.##}").Bold();
-                                //t.Cell().Padding(4).Text(g.Sum(x => x.Quantity).ToString()).Bold();
-                                //t.Cell().ColumnSpan(3).Padding(4).AlignRight().Text("Weight").Bold();
-                                //t.Cell().Padding(4).Text(g.Sum(x => x.Weight).ToString("0.##")).Bold();
+                                t.Cell().ColumnSpan(3).BorderTop(1).Padding(4).AlignRight().Text("Order Total").Bold();
+                                t.Cell().BorderTop(1).Padding(4).Text(g.Sum(x => x.Quantity).ToString()).Bold();
+                                t.Cell().BorderTop(1).Padding(4).Text(g.Sum(x => x.Weight).ToString("0.##")).Bold();
                             });
                         });
                     }
