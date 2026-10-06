@@ -263,7 +263,7 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string OrderId { get; set; }
         public List<OrderuserItem> items { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
@@ -275,7 +275,7 @@ namespace OtpAPI.Models
         public string MobileNo { get; set; }
         public string OrderId { get; set; }
         public List<FutureOrderItem> items { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
@@ -287,7 +287,7 @@ namespace OtpAPI.Models
         public string MobileNo { get; set; }
         public string OrderId { get; set; }
         public List<FutureOrderItem> items { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
@@ -310,7 +310,7 @@ namespace OtpAPI.Models
         public string token { get; set; }
         public string OrderId { get; set; }
         public List<InsertOrderitem> items { get; set; }
-        public int Status { get; set; }
+        public bool Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
     }
@@ -406,7 +406,7 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string OrderId { get; set; }
         public List<InsertOrderitem> items { get; set; }
-        public int Status { get; set; }
+        public bool Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
     }
