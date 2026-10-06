@@ -8,7 +8,7 @@ public static class OrderPdfService
     public static byte[] Generate(List<OrderListPDF> items)
     {
         QuestPDF.Settings.License = LicenseType.Community;
-        var orders = items.GroupBy(x => x.OrderId).ToList();
+        var shopname = items.GroupBy(x => x.ShopName).ToList();
 
         return Document.Create(doc =>
         {
@@ -20,7 +20,7 @@ public static class OrderPdfService
 
                 page.Header().Column(col =>
                 {
-                    col.Item().Text("DecorPlast - Order Details").FontSize(16).Bold();
+                    col.Item().Text("DecorPlast - Vehicle Details").FontSize(16).Bold();
                     col.Item().PaddingBottom(8).LineHorizontal(1);
                 });
 
@@ -28,7 +28,7 @@ public static class OrderPdfService
                 {
                     main.Spacing(14);
 
-                    foreach (var g in orders)
+                    foreach (var g in shopname)
                     {
                         var first = g.First();
 
@@ -71,7 +71,7 @@ public static class OrderPdfService
                         });
                     }
 
-                    if (orders.Count > 1)
+                    if (shopname.Count > 1)
                     {
                         main.Item().AlignRight().Text(
                             $"Grand Total - Qty: {items.Sum(x => x.Quantity)}   Total Weight: {items.Sum(x => x.Weight):0.##}")
