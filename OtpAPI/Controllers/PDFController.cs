@@ -34,8 +34,8 @@ public static class OrderPdfService
 
                         main.Item().Column(sec =>
                         {
-                            sec.Item().Text($"Order No: {g.Key}").Bold().FontSize(12);
-                            sec.Item().Text($"Customer: {first.ShopName}    Vehicle No: {first.VehicleNo}    Date: {first.CreatedAt:dd-MM-yyyy}");
+                            sec.Item().Text($"Customer: {first.ShopName}").Bold().FontSize(12);
+                            sec.Item().Text($"Vehicle No: {first.VehicleNo}    Date: {first.CreatedAt:dd-MM-yyyy}");
 
                             sec.Item().PaddingTop(4).Table(t =>
                             {
