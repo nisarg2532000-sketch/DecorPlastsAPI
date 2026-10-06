@@ -731,8 +731,8 @@ namespace OtpAPI.Controllers
                 return StatusCode(500, new { Message = "An error occurred while getting stock Excel", Details = ex.Message });
             }
         }
-        [HttpGet("DownloadOrderPdf")]
-        public IActionResult DownloadOrderPdf([FromQuery] string orderIds)
+        [HttpPost("DownloadOrderPdf")]
+        public IActionResult DownloadOrderPdf([FromQuery] string orderIds, [FromBody] getdata getdata)
         {
             try
             {
