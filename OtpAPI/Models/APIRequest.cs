@@ -439,6 +439,7 @@ namespace OtpAPI.Models
         public string CategoryName { get; set; }
         public int OrderCodeId { get; set; }
         public string CodeName { get; set; }
+        public string Size { get; set; }
         public int Quantity { get; set; }
         public double Weight { get; set; }
         public int Status { get; set; }

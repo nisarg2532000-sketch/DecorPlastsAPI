@@ -50,7 +50,7 @@ public static class OrderPdfService
 
                                 t.Header(h =>
                                 {
-                                    foreach (var title in new[] { "No.", "Category", "Code", "Qty", "Weight" })
+                                    foreach (var title in new[] { "No.", "Category", "Code", "Size", "Qty", "Weight" })
                                         h.Cell().Background(Colors.Grey.Lighten2).Padding(4).Text(title).Bold();
                                 });
 
@@ -60,6 +60,7 @@ public static class OrderPdfService
                                     t.Cell().BorderBottom(0.5f).Padding(4).Text((i++).ToString());
                                     t.Cell().BorderBottom(0.5f).Padding(4).Text(r.CategoryName);
                                     t.Cell().BorderBottom(0.5f).Padding(4).Text(r.CodeName);
+                                    t.Cell().BorderBottom(0.5f).Padding(4).Text(r.Size);
                                     t.Cell().BorderBottom(0.5f).Padding(4).Text(r.Quantity.ToString());
                                     t.Cell().BorderBottom(0.5f).Padding(4).Text(r.Weight.ToString("0.##"));
                                 }
