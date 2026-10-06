@@ -736,26 +736,31 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(orderIds))
-                    return BadRequest("orderIds is required");
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
+                    if (string.IsNullOrWhiteSpace(orderIds))
+                        return BadRequest("orderIds is required");
 
-                // clean input: "30082026/03, 30082026/08" -> "30082026/03,30082026/08"
-                var ids = orderIds.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                                  .Distinct().ToList();
-                var cleaned = string.Join(",", ids);
+                    // clean input: "30082026/03, 30082026/08" -> "30082026/03,30082026/08"
+                    var ids = orderIds.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                                      .Distinct().ToList();
+                    var cleaned = string.Join(",", ids);
 
-                var items = _otpBAL.GetOrderListByOrderId(cleaned);
-                if (items == null || items.Count == 0)
-                    return NotFound("No orders found");
+                    var items = _otpBAL.GetOrderListByOrderId(cleaned);
+                    if (items == null || items.Count == 0)
+                        return NotFound("No orders found");
 
-                // tell the caller if some ids had no data
-                var missing = ids.Except(items.Select(x => x.OrderId)).ToList();
-                if (missing.Count > 0)
-                    Response.Headers["X-Missing-Orders"] = string.Join(",", missing);
+                    // tell the caller if some ids had no data
+                    var missing = ids.Except(items.Select(x => x.OrderId)).ToList();
+                    if (missing.Count > 0)
+                        Response.Headers["X-Missing-Orders"] = string.Join(",", missing);
 
-                var pdf = OrderPdfService.Generate(items);
-                var fileName = ids.Count == 1 ? $"Order_{ids[0].Replace("/", "-")}.pdf" : $"Orders_{DateTime.Now:ddMMyyyy_HHmm}.pdf";
-                return File(pdf, "application/pdf", fileName);
+                    var pdf = OrderPdfService.Generate(items);
+                    var fileName = ids.Count == 1 ? $"Order_{ids[0].Replace("/", "-")}.pdf" : $"Orders_{DateTime.Now:ddMMyyyy_HHmm}.pdf";
+                    return File(pdf, "application/pdf", fileName);
+                }
+                return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
