@@ -406,7 +406,7 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string OrderId { get; set; }
         public List<InsertOrderitem> items { get; set; }
-        public int Status { get; set; }
+        public bool Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
     }
