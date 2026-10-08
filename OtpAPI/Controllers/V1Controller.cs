@@ -772,7 +772,9 @@ namespace OtpAPI.Controllers
         {
             try
             {
-                
+                bool issucess = _otpBAL.Verifytoken(getdata.userid, getdata.token);
+                if (issucess)
+                {
                     if (string.IsNullOrWhiteSpace(orderIds))
                         return BadRequest("orderIds is required");
 
@@ -793,6 +795,8 @@ namespace OtpAPI.Controllers
                     var pdf = OrderPdfService.GenerateAllOrder(items);
                     var fileName = ids.Count == 1 ? $"Order_{ids[0].Replace("/", "-")}.pdf" : $"Orders_{DateTime.Now:ddMMyyyy_HHmm}.pdf";
                     return File(pdf, "application/pdf", fileName);
+                }
+                return BadRequest(new { Message = "Token not verified" });
             }
             catch (Exception ex)
             {
