@@ -1,7 +1,6 @@
 ﻿
 using Dapper;
 using DecorPlastsAPI.Interface;
-using MongoDB.Driver.Core.Configuration;
 using OtpAPI.Models;
 using System.Data;
 namespace OtpAPI.BAL
