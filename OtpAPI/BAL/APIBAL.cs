@@ -1,7 +1,6 @@
 ﻿
 using Dapper;
 using DecorPlastsAPI.Interface;
-using Microsoft.AspNetCore.Http.HttpResults;
 using OtpAPI.Models;
 using System.Data;
 namespace OtpAPI.BAL
@@ -630,7 +629,7 @@ namespace OtpAPI.BAL
         }
         public string GetOrderId()
         {
-            var parameters = new DynamicParameters();
+            DynamicParameters parameters = new DynamicParameters();
             parameters.Add("p_OrderId", dbType: DbType.String, direction: ParameterDirection.Output);
 
             return _DB.ExecuteSPWithOutput<string>("USP_CreateOrderId", parameters, "p_OrderId");
@@ -656,7 +655,7 @@ namespace OtpAPI.BAL
                 // Skip only if both quantity and weight are 0 (nothing meaningful to save)
                 if (s.Quantity <= 0 && weight <= 0) continue;
 
-                var param = new DynamicParameters();
+                DynamicParameters param = new DynamicParameters();
                 param.Add("@p_CategoryName", s.Category);
                 param.Add("@p_CodeName", s.Code);
                 param.Add("@p_Size", s.Size);
@@ -668,6 +667,20 @@ namespace OtpAPI.BAL
             }
 
             return affected;
+        }
+        public List<OrderSheetRow> GetStockExcel()
+        {
+
+            var rows = _DB.Query<OrderSheetRow>("USP_GetStockSheetData", commandType: CommandType.StoredProcedure).ToList();
+
+            return rows;
+        }
+        public List<OrderListPDF> GetOrderListByOrderId(string orderIds)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@p_OrderIds", orderIds);
+
+            return _DB.Query<OrderListPDF>("USP_GetOrderListByOrderId", param, commandType: CommandType.StoredProcedure).ToList();
         }
     }
 }

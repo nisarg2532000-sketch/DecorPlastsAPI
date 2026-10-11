@@ -1,7 +1,5 @@
 ﻿using OtpAPI.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata;
-using System.Text.Json.Serialization;
 
 namespace OtpAPI.Models
 {
@@ -42,7 +40,7 @@ namespace OtpAPI.Models
     }
     public class IsverifyOtp
     {
-        public bool Status {  get; set; }
+        public bool Status { get; set; }
         public string Message { get; set; }
         public string Token { get; set; }
         public int UserId { get; set; }
@@ -71,7 +69,7 @@ namespace OtpAPI.Models
         public string Role { get; set; }
         public string IsActive { get; set; }
     }
-    public class AdminDashboard 
+    public class AdminDashboard
     {
         public string totalOrdersCount { get; set; }
         public string FutureOrdersCount { get; set; }
@@ -100,7 +98,7 @@ namespace OtpAPI.Models
         public int CodeId { get; set; }
         public string CodeName { get; set; }
         public bool Status { get; set; }
-        public string Size { get; set; } 
+        public string Size { get; set; }
         public int Quantity { get; set; }
         public float Weight { get; set; }
 
@@ -110,8 +108,8 @@ namespace OtpAPI.Models
         public int CodeId { get; set; }
         public string CodeName { get; set; }
         public int CategoryId { get; set; }
-        public string CategoryName { get; set; }  
-        public string Size { get; set; } 
+        public string CategoryName { get; set; }
+        public string Size { get; set; }
         public int Quantity { get; set; }
         public float Weight { get; set; }
         public bool Status { get; set; }
@@ -142,10 +140,10 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string token { get; set; }
         public string CodeId { get; set; }
-        public string CodeName { get;set; }
+        public string CodeName { get; set; }
         public string Size { get; set; }
         public string CategoryId { get; set; }
-        public float Weight{ get; set; }
+        public float Weight { get; set; }
         public string Status { get; set; }
     }
     public class UpdateSize
@@ -240,7 +238,7 @@ namespace OtpAPI.Models
         public string MobileNo { get; set; }
         public string OrderId { get; set; }
         public List<OrderItem> items { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
@@ -265,7 +263,7 @@ namespace OtpAPI.Models
         public string userid { get; set; }
         public string OrderId { get; set; }
         public List<OrderuserItem> items { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
@@ -277,7 +275,7 @@ namespace OtpAPI.Models
         public string MobileNo { get; set; }
         public string OrderId { get; set; }
         public List<FutureOrderItem> items { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
@@ -289,11 +287,11 @@ namespace OtpAPI.Models
         public string MobileNo { get; set; }
         public string OrderId { get; set; }
         public List<FutureOrderItem> items { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
         public string DateTime { get; set; }
-        public string? UpdatedDateTime { get; set; } 
+        public string? UpdatedDateTime { get; set; }
     }
     public class FutureOrderItem
     {
@@ -312,7 +310,7 @@ namespace OtpAPI.Models
         public string token { get; set; }
         public string OrderId { get; set; }
         public List<InsertOrderitem> items { get; set; }
-        public int Status { get; set; }
+        public bool Status { get; set; }
         public string? VehicleNo { get; set; }
         public string? InvoiceNo { get; set; }
     }
@@ -388,7 +386,7 @@ namespace OtpAPI.Models
     {
         public string LatestVersion { get; set; } = "";
         public bool ForceUpdate { get; set; }
- 
+
         public string Message { get; set; } = "";
     }
     public class ExcelGetStock
@@ -400,15 +398,54 @@ namespace OtpAPI.Models
         // Quantity as integer for processing
         public int Quantity { get; set; }
     }
-}
-public class InsertOrderbyAdmin
-{
-    public string AdminId { get; set; }
-    public string token { get; set; }
-    public string userid { get; set; }
-    public string OrderId { get; set; }
-    public List<InsertOrderitem> items { get; set; }
-    public int Status { get; set; }
-    public string? VehicleNo { get; set; }
-    public string? InvoiceNo { get; set; }
+
+    public class InsertOrderbyAdmin
+    {
+        public string AdminId { get; set; }
+        public string token { get; set; }
+        public string userid { get; set; }
+        public string OrderId { get; set; }
+        public List<InsertOrderitem> items { get; set; }
+        public bool Status { get; set; }
+        public string? VehicleNo { get; set; }
+        public string? InvoiceNo { get; set; }
+    }
+
+    public class OrderSheetRow
+    {
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; } = "";
+        public int CodeId { get; set; }
+        public string CodeName { get; set; } = "";
+        public string Size { get; set; } = "";
+        public double Weight { get; set; }
+        public int Quantity { get; set; }
+    }
+
+    public class SheetHeader
+    {
+        public string Name { get; set; } = "";
+        public string Address { get; set; } = "";
+        public string VehicleNo { get; set; } = "";
+        public string Date { get; set; } = DateTime.Now.ToString("dd-MM-yyyy");
+    }
+    public class OrderListPDF
+    {
+        public long Id { get; set; }
+        public string OrderId { get; set; }
+        public int UserId { get; set; }
+        public string ShopName { get; set; }
+        public int OrderCategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public int OrderCodeId { get; set; }
+        public string CodeName { get; set; }
+        public string Size { get; set; }
+        public int Quantity { get; set; }
+        public double Weight { get; set; }
+        public int Status { get; set; }
+        public string VehicleNo { get; set; }
+        public string InvoiceNo { get; set; }
+        public DateTime? UptadedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
 }
